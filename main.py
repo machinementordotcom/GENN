@@ -276,7 +276,25 @@ class MyGame(arcade.Window):
         self.enemy.fireball_list.update()
         self.enemy.arrow_list.update()
         
-        
+        #player collision
+        if self.player_sprite.center_x <= 0:
+            self.player_sprite.center_x = 0
+        if self.player_sprite.center_x >= SCREEN_WIDTH:
+            self.player_sprite.center_x = SCREEN_WIDTH
+        if self.player_sprite.center_y <= 0:
+            self.player_sprite.center_y = 0
+        if self.player_sprite.center_y >= SCREEN_HEIGHT:
+            self.player_sprite.center_y = SCREEN_HEIGHT
+        #enemy collision
+        if self.enemy.center_x <= 0:
+            self.enemy.center_x = 0
+        if self.enemy.center_x >= SCREEN_WIDTH:
+            self.enemy.center_x = SCREEN_WIDTH
+        if self.enemy.center_y <= 0:
+            self.enemy.center_y = 0
+        if self.enemy.center_y >= SCREEN_HEIGHT:
+            self.enemy.center_y = SCREEN_HEIGHT
+
         #print("Health: ", self.enemy.health)
         for fireball in self.fireball_list:
             diff_x = fireball.start_x-fireball.center_x

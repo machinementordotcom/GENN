@@ -40,7 +40,7 @@ class Fireball(arcade.Sprite):
         self.center_y += self.change_y
 class Enemy(arcade.Sprite):
     def throwfire(self):
-        fireball = Fireball("fire.png", .1)
+        fireball = Fireball("images/fire.png", .1)
         fireball.center_x = self.center_x
         fireball.center_y = self.center_y
         fireball.start_x = self.center_x # for tracking 
@@ -51,7 +51,7 @@ class Enemy(arcade.Sprite):
         
         self.fireball_list.append(fireball)
     def shootarrow(self):
-        arrow = Arrow("arrow.png",.1)
+        arrow = Arrow("images/arrow.png",.1)
         arrow.center_x = self.center_x
         arrow.center_y = self.center_y
         arrow.angle = self.angle-90
@@ -61,7 +61,7 @@ class Enemy(arcade.Sprite):
     def equipshield():
         pass
     def update(self):
-        self.curtime += 1 
+        self.curtime += 1
         x_diff = self.opponent.center_x - self.center_x
         y_diff = self.opponent.center_y - self.center_y
         self.center_x += self.change_x
@@ -123,8 +123,8 @@ class MyGame(arcade.Window):
         self.fireball_list = arcade.SpriteList()
         
         # Set up the player
-        self.player_sprite = arcade.Sprite("mage.png",SPRITE_SCALING)
-        self.player_sprite.append_texture(arcade.load_texture("a_shield_round.png"))
+        self.player_sprite = arcade.Sprite("images/mage.png",SPRITE_SCALING)
+        self.player_sprite.append_texture(arcade.load_texture("images/a_shield_round.png"))
         self.player_sprite.center_x = PLAYER_START_X
         self.player_sprite.center_y = PLAYER_START_Y
         self.player_sprite.angle = 0
@@ -134,7 +134,7 @@ class MyGame(arcade.Window):
         self.player_list.append(self.player_sprite)
         
         # Set up bad guy
-        self.enemy = Enemy('lilknight.png',1)
+        self.enemy = Enemy('images/lilknight.png',1)
         self.enemy.center_x = 800
         self.enemy.opponent = self.player_sprite
         self.enemy.center_y = 600
@@ -150,14 +150,14 @@ class MyGame(arcade.Window):
         # -- Set up the walls
         # Create a row of boxes
         for x in range(173, 650, 64):
-            wall = arcade.Sprite("bricks.png", .3)
+            wall = arcade.Sprite("images/bricks.png", .3)
             wall.center_x = x
             wall.center_y = 200
             self.wall_list.append(wall)
 
         # Create a column of boxes
         for y in range(273, 500, 64):
-            wall = arcade.Sprite("bricks.png", .3)
+            wall = arcade.Sprite("images/bricks.png", .3)
             wall.center_x = 465
             wall.center_y = y
             
@@ -174,7 +174,7 @@ class MyGame(arcade.Window):
         arcade.set_background_color(arcade.color.AMAZON)
     # Long attack
     def shootarrow(self):
-        arrow = Arrow("arrow.png",.1)
+        arrow = Arrow("images/arrow.png",.1)
         arrow.center_x = self.player_sprite.center_x
         arrow.center_y = self.player_sprite.center_y
         arrow.angle = self.player_sprite.angle-90
@@ -183,7 +183,7 @@ class MyGame(arcade.Window):
         self.arrow_list.append(arrow)
     # Shorter attack
     def throwfire(self):
-        fireball = Fireball("fire.png", .1)
+        fireball = Fireball("images/fire.png", .1)
         fireball.center_x = self.player_sprite.center_x
         fireball.center_y = self.player_sprite.center_y
         fireball.start_x = self.player_sprite.center_x # for tracking 
@@ -357,3 +357,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

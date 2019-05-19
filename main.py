@@ -77,6 +77,13 @@ class Enemy(arcade.Sprite):
             else:
                 self.shootarrow()
             self.curtime = 0
+
+        for fireball in self.fireball_list:
+            diff_x = fireball.start_x-fireball.center_x
+            diff_y = fireball.start_y-fireball.center_y
+            fireball_dist = math.sqrt(diff_x**2 + diff_y**2)
+            if fireball_dist>200:
+                fireball.kill()
         #if self.health <=50:
             #self.equipshield()
 
@@ -349,9 +356,11 @@ def main():
     simultaneous_games = int(input('Enter the amount of simultaneous games: '))
     #will run multiple games at once.
     for g in range(0,simultaneous_games):
+        print(g)
         window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
         window.setup()
         arcade.run() 
+
         
 
 

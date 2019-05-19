@@ -7,6 +7,14 @@ import sys
 import collections
 import heapq
 
+from numbers import Number
+from typing import Callable
+from typing import Union
+from arcade.arcade_types import Color
+
+
+
+
 SPRITE_SCALING = 0.5
 
 SCREEN_WIDTH = 1000
@@ -30,6 +38,7 @@ VERT_CENTER = 465 # X value
 HOR_WALL_START=1
 HOR_WALL_END=1
 HOR_CENTER = 200 # y value
+
 class Arrow(arcade.Sprite):
     def update(self):
         self.center_x += self.change_x
@@ -90,7 +99,7 @@ class Enemy(arcade.Sprite):
 class MyGame(arcade.Window):
     """ Main application class. """
 
-    def __init__(self, width, height, title):
+    def __init__(self, width, height, title,simultaneous_games):
         """
         Initializer
         """
@@ -103,7 +112,7 @@ class MyGame(arcade.Window):
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
         
-
+        self.simultaneous_games = simultaneous_games
 
         # Sprite lists
         self.coin_list = None
@@ -117,6 +126,11 @@ class MyGame(arcade.Window):
         self.player_sprite = None
         self.physics_engine = None
 
+    def end_game(self):
+        self.simultaneous_games -= 1
+        if self.simultaneous_games == 0:
+            sys.exit()
+        self.setup()
     def setup(self):
         """ Set up the game and initialize the variables. """
         # inputs for testing
@@ -341,25 +355,26 @@ class MyGame(arcade.Window):
             self.player_sprite.score += 1 # If enemy dies give good guy a point
             file = open("goodguyscore.txt","w")
             file.write(str(self.player_sprite.score))
-            sys.exit()
+            self.end_game()
+            # sys.exit()
             
         if self.player_sprite.health <= 0:
             self.player_sprite.kill()  
             self.enemy.score += 1 
             file = open("goodguyscore.txt","w")
             file.write(str(self.enemy.score)) 
-            sys.exit()
+            self.end_game()
+            # sys.exit()
        
 def main():
     """ Main method """
    
     simultaneous_games = int(input('Enter the amount of simultaneous games: '))
     #will run multiple games at once.
-    for g in range(0,simultaneous_games):
-        print(g)
-        window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-        window.setup()
-        arcade.run() 
+    window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE,simultaneous_games)
+    window.setup()
+    arcade.run()
+
 
         
 

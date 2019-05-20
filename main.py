@@ -298,7 +298,8 @@ class MyGame(arcade.Window):
         self.enemy.arrow_list.update()
         
         current_state = {"player1_x" : self.player_sprite.center_x, "player1_y": self.player_sprite.center_y, "player2_x" : self.enemy.center_x, "player2_y" :self.enemy.center_x,
-                "player1_fireballs" : self.fireball_list, "player2_fireballs" : self.enemy.fireball_list, "player1_arrows" : self.arrow_list, "player2_arrows": self.enemy.arrow_list}
+                        "player1_health" : self.player_sprite.health, "player2_health" : self.enemy.health,
+                        "player1_fireballs" : self.fireball_list, "player2_fireballs" : self.enemy.fireball_list, "player1_arrows" : self.arrow_list, "player2_arrows": self.enemy.arrow_list}
         # print(current_state)
 
         #player collision

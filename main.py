@@ -120,6 +120,7 @@ class MyGame(arcade.Window):
         self.player_list = None
         self.arrow_list = None
         self.fireball_list = None
+
         
         # Set up the player
         self.enemy_sprite = None
@@ -288,7 +289,6 @@ class MyGame(arcade.Window):
     # Functions that change with time
     def update(self, delta_time):
         """ Movement and game logic """
-        
         # Call update on all sprites
         self.arrow_list.update()
         self.player_list.update()
@@ -297,6 +297,10 @@ class MyGame(arcade.Window):
         self.enemy.fireball_list.update()
         self.enemy.arrow_list.update()
         
+        current_state = {"player1_x" : self.player_sprite.center_x, "player1_y": self.player_sprite.center_y, "player2_x" : self.enemy.center_x, "player2_y" :self.enemy.center_x,
+                "player1_fireballs" : self.fireball_list, "player2_fireballs" : self.enemy.fireball_list, "player1_arrows" : self.arrow_list, "player2_arrows": self.enemy.arrow_list}
+        # print(current_state)
+
         #player collision
         if self.player_sprite.center_x <= 0:
             self.player_sprite.center_x = 0
@@ -323,7 +327,6 @@ class MyGame(arcade.Window):
             fireball_dist = math.sqrt(diff_x**2 + diff_y**2)
             if fireball_dist>200:
                 fireball.kill()
-            print("fireball distance: ",diff_x, diff_y)
        
         # Hit function for fireball
         fireball_hit1 = arcade.check_for_collision_with_list(self.enemy, self.fireball_list)
@@ -366,19 +369,24 @@ class MyGame(arcade.Window):
             self.end_game()
             # sys.exit()
        
-def main():
+def main(args):
     """ Main method """
-   
+    if len(args) > 3:
+        raise Exception("Usage: python main.py <program_for_player_1> <program_for_player_2>")
     simultaneous_games = int(input('Enter the amount of simultaneous games: '))
-    #will run multiple games at once.
-    window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE,simultaneous_games)
-    window.setup()
-    arcade.run()
-
-
-        
+    # Playing with the keyboard inputs against a computer
+    if len(args) == 1:
+        window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE,simultaneous_games)
+        window.setup()
+        arcade.run()
+    # Playing against a computer with a program input
+    if len(args) == 2:
+        pass
+    # Playing with two program inputs
+    if len(args) == 3:
+        pass
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
 

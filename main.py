@@ -22,7 +22,7 @@ SCREEN_TITLE = "Adaptive AI"
 
 
 
-
+ARROW_IMAGE_HEIGHT = 7.9
 MOVEMENT_SPEED = 5
 ARROW_SPEED = 20
 ANGLE_SPEED = 4
@@ -34,7 +34,7 @@ HOR_WALL_START=1
 HOR_WALL_END=1
 HOR_CENTER = 200 # y value
 
-ARROW_DAMAGE = 10
+ARROW_DAMAGE = 12.5
 FIREBALL_DAMAGE = 20
 KNIFE_DAMAGE = 25
 
@@ -43,6 +43,9 @@ class Arrow(arcade.Sprite):
     def update(self):
         self.center_x += self.change_x
         self.center_y += self.change_y
+class HitBox(arcade.Sprite):
+    z = 500
+    y = ARROW_IMAGE_HEIGHT
 class Fireball(arcade.Sprite):
     def update(self):
         self.center_x += self.change_x
@@ -61,37 +64,90 @@ class RangePlayer(arcade.Sprite):
         arrow = Arrow("images/arrow.png",.1)
         arrow.center_x = self.center_x
         arrow.center_y = self.center_y
+        arrow.start_x = self.center_x # for tracking 
+        arrow.start_y = self.center_y
         arrow.angle = self.angle-90
         arrow.change_x = -ARROW_SPEED*math.sin(math.radians(self.angle))
         arrow.change_y = ARROW_SPEED*math.cos(math.radians(self.angle))
         self.arrow_list.append(arrow)
+        hit = HitBox("images/fire.png")
+        hit._set_alpha(0)
+        hit._set_height(math.sqrt(SCREEN_WIDTH**2 + SCREEN_HEIGHT**2))
+        hit._set_width(ARROW_IMAGE_HEIGHT)
+        hit.angle = self.angle
+        hit.center_x = self.center_x + -math.sin(math.radians(hit.angle)) * hit.height/2
+        hit.center_y = self.center_y + math.cos(math.radians(hit.angle)) * hit.height/2
+        
+        arrow.hit = hit
+        self.hitbox_list.append(hit)
+
     def update(self):
         self.curtime += 1
+        if len(self.opponent_hitbox_list) > 0:
+            if arcade.check_for_collision_with_list(self,self.opponent_hitbox_list):
+                randmove_x = random.choices([1,-1])[0]
+                randmove_y = random.choices([1,-1])[0]
+                self.center_x += MOVEMENT_SPEED * randmove_x
+                self.center_y += MOVEMENT_SPEED * randmove_y
+            else:
+                y_change = 0
+                x_change = 0
+                if self.opponent.center_x - self.center_x < 0:
+                    x_change += MOVEMENT_SPEED
+                else:
+                    x_change -= MOVEMENT_SPEED
+                if self.opponent.center_y - self.center_y < 0:
+                    y_change += MOVEMENT_SPEED
+                else:
+                    y_change -= MOVEMENT_SPEED
+
+                self.center_x += x_change
+                self.center_y += y_change
+        else:
+            y_change = 0
+            x_change = 0
+            if self.opponent.center_x - self.center_x < 0:
+                x_change += MOVEMENT_SPEED
+            else:
+                x_change -= MOVEMENT_SPEED
+            if self.opponent.center_y - self.center_y < 0:
+                y_change += MOVEMENT_SPEED
+            else:
+                y_change -= MOVEMENT_SPEED
+
+            self.center_x += x_change
+            self.center_y += y_change
+
+
+            
         x_diff = self.opponent.center_x - self.center_x
         y_diff = self.opponent.center_y - self.center_y
         self.d = math.sqrt(x_diff**2 +y_diff**2)
-        y_change = 0
-        x_change = 0
-        if self.opponent.center_x - self.center_x < 0:
-            x_change += MOVEMENT_SPEED
-        else:
-            x_change -= MOVEMENT_SPEED
-        if self.opponent.center_y - self.center_y < 0:
-            y_change += MOVEMENT_SPEED
-        else:
-            y_change -= MOVEMENT_SPEED
+        # y_change = 0
+        # x_change = 0
+        # if self.opponent.center_x - self.center_x < 0:
+        #     x_change += MOVEMENT_SPEED
+        # else:
+        #     x_change -= MOVEMENT_SPEED
+        # if self.opponent.center_y - self.center_y < 0:
+        #     y_change += MOVEMENT_SPEED
+        # else:
+        #     y_change -= MOVEMENT_SPEED
 
-
-        self.center_x += x_change
-        self.center_y += y_change
+        # self.center_x += x_change
+        # self.center_y += y_change
         self.angle = math.degrees(math.atan2(y_diff,x_diff))-90
         self.change_x = -math.cos(self.angle)*MOVEMENT_SPEED
         self.change_y = -math.sin(self.angle)*MOVEMENT_SPEED
         self.d = math.sqrt(x_diff**2 +y_diff**2)
-        if self.curtime >=20:
+        if self.curtime >=30:
             self.shootarrow()
             self.curtime = 0
-        if self.health <=50 and self.shield <= 1:
+        for arrow in self.arrow_list:
+            if arrow.center_x>SCREEN_WIDTH + 6 or arrow.center_y>SCREEN_HEIGHT + 6 or arrow.center_x< -6 or arrow.center_y< -6 :
+                arrow.hit.kill()
+                arrow.kill()
+        if self.health <=50 and self.shield < 1:
             self.equipshield()
 
 class midRangePlayer(arcade.Sprite):
@@ -110,40 +166,80 @@ class midRangePlayer(arcade.Sprite):
         fireball.change_y = ARROW_SPEED*math.cos(math.radians(self.angle))
         
         self.fireball_list.append(fireball)
+
+        hit = HitBox("images/fire.png")
+        hit._set_alpha(0)
+        hit._set_height(math.sqrt(SCREEN_WIDTH**2 + SCREEN_HEIGHT**2))
+        hit._set_width(ARROW_IMAGE_HEIGHT)
+        hit.angle = self.angle
+        hit.center_x = self.center_x + -math.sin(math.radians(hit.angle)) * hit.height/2
+        hit.center_y = self.center_y + math.cos(math.radians(hit.angle)) * hit.height/2
+        
+        fireball.hit = hit
+        self.hitbox_list.append(hit)
+
     def update(self):
         self.curtime += 1
         x_diff = self.opponent.center_x - self.center_x
         y_diff = self.opponent.center_y - self.center_y
         self.angle = math.degrees(math.atan2(y_diff,x_diff))-90
         self.d = math.sqrt(x_diff**2 +y_diff**2)
-
-        if abs(y_diff) + abs(x_diff) != 0: 
-            self.change_x = abs(x_diff)/(abs(y_diff) + abs(x_diff))
-            self.change_y = abs(y_diff)/(abs(y_diff) + abs(x_diff))
-            if self.d > 250:
-                self.center_x += self.change_x * MOVEMENT_SPEED
-                self.center_y += self.change_y * MOVEMENT_SPEED
-            else:
-                if abs(self.center_x - 0) > 5 and abs(SCREEN_WIDTH - self.center_x) > 5:
-                    self.center_x += -self.change_x * MOVEMENT_SPEED
+        midRangeSpeedHandicap = .9
+        if len(self.opponent_hitbox_list) > 0:
+            if arcade.check_for_collision_with_list(self,self.opponent_hitbox_list) and self.health <70:
+                randmove_x = random.choices([1,-1])[0]
+                randmove_y = random.choices([1,-1])[0]
+                self.center_x += (MOVEMENT_SPEED * midRangeSpeedHandicap) * randmove_x
+                self.center_y += (MOVEMENT_SPEED * midRangeSpeedHandicap) * randmove_y
+            elif abs(y_diff) + abs(x_diff) != 0: 
+                self.change_x = (x_diff)/(abs(y_diff) + abs(x_diff))
+                self.change_y = (y_diff)/(abs(y_diff) + abs(x_diff))
+                if self.d > 250:
+                    self.center_x += self.change_x * (MOVEMENT_SPEED * midRangeSpeedHandicap)
+                    self.center_y += self.change_y * (MOVEMENT_SPEED * midRangeSpeedHandicap)
                 else:
-                    if self.center_y > SCREEN_HEIGHT/2:
-                        self.center_y += MOVEMENT_SPEED
+                    if abs(self.center_x - 0) > 5 and abs(SCREEN_WIDTH - self.center_x) > 5:
+                        self.center_x += -self.change_x * (MOVEMENT_SPEED * midRangeSpeedHandicap)
                     else:
-                        self.center_y += -MOVEMENT_SPEED
+                        if self.center_y > SCREEN_HEIGHT/2:
+                            self.center_y += (MOVEMENT_SPEED * midRangeSpeedHandicap)
+                        else:
+                            self.center_y += -(MOVEMENT_SPEED * midRangeSpeedHandicap)
 
-                if abs(self.center_y - 0) > 5 and abs(SCREEN_HEIGHT - self.center_y) > 5:
-                    self.center_y += -self.change_y * MOVEMENT_SPEED
-                else:
-                    if self.center_x > SCREEN_WIDTH/2:
-                        self.center_x += MOVEMENT_SPEED
+                    if abs(self.center_y - 0) > 5 and abs(SCREEN_HEIGHT - self.center_y) > 5:
+                        self.center_y += -self.change_y * (MOVEMENT_SPEED * midRangeSpeedHandicap)
                     else:
-                        self.center_x += -MOVEMENT_SPEED
+                        if self.center_x > SCREEN_WIDTH/2:
+                            self.center_x += (MOVEMENT_SPEED * midRangeSpeedHandicap)
+                        else:
+                            self.center_x += -(MOVEMENT_SPEED * midRangeSpeedHandicap)
+        else:
+            if abs(y_diff) + abs(x_diff) != 0: 
+                self.change_x = (x_diff)/(abs(y_diff) + abs(x_diff))
+                self.change_y = (y_diff)/(abs(y_diff) + abs(x_diff))
+                if self.d > 250:
+                    self.center_x += self.change_x * (MOVEMENT_SPEED * midRangeSpeedHandicap)
+                    self.center_y += self.change_y * (MOVEMENT_SPEED * midRangeSpeedHandicap)
+                else:
+                    if abs(self.center_x - 0) > 5 and abs(SCREEN_WIDTH - self.center_x) > 5:
+                        self.center_x += -self.change_x * (MOVEMENT_SPEED * midRangeSpeedHandicap)
+                    else:
+                        if self.center_y > SCREEN_HEIGHT/2:
+                            self.center_y += (MOVEMENT_SPEED * midRangeSpeedHandicap)
+                        else:
+                            self.center_y += -(MOVEMENT_SPEED * midRangeSpeedHandicap)
+
+                    if abs(self.center_y - 0) > 5 and abs(SCREEN_HEIGHT - self.center_y) > 5:
+                        self.center_y += -self.change_y * (MOVEMENT_SPEED * midRangeSpeedHandicap)
+                    else:
+                        if self.center_x > SCREEN_WIDTH/2:
+                            self.center_x += (MOVEMENT_SPEED * midRangeSpeedHandicap)
+                        else:
+                            self.center_x += -(MOVEMENT_SPEED * midRangeSpeedHandicap)
         
         
         if self.curtime >=30:
-            if self.d <= 250:
-                pass
+            if self.d <= 300:
                 self.throwfire()
             self.curtime = 0
 
@@ -153,7 +249,7 @@ class midRangePlayer(arcade.Sprite):
             fireball_dist = math.sqrt(diff_x**2 + diff_y**2)
             if fireball_dist>200:
                 fireball.kill()
-        if self.health <=50 and self.shield <= 1:
+        if self.health <=50 and self.shield < 1:
             self.equipshield()
 class shortRangePlayer(arcade.Sprite):
     def equipshield(self):
@@ -167,19 +263,46 @@ class shortRangePlayer(arcade.Sprite):
         knife.angle = self.angle-180
         self.knife_num += 1 # prevents multiple knifes from being created
         self.knife_list.append(knife)
+
+        hit = HitBox("images/fire.png")
+        hit._set_alpha(0)
+        hit._set_height(5)
+        hit._set_width(ARROW_IMAGE_HEIGHT)
+        hit.angle = self.angle
+        hit.center_x = self.center_x + -math.sin(math.radians(hit.angle)) * hit.height/2
+        hit.center_y = self.center_y + math.cos(math.radians(hit.angle)) * hit.height/2
+        
+        knife.hit = hit
+        self.hitbox_list.append(hit)
     def update(self):
         self.curtime += 1
         x_diff = self.opponent.center_x - self.center_x
         y_diff = self.opponent.center_y - self.center_y
-        shortRangeSpeedHandicap = 0.8
-        if x_diff > 0:
-            self.center_x += (MOVEMENT_SPEED * shortRangeSpeedHandicap)
-        elif x_diff < 0:
-            self.center_x -= (MOVEMENT_SPEED * shortRangeSpeedHandicap)
-        if y_diff > 0:
-            self.center_y += (MOVEMENT_SPEED * shortRangeSpeedHandicap)
-        elif y_diff < 0:
-            self.center_y -= (MOVEMENT_SPEED * shortRangeSpeedHandicap)
+        shortRangeSpeedHandicap = .9
+        if len(self.opponent_hitbox_list) > 0:
+            if arcade.check_for_collision_with_list(self,self.opponent_hitbox_list) and self.health <45:
+                randmove_x = random.choices([1,-1])[0]
+                randmove_y = random.choices([1,-1])[0]
+                self.center_x += MOVEMENT_SPEED * randmove_x
+                self.center_y += MOVEMENT_SPEED * randmove_y
+            else:
+                if x_diff > 0:
+                    self.center_x += (MOVEMENT_SPEED * shortRangeSpeedHandicap)
+                elif x_diff < 0:
+                    self.center_x -= (MOVEMENT_SPEED * shortRangeSpeedHandicap)
+                if y_diff > 0:
+                    self.center_y += (MOVEMENT_SPEED * shortRangeSpeedHandicap)
+                elif y_diff < 0:
+                    self.center_y -= (MOVEMENT_SPEED * shortRangeSpeedHandicap)
+        else:
+            if x_diff > 0:
+                self.center_x += (MOVEMENT_SPEED * shortRangeSpeedHandicap)
+            elif x_diff < 0:
+                self.center_x -= (MOVEMENT_SPEED * shortRangeSpeedHandicap)
+            if y_diff > 0:
+                self.center_y += (MOVEMENT_SPEED * shortRangeSpeedHandicap)
+            elif y_diff < 0:
+                self.center_y -= (MOVEMENT_SPEED * shortRangeSpeedHandicap)
         self.angle = math.degrees(math.atan2(y_diff,x_diff))-90
         self.change_x = math.cos(self.angle)*MOVEMENT_SPEED
         self.change_y = math.sin(self.angle)*MOVEMENT_SPEED
@@ -188,7 +311,7 @@ class shortRangePlayer(arcade.Sprite):
             if self.d <= 50:
                 self.shortattack()
             self.curtime = 0
-        if self.health <=50 and self.shield <= 1:
+        if self.health <=50 and self.shield < 1:
             self.equipshield()
 
 class Enemy(arcade.Sprite):
@@ -246,7 +369,7 @@ class Enemy(arcade.Sprite):
                 self.shootarrow()
             
             self.curtime = 0
-        if self.health <=50 and self.shield <= 1:
+        if self.health <=50 and self.shield < 1:
             self.equipshield()
 
 class MyGame(arcade.Window):
@@ -273,6 +396,7 @@ class MyGame(arcade.Window):
         self.player_list = None
         self.arrow_list = None
         self.fireball_list = None
+        self.hitbox_list = None
 
         
         # Set up the player
@@ -311,13 +435,14 @@ class MyGame(arcade.Window):
         self.knife_list = arcade.SpriteList()
 
         # Set up the player
-        self.player_sprite = RangePlayer('images/mage.png')#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+        self.player_sprite = shortRangePlayer('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
         self.player_sprite.append_texture(arcade.load_texture("images/a_shield_round.png"))
         self.player_sprite.center_x = random.randint(10,900)
         self.player_sprite.center_y = random.randint(10,600)
         self.player_sprite.score = 0
         self.player_sprite.health = 100
         self.player_sprite.curtime = 0
+        self.player_sprite.hitbox_list = arcade.SpriteList()
         self.player_sprite.arrow_list = arcade.SpriteList()
         self.player_sprite.fireball_list = arcade.SpriteList()
         self.player_sprite.knife_list = arcade.SpriteList()
@@ -337,9 +462,12 @@ class MyGame(arcade.Window):
         self.enemy.knife_num = 0
         self.enemy.shield = 0
         self.player_list.append(self.enemy)
+        self.enemy.hitbox_list = arcade.SpriteList()
         self.enemy.arrow_list = arcade.SpriteList()
         self.enemy.fireball_list = arcade.SpriteList()
         self.enemy.knife_list = arcade.SpriteList()
+        self.player_sprite.opponent_hitbox_list = self.enemy.hitbox_list
+        self.enemy.opponent_hitbox_list = self.player_sprite.hitbox_list
         self.player_sprite.opponent = self.enemy
         self.player_list.append(self.player_sprite)
 
@@ -424,6 +552,8 @@ class MyGame(arcade.Window):
         self.enemy.fireball_list.draw()
         self.knife_list.draw()
         self.enemy.knife_list.draw()
+        self.player_sprite.hitbox_list.draw()
+        self.enemy.hitbox_list.draw()
         # Draw player health
         x = self.player_sprite.center_x
         y = self.player_sprite.center_y
@@ -492,7 +622,8 @@ class MyGame(arcade.Window):
         self.enemy.arrow_list.update()
         self.player_sprite.fireball_list.update()
         self.player_sprite.arrow_list.update()
-
+        self.player_sprite.hitbox_list.update()
+        self.enemy.hitbox_list.update()
 
 
         current_state = {"player1_x" : self.player_sprite.center_x, "player1_y": self.player_sprite.center_y, "player2_x" : self.enemy.center_x, "player2_y" :self.enemy.center_x,
@@ -555,10 +686,12 @@ class MyGame(arcade.Window):
         # Hit function for arrrow
         arrow_hit1 = arcade.check_for_collision_with_list(self.enemy, self.player_sprite.arrow_list) # for bad guy
         for arrow in arrow_hit1:
+            arrow.hit.kill()
             arrow.kill()
             self.enemy.health -= ARROW_DAMAGE
         arrow_hit2 = arcade.check_for_collision_with_list(self.player_sprite, self.enemy.arrow_list) # for bad guy
         for arrow in arrow_hit2:
+            arrow.hit.kill()
             arrow.kill()
             self.player_sprite.health -= ARROW_DAMAGE
         # Hit function for knife

@@ -8,10 +8,7 @@ import collections
 import heapq
 
 from numbers import Number
-from typing import Callable
-from typing import Union
 from arcade.arcade_types import Color
-from pynput.keyboard import Key, Controller
 
 
 SPRITE_SCALING = 0.5
@@ -460,15 +457,14 @@ class MyGame(arcade.Window):
 
         # Set up bad guy
         if self.player2_type.lower() == 'range':
-            self.enemy = RangePlayer('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+            self.enemy = RangePlayer('images/lilknight.png',1)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
         elif self.player2_type.lower() == 'mid':
-            self.enemy = midRangePlayer('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+            self.enemy = midRangePlayer('images/lilknight.png',1)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
         elif self.player2_type.lower() == 'short':
-            self.enemy = shortRangePlayer('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+            self.enemy = shortRangePlayer('images/lilknight.png',1)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
         else:
-            self.enemy = Enemy('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+            self.enemy = Enemy('images/lilknight.png',1)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
 
-        self.enemy = RangePlayer('images/lilknight.png',1)
         self.enemy.append_texture(arcade.load_texture('images/a_shield_round.png'))
         self.enemy.append_texture(arcade.load_texture('images/knife.png'))
         self.enemy.center_x = random.randint(10,900)

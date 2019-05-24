@@ -375,7 +375,7 @@ class Enemy(arcade.Sprite):
 class MyGame(arcade.Window):
     """ Main application class. """
 
-    def __init__(self, width, height, title,simultaneous_games):
+    def __init__(self, width, height, title,simultaneous_games,player_1_type,player_2_type):
         """
         Initializer
         """
@@ -389,7 +389,8 @@ class MyGame(arcade.Window):
         os.chdir(file_path)
         
         self.simultaneous_games = simultaneous_games
-
+        self.player1_type = player_1_type
+        self.player2_type = player_2_type
         # Sprite lists
         self.coin_list = None
         self.wall_list = None
@@ -435,7 +436,15 @@ class MyGame(arcade.Window):
         self.knife_list = arcade.SpriteList()
 
         # Set up the player
-        self.player_sprite = shortRangePlayer('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+        if self.player1_type.lower() == 'range':
+            self.player_sprite = RangePlayer('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+        elif self.player1_type.lower() == 'mid':
+            self.player_sprite = midRangePlayer('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+        elif self.player1_type.lower() == 'short':
+            self.player_sprite = shortRangePlayer('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+        else:
+            self.player_sprite = Enemy('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+
         self.player_sprite.append_texture(arcade.load_texture("images/a_shield_round.png"))
         self.player_sprite.center_x = random.randint(10,900)
         self.player_sprite.center_y = random.randint(10,600)
@@ -450,6 +459,15 @@ class MyGame(arcade.Window):
         self.player_sprite.shield = 0
 
         # Set up bad guy
+        if self.player2_type.lower() == 'range':
+            self.enemy = RangePlayer('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+        elif self.player2_type.lower() == 'mid':
+            self.enemy = midRangePlayer('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+        elif self.player2_type.lower() == 'short':
+            self.enemy = shortRangePlayer('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+        else:
+            self.enemy = Enemy('images/mage.png',SPRITE_SCALING)#arcade.Sprite("images/mage.png",SPRITE_SCALING)
+
         self.enemy = RangePlayer('images/lilknight.png',1)
         self.enemy.append_texture(arcade.load_texture('images/a_shield_round.png'))
         self.enemy.append_texture(arcade.load_texture('images/knife.png'))
@@ -720,10 +738,12 @@ class MyGame(arcade.Window):
        
 def main(args):
     """ Main method """
-    if len(args) > 3:
-        raise Exception("Usage: python main.py <program_for_player_1> <program_for_player_2>")
+    # if len(args) > 3:
+    #     raise Exception("Usage: python main.py <program_for_player_1> <program_for_player_2>")
     simultaneous_games = int(input('Enter the amount of simultaneous games: '))
-    window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE,simultaneous_games)
+    player_1_type = input("What type of player is player 1 (short, mid, or range)?")
+    player_2_type = input("What type of player is player 2 (short, mid, or range)?")
+    window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE,simultaneous_games,player_1_type,player_2_type)
     window.setup()
     arcade.run()
 

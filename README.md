@@ -44,5 +44,6 @@ A fully custom simulation environment that interchangeably compares reinforcemen
 |SPACE|Long-range arrow|Player|
 |E|Mid-range fireball|Player|
 |R|Short-range knife|Player|
+|esc|End The Game|Global|
 <br>
 

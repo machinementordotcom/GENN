@@ -1,0 +1,338 @@
+import arcade
+import os
+import math
+import random
+import sys
+from arcade.arcade_types import Color
+from FSMPlayers.RangePlayer import *
+from FSMPlayers.MidRangePlayer import *
+from FSMPlayers.ShortRangePlayer import *
+from FSMPlayers.AllEnemy import *
+from FSMPlayers.HumanPlayer import *
+
+class Game(arcade.Window):
+    """ Main application class. """
+    def __init__(self, width, height, title,simultaneous_games,player_1_type,player_2_type):
+        """
+        Initializer
+        """
+        super().__init__(width, height, title)
+        # Set the working directory (where we expect to find files) to the same
+        # directory this .py file is in. You can leave this out of your own
+        # code, but it is needed to easily run the examples using "python -m"
+        # as mentioned at the top of this program.
+        file_path = os.path.dirname(os.path.abspath(__file__))
+        os.chdir(file_path)
+        
+        self.simultaneous_games = simultaneous_games
+        self.player1_type = player_1_type.lower()
+        self.player2_type = player_2_type.lower()
+
+        # Sprite lists
+        self.coin_list = None
+        self.wall_list = None
+        self.player_list = None
+        self.arrow_list = None
+        self.fireball_list = None
+        self.hitbox_list = None
+
+        # Set up the player
+        self.player2_sprite = None
+        self.player1 = None
+        self.physics_engine = None
+        self.player1_score = 0
+        self.player2_score = 0
+        
+    def end_game(self):
+        self.player1_score += self.player1.score
+        self.player2_score += self.player2.score
+        self.simultaneous_games -= 1
+        if self.simultaneous_games == 0:
+            file = open("player1score.txt","w")
+            file.write(str(self.player1_score))
+            file.close()
+            file = open("player2score.txt","w")
+            file.write(str(self.player2_score)) 
+            file.close()
+            sys.exit()
+        self.setup()
+
+    def setup(self):
+        """ Set up the game and initialize the variables. """
+
+        # Sprite lists
+        self.player_list = arcade.SpriteList()
+        self.wall_list = arcade.SpriteList()
+        self.arrow_list = arcade.SpriteList()
+        self.fireball_list = arcade.SpriteList()
+        self.knife_list = arcade.SpriteList()
+
+        # Set up the player
+        if self.player1_type.lower() == 'range':
+            self.player1 = RangePlayer(MAGE_IMAGE,SPRITE_SCALING)
+        elif self.player1_type.lower() == 'mid':
+            self.player1 = MidRangePlayer(MAGE_IMAGE,SPRITE_SCALING)
+        elif self.player1_type.lower() == 'short':
+            self.player1 = ShortRangePlayer(MAGE_IMAGE,SPRITE_SCALING)
+        elif self.player1_type.lower() == 'human':
+            self.player1 = HumanPlayer(MAGE_IMAGE,SPRITE_SCALING)
+        else:
+            self.player1 = Enemy(MAGE_IMAGE,SPRITE_SCALING)
+
+        self.player1.append_texture(arcade.load_texture("images/a_shield_round.png"))
+        self.player1.center_x = random.randint(10,900)
+        self.player1.center_y = random.randint(10,600)
+        self.player1.score = 0
+        self.player1.health = 100
+        self.player1.curtime = 0
+        self.player1.hitbox_list = arcade.SpriteList()
+        self.player1.arrow_list = arcade.SpriteList()
+        self.player1.fireball_list = arcade.SpriteList()
+        self.player1.knife_list = arcade.SpriteList()
+        self.player1.knife_num = 0
+        self.player1.shield = 0
+
+        # Set up bad guy
+        if self.player2_type.lower() == 'range':
+            self.player2 = RangePlayer(KNIGHT_IMAGE,1)
+        elif self.player2_type.lower() == 'mid':
+            self.player2 = MidRangePlayer(KNIGHT_IMAGE,1)
+        elif self.player2_type.lower() == 'short':
+            self.player2 = ShortRangePlayer(KNIGHT_IMAGE,1)
+        elif self.player2_type.lower() == 'human':
+            self.player2 = HumanPlayer(KNIGHT_IMAGE,1)
+        else:
+            self.player2 = Enemy(KNIGHT_IMAGE,1)
+
+        self.player2.append_texture(arcade.load_texture('images/a_shield_round.png'))
+        self.player2.append_texture(arcade.load_texture('images/knife.png'))
+        self.player2.center_x = random.randint(10,900)
+        self.player2.opponent = self.player1
+        self.player2.center_y = random.randint(10,600)
+        self.player2.health = 100
+        self.player2.score = 0
+        self.player2.curtime = 0
+        self.player2.knife_num = 0
+        self.player2.shield = 0
+        self.player_list.append(self.player2)
+        self.player2.hitbox_list = arcade.SpriteList()
+        self.player2.arrow_list = arcade.SpriteList()
+        self.player2.fireball_list = arcade.SpriteList()
+        self.player2.knife_list = arcade.SpriteList()
+        self.player1.opponent_hitbox_list = self.player2.hitbox_list
+        self.player2.opponent_hitbox_list = self.player1.hitbox_list
+        self.player1.opponent = self.player2
+        self.player_list.append(self.player1)
+
+        # Set the background color
+        arcade.set_background_color(arcade.color.AMAZON)
+    
+    def on_draw(self):
+        """
+        Render the screen.
+        """
+
+        # This command has to happen before we start drawing
+        arcade.start_render()
+
+        # Draw all the sprites.
+        
+        self.wall_list.draw()
+        self.player_list.draw()
+        self.player1.arrow_list.draw()
+        self.player1.fireball_list.draw()
+        self.player2.arrow_list.draw()
+        self.player2.fireball_list.draw()
+        self.knife_list.draw()
+        self.player2.knife_list.draw()
+        self.player1.hitbox_list.draw()
+        self.player2.hitbox_list.draw()
+        # Draw player health
+        x = self.player1.center_x
+        y = self.player1.center_y
+        arcade.draw_rectangle_filled(x, y - 16, 24, 4, (255, 0, 0))
+        arcade.draw_rectangle_filled(x - math.ceil((24 - (self.player1.health / 4.16)) / 2), y - 16, math.ceil(self.player1.health / 4.16), 4, (0, 255, 0))
+         
+        # Draw player2 health
+        x = self.player2.center_x
+        y = self.player2.center_y
+        arcade.draw_rectangle_filled(x, y - 16, 24, 4, (255, 0, 0))
+        arcade.draw_rectangle_filled(x - math.ceil((24 - (self.player2.health / 4.16)) / 2), y - 16, math.ceil(self.player2.health / 4.16), 4, (0, 255, 0))
+
+
+    def on_key_press(self, key, modifiers):
+        """Called whenever a key is pressed. """
+        if self.player1_type == 'human':
+        # spatial
+            if key == arcade.key.W:
+                self.player1.change_y = MOVEMENT_SPEED
+            elif key == arcade.key.S:
+                self.player1.change_y = -MOVEMENT_SPEED
+            elif key == arcade.key.A:
+                self.player1.change_x = -MOVEMENT_SPEED
+            elif key == arcade.key.D:
+                self.player1.change_x = MOVEMENT_SPEED
+            # Rotational
+            elif key == arcade.key.LEFT:
+                self.player1.change_angle = ANGLE_SPEED
+            elif key == arcade.key.RIGHT:
+                self.player1.change_angle = -ANGLE_SPEED
+                    
+            # Arrow
+            elif key == arcade.key.SPACE:
+                self.player1.shootarrow()
+            # Fireball
+            elif key == arcade.key.E:
+                self.player1.throwfire()
+                Knife
+            elif key == arcade.key.R and self.player1.knife_num == 0:
+                self.player1.shortattack()
+                
+            # Calls shield (will simplify and replace with arc that is always in front of player later) can be used 3 times (can be modified if need to)
+            if self.player1.shield <= 3:
+                if key == arcade.key.Q:
+                    self.player1.equipshield()
+        if self.player2_type == 'human':
+        # spatial
+            if key == arcade.key.W:
+                self.player2.change_y = MOVEMENT_SPEED
+            elif key == arcade.key.S:
+                self.player2.change_y = -MOVEMENT_SPEED
+            elif key == arcade.key.A:
+                self.player2.change_x = -MOVEMENT_SPEED
+            elif key == arcade.key.D:
+                self.player2.change_x = MOVEMENT_SPEED
+            # Rotational
+            elif key == arcade.key.LEFT:
+                self.player2.change_angle = ANGLE_SPEED
+            elif key == arcade.key.RIGHT:
+                self.player2.change_angle = -ANGLE_SPEED
+                    
+            # Arrow
+            elif key == arcade.key.SPACE:
+                self.player2.shootarrow()
+            # Fireball
+            elif key == arcade.key.E:
+                self.player2.throwfire()
+                Knife
+            elif key == arcade.key.R and self.player2.knife_num == 0:
+                self.player2.shortattack()
+                
+            # Calls shield (will simplify and replace with arc that is always in front of player later) can be used 3 times (can be modified if need to)
+            if self.player2.shield <= 3:
+                if key == arcade.key.Q:
+                    self.player2.equipshield()
+
+    def on_key_release(self, key, modifiers):
+        """Called when the user releases a key. """
+        if self.player1_type == 'human':
+            if key == arcade.key.W or key == arcade.key.S:
+                self.player1.change_y = 0
+            elif key == arcade.key.A or key == arcade.key.D:
+                self.player1.change_x = 0
+            elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
+                self.player1.change_angle = 0
+        if self.player2_type == 'human':
+            if key == arcade.key.W or key == arcade.key.S:
+                self.player2.change_y = 0
+            elif key == arcade.key.A or key == arcade.key.D:
+                self.player2.change_x = 0
+            elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
+                self.player2.change_angle = 0
+    # Functions that change with time
+    def update(self, delta_time):
+        """ Movement and game logic """
+        # Call update on all sprites
+        self.arrow_list.update()
+        self.player_list.update()
+        #self.physics_engine.update()
+        self.fireball_list.update()
+        self.player2.fireball_list.update()
+        self.player2.arrow_list.update()
+        self.player1.fireball_list.update()
+        self.player1.arrow_list.update()
+        self.player1.hitbox_list.update()
+        self.player2.hitbox_list.update()
+
+        #player collision
+        if self.player1.center_x <= 0:
+            self.player1.center_x = 0
+        if self.player1.center_x >= SCREEN_WIDTH:
+            self.player1.center_x = SCREEN_WIDTH
+        if self.player1.center_y <= 0:
+            self.player1.center_y = 0
+        if self.player1.center_y >= SCREEN_HEIGHT:
+            self.player1.center_y = SCREEN_HEIGHT
+        #player2 collision
+        if self.player2.center_x <= 0:
+            self.player2.center_x = 0
+        if self.player2.center_x >= SCREEN_WIDTH:
+            self.player2.center_x = SCREEN_WIDTH
+        if self.player2.center_y <= 0:
+            self.player2.center_y = 0
+        if self.player2.center_y >= SCREEN_HEIGHT:
+            self.player2.center_y = SCREEN_HEIGHT
+
+
+        for knife in self.knife_list:
+            knife.center_x = self.player1.center_x
+            knife.center_y = self.player1.center_y
+            knife.angle = self.player1.angle+180
+        
+        for knife in self.player2.knife_list:
+            knife.center_x = self.player2.center_x
+            knife.center_y = self.player2.center_y
+            knife.angle = self.player2.angle+180
+            
+        for fireball in self.fireball_list:
+            diff_x = fireball.start_x-fireball.center_x
+            diff_y = fireball.start_y-fireball.center_y
+            fireball_dist = math.sqrt(diff_x**2 + diff_y**2)
+            if fireball_dist>200:
+                fireball.kill()
+       
+        # Hit function for fireball)
+        fireball_hit1 = arcade.check_for_collision_with_list(self.player2, self.player1.fireball_list)
+        for fireball in fireball_hit1:
+            fireball.kill()
+            self.player2.health -= FIREBALL_DAMAGE
+
+        fireball_hit2 = arcade.check_for_collision_with_list(self.player1, self.player2.fireball_list)
+        for fireball in fireball_hit2:
+            fireball.kill()
+            self.player1.health -= FIREBALL_DAMAGE
+       
+        # Hit function for arrrow
+        arrow_hit1 = arcade.check_for_collision_with_list(self.player2, self.player1.arrow_list) # for bad guy
+        for arrow in arrow_hit1:
+            arrow.hit.kill()
+            arrow.kill()
+            self.player2.health -= ARROW_DAMAGE
+        arrow_hit2 = arcade.check_for_collision_with_list(self.player1, self.player2.arrow_list) # for bad guy
+        for arrow in arrow_hit2:
+            arrow.hit.kill()
+            arrow.kill()
+            self.player1.health -= ARROW_DAMAGE
+        # Hit function for knife
+        knife_hit1 = arcade.check_for_collision_with_list(self.player2, self.player1.knife_list) # for bad guy
+        for knife in knife_hit1:
+            knife.kill()
+            self.player2.health -= KNIFE_DAMAGE
+            self.player1.knife_num = 0
+            
+        knife_hit2 = arcade.check_for_collision_with_list(self.player1, self.player2.knife_list) # for bad guy
+        for knife in knife_hit2:
+            knife.kill()
+            self.player1.health -= KNIFE_DAMAGE
+            self.player2.knife_num = 0
+        
+        # If health is zero kill them
+        if self.player2.health <= 0:
+            self.player2.kill()
+            self.player1.score += 1 
+            self.end_game()
+            
+        if self.player1.health <= 0:
+            self.player1.kill()  
+            self.player2.score += 1 
+            self.end_game()

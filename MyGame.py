@@ -10,7 +10,7 @@ from FSMPlayers.ShortRangePlayer import *
 from FSMPlayers.AllEnemy import *
 from FSMPlayers.HumanPlayer import *
 
-class Game(arcade.Window):
+class MyGame(arcade.Window):
     """ Main application class. """
     def __init__(self, width, height, title,simultaneous_games,player_1_type,player_2_type):
         """

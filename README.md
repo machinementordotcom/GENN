@@ -10,7 +10,7 @@ A fully custom simulation environment that interchangeably compares reinforcemen
 - [Arcade](http://arcade.academy/)
 
 ### Usage:
-- Clone this repository. `git clone https://github.com/McCrearyD/ML_Arena.git`
+- Clone this repository. `git clone https://github.com/dbinnion/AdaptableAITesting.git`
 - To run any simulation, run `python3 main.py` inside the main directory.
 - Follow the terminal instructions to run any type of simulation.
 

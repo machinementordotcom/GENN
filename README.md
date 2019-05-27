@@ -35,15 +35,3 @@ A fully custom simulation environment that interchangeably compares reinforcemen
 
 <br>
 
-# Main Simulation Keys
-|Key(s)|Description|Context|
-|---|---|---|
-|W, A, S, D|Movement|Player|
-|LEFT, UP, RIGHT, DOWN|Directional movement|Player|
-|Q|Shield|Player|
-|SPACE|Long-range arrow|Player|
-|E|Mid-range fireball|Player|
-|R|Short-range knife|Player|
-|esc|End The Game|Global|
-<br>
-

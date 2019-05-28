@@ -1,7 +1,7 @@
 import arcade
 import sys
 from MyGame import *
-from Game import *
+#from Game import *
 from SimulatedGame import * 
 from util.constants import * 
 from util.inputFunctions import * 

@@ -6,7 +6,7 @@ from util.constants import *
 class RangePlayer(arcade.Sprite):
     def equipshield(self):
         self.set_texture(1)
-        self.health += 50
+        self.health += PLAYER_HEALTH*.5
         self.shield +=1
     def shootarrow(self):
         arrow = Arrow("images/arrow.png",.1)
@@ -73,8 +73,8 @@ class RangePlayer(arcade.Sprite):
             self.shootarrow()
             self.curtime = 0
         for arrow in self.arrow_list:
-            if arrow.center_x>SCREEN_WIDTH + 6 or arrow.center_y>SCREEN_HEIGHT + 6 or arrow.center_x< -6 or arrow.center_y< -6 :
+            if arrow.center_x>SCREEN_WIDTH + 10 or arrow.center_y>SCREEN_HEIGHT + 10 or arrow.center_x< -10 or arrow.center_y< -10 :
                 arrow.hit.kill()
                 arrow.kill()
-        if self.health <=50 and self.shield < 1:
+        if self.health <= PLAYER_HEALTH*.5 and self.shield < 1:
             self.equipshield()

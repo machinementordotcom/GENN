@@ -4,6 +4,8 @@ import random
 from util.constants import * 
 
 class HumanPlayer(arcade.Sprite):
+    # def moveW(self):
+    #         self.center_y += MOVEMENT_SPEED
     def throwfire(self):
         fireball = Fireball("images/fire.png", .1)
         fireball.center_x = self.center_x
@@ -34,4 +36,11 @@ class HumanPlayer(arcade.Sprite):
         knife.angle = self.angle-180
         self.knife_num += 1 # prevents multiple knifes from being created
         self.knife_list.append(knife)
-    
+    # def update(self):
+    #     for fireball in self.fireball_list:
+    #         diff_x = fireball.start_x-fireball.center_x
+    #         diff_y = fireball.start_y-fireball.center_y
+    #         fireball_dist = math.sqrt(diff_x**2 + diff_y**2)
+    #         if fireball_dist>200:
+    #             fireball.kill()
+ 

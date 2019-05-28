@@ -3,6 +3,7 @@ import os
 import math
 import random
 import sys
+import time
 from arcade.arcade_types import Color
 from FSMPlayers.RangePlayer import *
 from FSMPlayers.MidRangePlayer import *
@@ -23,14 +24,12 @@ class MyGame(arcade.Window):
         # as mentioned at the top of this program.
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
-        
+        self.start = time.time()
         self.simultaneous_games = simultaneous_games
         self.player1_type = player_1_type.lower()
         self.player2_type = player_2_type.lower()
 
         # Sprite lists
-        self.coin_list = None
-        self.wall_list = None
         self.player_list = None
         self.arrow_list = None
         self.fireball_list = None
@@ -39,22 +38,28 @@ class MyGame(arcade.Window):
         # Set up the player
         self.player2_sprite = None
         self.player1 = None
-        self.physics_engine = None
         self.player1_score = 0
         self.player2_score = 0
-        
+        self.draws = 0
+
     def end_game(self):
         self.player1_score += self.player1.score
         self.player2_score += self.player2.score
         self.simultaneous_games -= 1
         if self.simultaneous_games == 0:
+            print("Player 1",self.player1_type + ":",str(self.player1_score))
             file = open("player1score.txt","w")
             file.write(str(self.player1_score))
             file.close()
+            print("Player 2",self.player2_type + ":",str(self.player2_score))
             file = open("player2score.txt","w")
             file.write(str(self.player2_score)) 
             file.close()
-            sys.exit()
+            print("Draws :",self.draws)
+            print("Total Time: ",time.time() - self.start)
+            raise Exception("End")
+            # return False
+            # sys.exit()
         self.setup()
 
     def setup(self):
@@ -62,7 +67,6 @@ class MyGame(arcade.Window):
 
         # Sprite lists
         self.player_list = arcade.SpriteList()
-        self.wall_list = arcade.SpriteList()
         self.arrow_list = arcade.SpriteList()
         self.fireball_list = arcade.SpriteList()
         self.knife_list = arcade.SpriteList()
@@ -79,11 +83,13 @@ class MyGame(arcade.Window):
         else:
             self.player1 = Enemy(MAGE_IMAGE,SPRITE_SCALING)
 
-        self.player1.append_texture(arcade.load_texture("images/a_shield_round.png"))
+
+        self.player1.append_texture(arcade.load_texture('images/a_shield_round.png'))
+        self.player1.append_texture(arcade.load_texture('images/knife.png'))
         self.player1.center_x = random.randint(10,900)
         self.player1.center_y = random.randint(10,600)
         self.player1.score = 0
-        self.player1.health = 100
+        self.player1.health = PLAYER_HEALTH
         self.player1.curtime = 0
         self.player1.hitbox_list = arcade.SpriteList()
         self.player1.arrow_list = arcade.SpriteList()
@@ -109,7 +115,7 @@ class MyGame(arcade.Window):
         self.player2.center_x = random.randint(10,900)
         self.player2.opponent = self.player1
         self.player2.center_y = random.randint(10,600)
-        self.player2.health = 100
+        self.player2.health = PLAYER_HEALTH
         self.player2.score = 0
         self.player2.curtime = 0
         self.player2.knife_num = 0
@@ -123,6 +129,7 @@ class MyGame(arcade.Window):
         self.player2.opponent_hitbox_list = self.player1.hitbox_list
         self.player1.opponent = self.player2
         self.player_list.append(self.player1)
+        
 
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)
@@ -137,7 +144,6 @@ class MyGame(arcade.Window):
 
         # Draw all the sprites.
         
-        self.wall_list.draw()
         self.player_list.draw()
         self.player1.arrow_list.draw()
         self.player1.fireball_list.draw()
@@ -187,9 +193,11 @@ class MyGame(arcade.Window):
                 Knife
             elif key == arcade.key.R and self.player1.knife_num == 0:
                 self.player1.shortattack()
+            elif key == arcade.key.ESCAPE:
+                sys.exit()
                 
             # Calls shield (will simplify and replace with arc that is always in front of player later) can be used 3 times (can be modified if need to)
-            if self.player1.shield <= 3:
+            if self.player1.shield < 1:
                 if key == arcade.key.Q:
                     self.player1.equipshield()
         if self.player2_type == 'human':
@@ -217,9 +225,11 @@ class MyGame(arcade.Window):
                 Knife
             elif key == arcade.key.R and self.player2.knife_num == 0:
                 self.player2.shortattack()
+            elif key == arcade.key.ESCAPE:
+                sys.exit()
                 
             # Calls shield (will simplify and replace with arc that is always in front of player later) can be used 3 times (can be modified if need to)
-            if self.player2.shield <= 3:
+            if self.player2.shield < 1:
                 if key == arcade.key.Q:
                     self.player2.equipshield()
 
@@ -239,14 +249,15 @@ class MyGame(arcade.Window):
                 self.player2.change_x = 0
             elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
                 self.player2.change_angle = 0
+
     # Functions that change with time
     def update(self, delta_time):
         """ Movement and game logic """
         # Call update on all sprites
-        self.arrow_list.update()
-        self.player_list.update()
+        # self.arrow_list.update()
         #self.physics_engine.update()
-        self.fireball_list.update()
+        # self.fireball_list.update()
+        self.player_list.update()
         self.player2.fireball_list.update()
         self.player2.arrow_list.update()
         self.player1.fireball_list.update()
@@ -257,20 +268,20 @@ class MyGame(arcade.Window):
         #player collision
         if self.player1.center_x <= 0:
             self.player1.center_x = 0
-        if self.player1.center_x >= SCREEN_WIDTH:
+        elif self.player1.center_x >= SCREEN_WIDTH:
             self.player1.center_x = SCREEN_WIDTH
         if self.player1.center_y <= 0:
             self.player1.center_y = 0
-        if self.player1.center_y >= SCREEN_HEIGHT:
+        elif self.player1.center_y >= SCREEN_HEIGHT:
             self.player1.center_y = SCREEN_HEIGHT
         #player2 collision
         if self.player2.center_x <= 0:
             self.player2.center_x = 0
-        if self.player2.center_x >= SCREEN_WIDTH:
+        elif self.player2.center_x >= SCREEN_WIDTH:
             self.player2.center_x = SCREEN_WIDTH
         if self.player2.center_y <= 0:
             self.player2.center_y = 0
-        if self.player2.center_y >= SCREEN_HEIGHT:
+        elif self.player2.center_y >= SCREEN_HEIGHT:
             self.player2.center_y = SCREEN_HEIGHT
 
 
@@ -305,12 +316,10 @@ class MyGame(arcade.Window):
         # Hit function for arrrow
         arrow_hit1 = arcade.check_for_collision_with_list(self.player2, self.player1.arrow_list) # for bad guy
         for arrow in arrow_hit1:
-            arrow.hit.kill()
             arrow.kill()
             self.player2.health -= ARROW_DAMAGE
         arrow_hit2 = arcade.check_for_collision_with_list(self.player1, self.player2.arrow_list) # for bad guy
         for arrow in arrow_hit2:
-            arrow.hit.kill()
             arrow.kill()
             self.player1.health -= ARROW_DAMAGE
         # Hit function for knife
@@ -327,12 +336,15 @@ class MyGame(arcade.Window):
             self.player2.knife_num = 0
         
         # If health is zero kill them
-        if self.player2.health <= 0:
+        if self.player1.health <= 0 and self.player2.health <= 0:
+            self.draws += 1
+            self.end_game()
+        elif self.player2.health <= 0:
             self.player2.kill()
             self.player1.score += 1 
             self.end_game()
             
-        if self.player1.health <= 0:
+        elif self.player1.health <= 0:
             self.player1.kill()  
             self.player2.score += 1 
             self.end_game()

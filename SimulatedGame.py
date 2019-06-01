@@ -11,6 +11,7 @@ from FSMPlayers.ShortRangePlayer import *
 from FSMPlayers.AllEnemy import *
 from FSMPlayers.HumanPlayer import *
 from util.inputFunctions import *
+from DynamicController import *
 
 class SimulatedGame(arcade.Window):
     """ Main application class. """
@@ -85,11 +86,22 @@ class SimulatedGame(arcade.Window):
             self.player1 = MidRangePlayer(KNIGHT_IMAGE,1)
         elif self.player1_type.lower() == 'short':
             self.player1 = ShortRangePlayer(KNIGHT_IMAGE,1)
+        elif self.player1_type.lower() == 'dc':
+            self.player1 = DynamicController(KNIGHT_IMAGE,1)
+            if self.iterations == self.totalIterations:
+                self.player1.weights = [1/3,1/3,1/3]
+                self.player1.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
+                self.player1.benchmarkDifference = 0
+            else:
+                self.player1.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
+                self.player1.benchmarkDifference = 0
+                self.player1.readWeights()
         else:
             self.player1 = Enemy(KNIGHT_IMAGE,1)
 
         self.player1.append_texture(arcade.load_texture(KNIGHT_IMAGE))
         self.player1.append_texture(arcade.load_texture(KNIGHT_IMAGE))
+        self.player1.type = random.choice(["range","mid","short"])
         self.player1.center_x = random.randint(10,900)
         self.player1.center_y = random.randint(10,600)
         self.player1.score = 0
@@ -109,6 +121,9 @@ class SimulatedGame(arcade.Window):
             self.player2 = MidRangePlayer(KNIGHT_IMAGE,1)
         elif self.player2_type.lower() == 'short':
             self.player2 = ShortRangePlayer(KNIGHT_IMAGE,1)
+        elif self.player2_type.lower() == 'dc':
+            self.player2 = DynamicController(KNIGHT_IMAGE,1)
+            self.player2.weights = [1/3,1/3,1/3]
         else:
             self.player2 = Enemy(KNIGHT_IMAGE,1)
 
@@ -120,6 +135,7 @@ class SimulatedGame(arcade.Window):
         self.player2.health = PLAYER_HEALTH
         self.player2.score = 0
         self.player2.curtime = 0
+        self.player2.type = self.player2_type.lower()
         self.player2.knife_num = 0
         self.player2.shield = 0
         self.player_list.append(self.player2)
@@ -131,7 +147,6 @@ class SimulatedGame(arcade.Window):
         self.player2.opponent_hitbox_list = self.player1.hitbox_list
         self.player1.opponent = self.player2
         self.player_list.append(self.player1)
-        
 
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)

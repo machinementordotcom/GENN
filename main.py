@@ -16,18 +16,20 @@ def main(args):
     # games = int(input('Enter the amount of games to be played: '))
     spacer()
     iterations = get_int_choice('Enter the amount of iterations to be played: ',1,5000)
-    simulation_player_1 = get_str_choice("What type of simulation do you want for player 1(fsm)?",'fsm','freeplay')
-    if simulation_player_1 == "freeplay":
+    simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc')
+    if simulation_player_1.lower() == "freeplay":
         player_1_type = "human"
         graphics = 'yes'
-    elif simulation_player_1 == "fsm":
-            player_1_type = get_str_choice("What type of player is player 1 (short, mid, or range)?",'short','mid','range','pq')
-    simulation_player_2 = get_str_choice("What type of simulation do you want for player 2(fsm)?",'fsm','freeplay')
+    elif simulation_player_1.lower() == "fsm":
+        player_1_type = get_str_choice("What type of player is player 1 ?",'short','mid','range','pq')
+    elif simulation_player_1.lower() == "dc":
+        player_1_type = 'dc'
+    simulation_player_2 = get_str_choice("What type of simulation do you want for player 2?",'fsm','freeplay')
     if simulation_player_2 == "freeplay":
         player_2_type = "human"
         graphics = 'yes'
     if simulation_player_2 == "fsm":
-        player_2_type = get_str_choice("What type of player is player 2 (short, mid, or range)?",'short','mid','range','pq')
+        player_2_type = get_str_choice("What type of player is player 2?",'short','mid','range','pq')
     if graphics == 'no':
         graphics = get_str_choice('Run Graphically?: ','yes','no')
 

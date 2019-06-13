@@ -18,6 +18,7 @@ A fully custom simulation environment that interchangeably compares reinforcemen
 ### Simulation Types:
 - **Freeplay** Freeplay let’s you play against a character of any type.
 - **FSM**: Finite State Machine allows you to select from three character types (range, mid,short). These are trained with profile based logic
+- **DC**: Dynamic Controller allows you to select from three types (master,average,random). These follow logic based on a weight scheme that the player learns from the results of the game
 
 
 

@@ -31,6 +31,8 @@ SHORT_SPEED_HANDICAP = .955
 MID_SPEED_HANDICAP = 1
 
 
+
+
 MAGE_IMAGE = 'images/mage.png'
 KNIGHT_IMAGE = 'images/lilknight.png'
 

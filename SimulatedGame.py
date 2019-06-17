@@ -11,7 +11,7 @@ from FSMPlayers.ShortRangePlayer import *
 from FSMPlayers.AllEnemy import *
 from FSMPlayers.HumanPlayer import *
 from util.inputFunctions import *
-from DynamicController import *
+from DynamicController.DynamicController import *
 
 class SimulatedGame(arcade.Window):
     """ Main application class. """
@@ -92,8 +92,8 @@ class SimulatedGame(arcade.Window):
             self.player1.adjusting = None
             if self.iterations == self.totalIterations:
                 self.player1.adjustingWeight = 0
-                shootWeights = [0.413447997,0.052134062,0.026132062,0.005921391,0.118060872,0.030692405,0.022900098,0.000975148,0.000545997,0.001726747,0.000583085,0.000545616,0.000363813,0.000368561,0.000828372,0.027643191,0.006816719,0.001256173,0.002667657,0.284793051,1.60E-03] #[1/7] * 21
-                moveWeights = [0.215693699 ,0.055513213,0.180994072,0.123191965 ,0.209447875,0.15983338 ,0.055325796,0.049965682,0.208096511,0.016425697,0.323913853,0.020331929,0.340417658,0.04084867,0.64343802,0.35656198,0.721675089,0.278324911,0.933683364,0.066316636]
+                shootWeights =  MASTER_SHOOT_WEIGHTS
+                moveWeights = MASTER_MOVE_WEIGHTS
                 self.player1.weights = [shootWeights,moveWeights]
                 self.player1.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
                 self.player1.benchmarkDifference = 0

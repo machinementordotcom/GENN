@@ -90,9 +90,8 @@ class MyGame(arcade.Window):
             self.player1.adjusting = None
             if self.iterations == self.totalIterations:
                 self.player1.adjustingWeight = 0
-                shootWeights = MASTER_SHOOT_WEIGHTS
-                moveWeights = MASTER_MOVE_WEIGHTS
-                self.player1.weights = [shootWeights,moveWeights]
+                self.player1.weights = [[],[]]
+                self.player1.readWeights("DynamicController/masterWeights.csv")
                 self.player1.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
                 self.player1.benchmarkDifference = 0
                 self.player1.shootRule = None
@@ -103,16 +102,15 @@ class MyGame(arcade.Window):
                 self.player1.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
                 self.player1.benchmarkDifference = 0
                 self.player1.weights = [[],[]]
-                self.player1.readWeights()
+                self.player1.readWeights("DynamicController/masterWeights.csv")
                 chooseWeight(self.player1)
         elif self.player1_type.lower() == 'average':
             self.player1 = DynamicController(MAGE_IMAGE,SPRITE_SCALING)
             self.player1.id = "player1"
             self.player1.adjusting = 'both'
             if self.iterations == self.totalIterations:
-                shootWeights = [0.413447997,0.052134062,0.026132062,0.005921391,0.118060872,0.030692405,0.022900098,0.000975148,0.000545997,0.001726747,0.000583085,0.000545616,0.000363813,0.000368561,0.000828372,0.027643191,0.006816719,0.001256173,0.002667657,0.284793051,1.60E-03] #[1/7] * 21
-                moveWeights = [0.215693699 ,0.055513213,0.180994072,0.123191965 ,0.209447875,0.15983338 ,0.055325796,0.049965682,0.208096511,0.016425697,0.323913853,0.020331929,0.340417658,0.04084867,0.64343802,0.35656198,0.721675089,0.278324911,0.933683364,0.066316636]
-                self.player1.weights = [shootWeights,moveWeights]
+                self.player1.weights = [[],[]]
+                self.player1.readWeights("DynamicController/masterWeights.csv")
                 self.player1.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
                 self.player1.benchmarkDifference = 0
                 self.player1.shootRule = None
@@ -123,6 +121,7 @@ class MyGame(arcade.Window):
                 self.player1.benchmarkDifference = 0
                 self.player1.weights = [[],[]]
                 self.player1.readWeights()
+                chooseWeight(self.player1)
         elif self.player1_type.lower() == 'random':
             self.player1 = DynamicController(MAGE_IMAGE,SPRITE_SCALING)
             self.player1.id = "player1"
@@ -177,9 +176,8 @@ class MyGame(arcade.Window):
             self.player2.adjusting = None
             if self.iterations == self.totalIterations:
                 self.player2.adjustingWeight = 0
-                shootWeights = [0.413447997,0.052134062,0.026132062,0.005921391,0.118060872,0.030692405,0.022900098,0.000975148,0.000545997,0.001726747,0.000583085,0.000545616,0.000363813,0.000368561,0.000828372,0.027643191,0.006816719,0.001256173,0.002667657,0.284793051,1.60E-03] #[1/7] * 21
-                moveWeights = [0.215693699 ,0.055513213,0.180994072,0.123191965 ,0.209447875,0.15983338 ,0.055325796,0.049965682,0.208096511,0.016425697,0.323913853,0.020331929,0.340417658,0.04084867,0.64343802,0.35656198,0.721675089,0.278324911,0.933683364,0.066316636]
-                self.player2.weights = [shootWeights,moveWeights]
+                self.player2.weights = [[],[]]
+                self.player2.readWeights("DynamicController/masterWeights.csv")
                 self.player2.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
                 self.player2.benchmarkDifference = 0
                 self.player2.shootRule = None
@@ -190,16 +188,15 @@ class MyGame(arcade.Window):
                 self.player2.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
                 self.player2.benchmarkDifference = 0
                 self.player2.weights = [[],[]]
-                self.player2.readWeights()
+                self.player2.readWeights("DynamicController/masterWeights.csv")
                 chooseWeight(self.player2)
         elif self.player2_type.lower() == 'average':
             self.player2 = DynamicController(KNIGHT_IMAGE,1)
             self.player2.id = "player2"
             self.player2.adjusting = 'both'
             if self.iterations == self.totalIterations:
-                shootWeights = [0.413447997,0.052134062,0.026132062,0.005921391,0.118060872,0.030692405,0.022900098,0.000975148,0.000545997,0.001726747,0.000583085,0.000545616,0.000363813,0.000368561,0.000828372,0.027643191,0.006816719,0.001256173,0.002667657,0.284793051,1.60E-03] #[1/7] * 21
-                moveWeights = [0.215693699 ,0.055513213,0.180994072,0.123191965 ,0.209447875,0.15983338 ,0.055325796,0.049965682,0.208096511,0.016425697,0.323913853,0.020331929,0.340417658,0.04084867,0.64343802,0.35656198,0.721675089,0.278324911,0.933683364,0.066316636]
-                self.player2.weights = [shootWeights,moveWeights]
+                self.player2.weights = [[],[]]
+                self.player2.readWeights("DynamicController/masterWeights.csv")
                 self.player2.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
                 self.player2.benchmarkDifference = 0
                 self.player2.shootRule = None

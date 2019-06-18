@@ -15,13 +15,22 @@ class DynamicController(arcade.Sprite):
             wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
             for i in range(2):
                 wr.writerow(self.weights[i])
-    def readWeights(self):
-        with open('DynamicController/weightsDynamicController' + self.id + '.csv') as csvfile:
-            reader = csv.reader(csvfile)
-            weightType = 0
-            for row in reader:
-                self.weights[weightType] = [float(i) for i in row]
-                weightType +=1
+    def readWeights(self,path = None):
+        if path == None:
+            with open('DynamicController/weightsDynamicController' + self.id + '.csv') as csvfile:
+                reader = csv.reader(csvfile)
+                weightType = 0
+                for row in reader:
+                    self.weights[weightType] = [float(i) for i in row]
+                    weightType +=1
+        else:
+            with open(path) as csvfile:
+                reader = csv.reader(csvfile)
+                weightType = 0
+                for row in reader:
+                    self.weights[weightType] = [float(i) for i in row]
+                    weightType +=1
+
     def update(self):
         self.curtime += 1
         self.total_time += 1

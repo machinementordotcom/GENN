@@ -14,7 +14,7 @@ from FSMPlayers.AllEnemy import *
 from FSMPlayers.HumanPlayer import *
 from util.inputFunctions import *
 from DynamicController.DynamicController import *
-from util/constants import *
+from util.constants import *
 
 class Game:
     def __init__(self,width , height, title, iterations, player_1_type, player_2_type):
@@ -251,12 +251,12 @@ class Game:
     # There are 2 functions for each so it is easy to not interfere 
     # with each other
     def arrow1(self):
-        self.arw = Arrow(self.player1.x,self.player1.y,FIREBALL_SPEED,self.player1.box)
+        self.arw = Arrow(self.player1.x,self.player1.y,ARROW_SPEED,self.player1.box)
         self.player1.arrow_list.append(self.arw)
         
     def arrow2(self):
 
-        self.arw = Arrow(self.player2.x,self.player2.y,FIREBALL_SPEED,self.player2.box)
+        self.arw = Arrow(self.player2.x,self.player2.y,ARROW_SPEED,self.player2.box)
         self.player2.arrow_list.append(self.arw)
         
     def fire1(self):

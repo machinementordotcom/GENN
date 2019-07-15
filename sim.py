@@ -251,22 +251,22 @@ class Game:
     # There are 2 functions for each so it is easy to not interfere 
     # with each other
     def arrow1(self):
-        self.arw = Arrow(self.player1.x,self.player1.y,ARROW_SPEED,self.player1.box)
+        self.arw = ArrowSimulated(self.player1.x,self.player1.y,ARROW_SPEED,self.player1.box)
         self.player1.arrow_list.append(self.arw)
         
     def arrow2(self):
 
-        self.arw = Arrow(self.player2.x,self.player2.y,ARROW_SPEED,self.player2.box)
+        self.arw = ArrowSimulated(self.player2.x,self.player2.y,ARROW_SPEED,self.player2.box)
         self.player2.arrow_list.append(self.arw)
         
     def fire1(self):
 
-        self.fireball = FireBall(self.player1.x,self.player1.y,ARROW_SPEED,self.player1.box)  
+        self.fireball = FireballSimulated(self.player1.x,self.player1.y,ARROW_SPEED,self.player1.box)  
         self.player1.fireball_list.append(self.fireball)
         
     def fire2(self):
 
-        self.fireball = FireBall(self.player2.x,self.player2.y,ARROW_SPEED,self.player2.box)  
+        self.fireball = FireballSimulated(self.player2.x,self.player2.y,ARROW_SPEED,self.player2.box)  
         self.player2.fireball_list.append(self.fireball)
     
     def equip_shield1(self):

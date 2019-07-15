@@ -37,18 +37,23 @@ MID_SPEED_HANDICAP = 1
 MAGE_IMAGE = 'images/mage.png'
 KNIGHT_IMAGE = 'images/lilknight.png'
 
-class Arrow(arcade.Sprite):
-    def update(self):
-        self.center_x += self.change_x
-        self.center_y += self.change_y
+
 class HitBox(arcade.Sprite):
     z = 500
     y = ARROW_IMAGE_HEIGHT
-class Fireball(arcade.Sprite):
-    def update(self):
-        self.center_x += self.change_x
-        self.center_y += self.change_y
 class Knife(arcade.Sprite):
     def update(self):
         self.center_x += self.change_x
         self.center_y += self.change_y
+class Arrow:
+    def __init__(self, x, y, v, box):
+        self.x = x 
+        self.y = y
+        self.vel = v
+        self.box = box
+class FireBall:
+    def __init__(self, x, y, v, box):
+        self.x = x 
+        self.y = y
+        self.vel = v
+        self.box = box

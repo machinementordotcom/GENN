@@ -2,7 +2,8 @@ import arcade
 import sys
 from MyGame import *
 #from Game import *
-from SimulatedGame import * 
+#from SimulatedGame import * 
+from sim import *
 from util.constants import * 
 from util.inputFunctions import * 
 import time
@@ -44,14 +45,21 @@ def main(args):
         except:
             pass
     elif graphics == 'no':
-        window = SimulatedGame(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,iterations,player_1_type,player_2_type)
-        window.setup()
+        #x = Game()
+        x = Game(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,iterations,player_1_type,player_2_type)
+        x.setup()
         try:
-            while window:
-                window.on_draw()
-                window.update(1/60)
+           x.update()
         except:
-            pass
+           pass
+        #window = SimulatedGame(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,iterations,player_1_type,player_2_type)
+        #window.setup()
+        #try:
+        #    while window:
+        #        window.on_draw()
+        #        window.update(1/60)
+        #except:
+        #    pass
 
 if __name__ == "__main__":
     main(sys.argv)

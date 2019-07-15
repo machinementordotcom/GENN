@@ -45,13 +45,21 @@ class Knife(arcade.Sprite):
     def update(self):
         self.center_x += self.change_x
         self.center_y += self.change_y
-class Arrow:
+class Arrow(arcade.Sprite):
+    def update(self):
+        self.center_x += self.change_x
+        self.center_y += self.change_y
+class Fireball(arcade.Sprite):
+    def update(self):
+        self.center_x += self.change_x
+        self.center_y += self.change_y
+class ArrowSimulated:
     def __init__(self, x, y, v, box):
         self.x = x 
         self.y = y
         self.vel = v
         self.box = box
-class FireBall:
+class FireballSimulated:
     def __init__(self, x, y, v, box):
         self.x = x 
         self.y = y

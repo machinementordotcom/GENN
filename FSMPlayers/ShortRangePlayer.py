@@ -25,7 +25,7 @@ class ShortRangePlayer(arcade.Sprite):
         hit.center_y = self.center_y + math.cos(math.radians(hit.angle)) * hit.height/2
         
         knife.hit = hit
-        self.hitbox_list.append(hit)
+        # self.hitbox_list.append(hit)
     def update(self):
         self.curtime += 1
         x_diff = self.opponent.center_x - self.center_x

@@ -48,10 +48,10 @@ def main(args):
         #x = Game()
         x = Game(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,iterations,player_1_type,player_2_type)
         x.setup()
-        try:
+        while True:
            x.update()
-        except:
-           pass
+        # except:
+        #    pass
         #window = SimulatedGame(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,iterations,player_1_type,player_2_type)
         #window.setup()
         #try:

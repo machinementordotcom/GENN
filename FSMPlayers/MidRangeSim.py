@@ -102,7 +102,15 @@ class MidRangePlayer(arcade.Sprite):
                         else:
                             self.center_x += -(MOVEMENT_SPEED * MID_SPEED_HANDICAP)
         
-        
+        if self.center_y >= SCREEN_HEIGHT:
+            self.center_y = SCREEN_HEIGHT
+        if self.center_y <= 0:
+            self.center_y = 0
+        if self.center_x >= SCREEN_WIDTH:
+            self.center_x = SCREEN_WIDTH
+        if self.center_x <= 0:
+            self.center_x = 0
+            
         if self.curtime >=30:
             if self.d <= 300:
                 self.throwfire()

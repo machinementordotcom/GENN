@@ -56,6 +56,15 @@ class ShortRangePlayer(arcade.Sprite):
             elif y_diff < 0:
                 self.center_y -= (MOVEMENT_SPEED * SHORT_SPEED_HANDICAP)
 
+        if self.center_y >= SCREEN_HEIGHT:
+            self.center_y = SCREEN_HEIGHT
+        if self.center_y <= 0:
+            self.center_y = 0
+        if self.center_x >= SCREEN_WIDTH:
+            self.center_x = SCREEN_WIDTH
+        if self.center_x <= 0:
+            self.center_x = 0
+
         self.angle = math.degrees(math.atan2(y_diff,x_diff))-90
         self.change_x = math.cos(self.angle)*MOVEMENT_SPEED
         self.change_y = math.sin(self.angle)*MOVEMENT_SPEED

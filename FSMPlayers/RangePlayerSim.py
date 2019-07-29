@@ -77,6 +77,15 @@ class RangePlayer(arcade.Sprite):
         self.center_x += x_change
         self.center_y += y_change
 
+        if self.center_y >= SCREEN_HEIGHT:
+            self.center_y = SCREEN_HEIGHT
+        if self.center_y <= 0:
+            self.center_y = 0
+        if self.center_x >= SCREEN_WIDTH:
+            self.center_x = SCREEN_WIDTH
+        if self.center_x <= 0:
+            self.center_x = 0
+
             
         x_diff = self.opponent.center_x - self.center_x
         y_diff = self.opponent.center_y - self.center_y

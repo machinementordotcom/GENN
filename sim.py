@@ -279,12 +279,29 @@ class Game:
         self.player2.health += 50
         self.player2.shield += 1
 
+    def collisionCheck(self,player,projectile):
+        if (
+                (     player.center_x - player.box <= projectile.center_x + projectile.box and player.center_x + player.box >= projectile.center_x + projectile.box  
+                or   player.center_x - player.box <= projectile.center_x - projectile.box and player.center_x + player.box >= projectile.center_x - projectile.box 
+                or   player.center_x - player.box <= projectile.center_x and player.center_x + player.box >= projectile.center_x  )
+                and 
+                (    player.center_y - player.box <= projectile.center_y + projectile.box and player.center_y + player.box >= projectile.center_y + projectile.box
+                or   player.center_y - player.box <= projectile.center_y - projectile.box and player.center_y + player.box >= projectile.center_y - projectile.box  
+                or   player.center_y - player.box <= projectile.center_y and player.center_y + player.box >= projectile.center_y  
+                )
+            ):
+            return True
+        return False
     def update(self):
         # sets a timer that game and perspective players use
         # not sure if necessary
         self.curtime += 1 
+        # print(self.player1.center_x,self.player1.center_y,self.player2.center_x,self.player2.center_y)
+        print(self.player1.health,self.player2.health)
         self.player1.update()
         self.player2.update()
+        # print(self.player1.health,self.player2.health)
+
         # player 1 collision
         if self.player1.center_y >= self.height:
             self.player1.center_y = self.height
@@ -303,78 +320,93 @@ class Game:
             self.player2.center_x = self.width
         if self.player2.center_x <= 0:
             self.player2.center_x = 0
+
+
         
         # Stop at hit boxes
         # Only needs to be done for one player
-        if self.player1.center_x - self.player1.box <= self.player2.center_x + self.player2.box:
-            self.player1.center_x = self.player2.center_x + self.player2.box + self.player1.box
-        elif self.player1.center_x + self.player1.box >= self.player2.center_x - self.player2.box:
-            self.player1.center_x = self.player2.center_x - self.player2.box - self.player1.box
-        if self.player1.center_y - self.player1.box <= self.player2.center_y + self.player2.box:
-            self.player1.center_y = self.player2.center_y + self.player2.box + self.player1.box
-        elif self.player1.center_y + self.player1.box >= self.player2.center_y - self.player2.box:
-            self.player1.center_y = self.player2.center_y - self.player2.box - self.player1.box
+        # if self.player1.center_x - self.player1.box <= self.player2.center_x + self.player2.box:
+        #     self.player1.center_x = self.player2.center_x + self.player2.box + self.player1.box
+        # elif self.player1.center_x + self.player1.box >= self.player2.center_x - self.player2.box:
+        #     self.player1.center_x = self.player2.center_x - self.player2.box - self.player1.box
+        # if self.player1.center_y - self.player1.box <= self.player2.center_y + self.player2.box:
+        #     self.player1.center_y = self.player2.center_y + self.player2.box + self.player1.box
+        # elif self.player1.center_y + self.player1.box >= self.player2.center_y - self.player2.box:
+        #     self.player1.center_y = self.player2.center_y - self.player2.box - self.player1.box
         
-      
+
 
         #fireball movement
         for self.fireball in self.player1.fireball_list:
+            # print(self.fireball.center_x,self.fireball.center_y,self.player2.center_x,self.player2.center_y)
+            if self.collisionCheck(self.player2,self.fireball):
+                self.player1.fireball_list.remove(self.fireball)
+                self.player2.health -= FIREBALL_DAMAGE
+            elif self.fireball.center_x < 0 or self.fireball.center_x > SCREEN_WIDTH or self.fireball.center_y < 0 or self.fireball.center_y > SCREEN_HEIGHT:
+                self.player1.fireball_list.remove(self.fireball)
             self.fireball.center_x += self.fireball.vel*math.cos(self.player1.angle)
             self.fireball.center_y += self.fireball.vel*math.sin(self.player1.angle)
 
-            if self.fireball.center_x - self.fireball.box <= self.player2.center_x + self.player2.box or self.fireball.center_x + self.fireball.box >= self.player2.center_x - self.player2.box and self.fireball.center_y + self.fireball.box <= self.player2.center_y - self.player2.box or self.fireball.center_y + self.fireball.box >= self.player2.center_y - self.player2.box:
-                self.player1.fireball_list.remove(self.fireball)
-                self.player2.health -= FIREBALL_DAMAGE
         #fireball movement
         for self.fireball in self.player2.fireball_list:
-            self.fireball.center_x += self.fireball.vel*math.cos(self.player2.angle)
-            self.fireball.center_y += self.fireball.vel*math.sin(self.player2.angle)
-        
-            if self.fireball.center_x - self.fireball.box <= self.player1.center_x + self.player1.box or self.fireball.center_x + self.fireball.box >= self.player1.center_x - self.player1.box and self.fireball.center_y + self.fireball.box <= self.player1.center_y - self.player1.box or self.fireball.center_y + self.fireball.box >= self.player1.center_y - self.player1.box:
+            if self.collisionCheck(self.player1,self.fireball):
                 self.player2.fireball_list.remove(self.fireball)
                 self.player1.health -= FIREBALL_DAMAGE
+            elif self.fireball.center_x < 0 or self.fireball.center_x > SCREEN_WIDTH or self.fireball.center_y < 0 or self.fireball.center_y > SCREEN_HEIGHT:
+                self.player2.fireball_list.remove(self.fireball)
+            self.fireball.center_x += self.fireball.vel*math.cos(self.player2.angle)
+            self.fireball.center_y += self.fireball.vel*math.sin(self.player2.angle)
+    
 
         # Arrow movement
         for self.arw in self.player1.arrow_list:
-            self.arw.center_x += self.arw.vel*math.cos(self.player1.angle)
-            self.arw.center_y += self.arw.vel*math.sin(self.player1.angle)
-                        
-            if self.arw.center_x - self.arw.box <= self.player2.center_x + self.player2.box or self.arw.center_x + self.arw.box >= self.player2.center_x - self.player2.box and self.arw.center_y + self.arw.box <= self.player2.center_y - self.player2.box or self.arw.center_y + self.arw.box >= self.player2.center_y - self.player2.box:
+                        # Player 2 and arrow hit check
+            if self.collisionCheck(self.player2,self.arw):
                 self.player1.arrow_list.remove(self.arw)
                 self.player2.health -= ARROW_DAMAGE
-            
+            elif self.arw.center_x < 0 or self.arw.center_x > SCREEN_WIDTH or self.arw.center_y < 0 or self.arw.center_y > SCREEN_HEIGHT:
+                self.player1.arrow_list.remove(self.arw)
+
+            self.arw.center_x += self.arw.vel*math.cos(self.player1.angle)
+            self.arw.center_y += self.arw.vel*math.sin(self.player1.angle)
+
         # Arrow movement
         for self.arw in self.player2.arrow_list:
-            self.arw.center_x += self.arw.vel*math.cos(self.player2.angle)
-            self.arw.center_y += self.arw.vel*math.sin(self.player2.angle)
-            
-            if self.arw.center_x - self.arw.box <= self.player1.center_x + self.player1.box or self.arw.center_x + self.arw.box >= self.player1.center_x - self.player1.box and self.arw.center_y + self.arw.box <= self.player1.center_y - self.player1.box or self.arw.center_y + self.arw.box >= self.player1.center_y - self.player1.box:
+            if self.collisionCheck(self.player1,self.arw):
                 self.player2.arrow_list.remove(self.arw)
                 self.player1.health -= ARROW_DAMAGE
+            elif self.arw.center_x < 0 or self.arw.center_x > SCREEN_WIDTH or self.arw.center_y < 0 or self.arw.center_y > SCREEN_HEIGHT:
+                self.player2.arrow_list.remove(self.arw)
+
+            self.arw.center_x += self.arw.vel*math.cos(self.player2.angle)
+            self.arw.center_y += self.arw.vel*math.sin(self.player2.angle)
         
 
         for self.knife in self.player1.knife_list:
-            if self.knife.center_x - self.knife.box <= self.player2.center_x + self.player2.box or self.knife.center_x + self.knife.box >= self.player2.center_x - self.player2.box and self.knife.center_y + self.knife.box <= self.player2.center_y - self.player2.box or self.knife.center_y + self.knife.box >= self.player2.center_y - self.player2.box:
-                self.player1.knife_list.remove(self.knife)
+            if self.collisionCheck(self.player2,self.knife):
                 self.player2.health -= KNIFE_DAMAGE
+            self.player1.knife_list.remove(self.knife)
 
         for self.knife in self.player2.knife_list:
-            if self.knife.center_x - self.knife.box <= self.player1.center_x + self.player1.box or self.knife.center_x + self.knife.box >= self.player1.center_x - self.player1.box and self.knife.center_y + self.knife.box <= self.player1.center_y - self.player1.box or self.knife.center_y + self.knife.box >= self.player1.center_y - self.player1.box:
-                self.player2.knife_list.remove(self.knife)
+            if self.collisionCheck(self.player1,self.knife):
                 self.player1.health -= KNIFE_DAMAGE
+            self.player2.knife_list.remove(self.knife)
+
+
         
                 
         # If health is zero kill them
         if self.player1.health <= 0 and self.player2.health <= 0:
             self.draws += 1
+            # print(self.player1.health,self.player2.health)
             self.end_game()
         elif self.player2.health <= 0:
-            self.player2.kill()
+            # print(self.player1.health,self.player2.health)
             self.player1.score += 1 
             self.end_game()
             
         elif self.player1.health <= 0:
-            self.player1.kill()  
+            print(self.player1.health,self.player2.health)
             self.player2.score += 1 
             self.end_game()
         

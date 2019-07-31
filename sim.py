@@ -130,7 +130,7 @@ class Game:
         self.player1.knife_list = []
         self.player1.knife_num = 0
         self.player1.shield = 0
-        self.player1.box = 3
+        self.player1.box = 150
 
         # Set up bad guy
         if self.player2_type.lower() == 'range':
@@ -220,7 +220,7 @@ class Game:
         self.player2.opponent_hitbox_list = self.player1.hitbox_list
         self.player2.opponent = self.player1
         self.player1.opponent = self.player2
-        self.player2.box = 3
+        self.player2.box = 150
 
 
     def end_game(self):
@@ -297,10 +297,9 @@ class Game:
         # not sure if necessary
         self.curtime += 1 
         # print(self.player1.center_x,self.player1.center_y,self.player2.center_x,self.player2.center_y)
-        print(self.player1.health,self.player2.health)
+        # print(self.player1.health,self.player2.health)
         self.player1.update()
         self.player2.update()
-        # print(self.player1.health,self.player2.health)
 
         # player 1 collision
         if self.player1.center_y >= self.height:
@@ -406,7 +405,7 @@ class Game:
             self.end_game()
             
         elif self.player1.health <= 0:
-            print(self.player1.health,self.player2.health)
+            # print(self.player1.health,self.player2.health)
             self.player2.score += 1 
             self.end_game()
         

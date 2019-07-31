@@ -110,7 +110,7 @@ class MidRangePlayer(arcade.Sprite):
             self.center_x = SCREEN_WIDTH
         if self.center_x <= 0:
             self.center_x = 0
-            
+
         if self.curtime >=30:
             if self.d <= 300:
                 self.throwfire()
@@ -121,6 +121,6 @@ class MidRangePlayer(arcade.Sprite):
             diff_y = fireball.start_y-fireball.center_y
             fireball_dist = math.sqrt(diff_x**2 + diff_y**2)
             if fireball_dist>200:
-                fireball.kill()
+                self.fireball_list.remove(fireball)
         if self.health <=PLAYER_HEALTH*.5 and self.shield < 1:
             self.equipshield()

@@ -24,7 +24,7 @@ def main(args):
     elif simulation_player_1.lower() == "fsm":
         player_1_type = get_str_choice("What type of player is player 1 ?",'short','mid','range','pq')
     elif simulation_player_1.lower() == "dc":
-        player_1_type = get_str_choice("What type of dynamic controller is player 1 ?",'master','average','random')
+        player_1_type = get_str_choice("What type of dynamic controller is player 1 ?",'master','average','random','train')
     simulation_player_2 = get_str_choice("What type of simulation do you want for player 2?",'fsm','dc','freeplay')
     if simulation_player_2 == "freeplay":
         player_2_type = "human"

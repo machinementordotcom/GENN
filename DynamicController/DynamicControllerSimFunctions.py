@@ -27,9 +27,6 @@ def throwfireball(self,angle_adjustment):
     fireball.box = BOX
     self.fireball_list.append(fireball)
     hit = HitBox("images/fire.png")
-    hit._set_alpha(0)
-    hit._set_height(math.sqrt(SCREEN_WIDTH**2 + SCREEN_HEIGHT**2))
-    hit._set_width(ARROW_IMAGE_HEIGHT)
     hit.angle = self.angle
     hit.center_x = self.center_x + -math.sin(math.radians(hit.angle)) * hit.height/2
     hit.center_y = self.center_y + math.cos(math.radians(hit.angle)) * hit.height/2
@@ -50,9 +47,6 @@ def shootarrow(self,angle_adjustment):
     arrow.box = BOX
     self.arrow_list.append(arrow)
     hit = HitBox("images/fire.png")
-    hit._set_alpha(0)
-    hit._set_height(math.sqrt(SCREEN_WIDTH**2 + SCREEN_HEIGHT**2))
-    hit._set_width(ARROW_IMAGE_HEIGHT)
     hit.angle = self.angle
     hit.center_x = self.center_x + -math.sin(math.radians(hit.angle)) * hit.height/2
     hit.center_y = self.center_y + math.cos(math.radians(hit.angle)) * hit.height/2

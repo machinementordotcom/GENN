@@ -54,7 +54,7 @@ class DynamicController(arcade.Sprite):
             diff_y = fireball.start_y-fireball.center_y
             fireball_dist = math.sqrt(diff_x**2 + diff_y**2)
             if fireball_dist>200:
-                fireball.kill()
+                self.fireball_list.remove(fireball)
         if self.health <=PLAYER_HEALTH*.5 and self.shield < 1:
             self.equipshield()
         health_diff = self.health - self.opponent.health

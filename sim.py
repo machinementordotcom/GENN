@@ -113,6 +113,29 @@ class Game:
                 self.player1.weights = [[],[]]
                 self.player1.readWeights()
                 chooseWeight(self.player1)
+        elif self.player1_type.lower() == 'train':
+            self.player1 = DynamicController(KNIGHT_IMAGE,1)
+            self.player1.id = "player1"
+            self.player1.adjusting = 'shoot'
+            if self.player1.adjusting == 'shoot':
+                self.player1.adjustingWeight = abs(self.iterations) % 21 
+            elif self.player1.adjusting == 'move':
+                self.player1.adjustingWeight = abs(self.iterations) % 20
+            if self.iterations == self.totalIterations:
+                shootWeights = [0.349706412,0.003654498,0.007241115,0.007261579,0.056467904,0.014784824,0.07526815 ,0.008607914,0.009829359,0.025498057,0.007078288,0.006121223,0.023625114,0.013999045,0.01048127 ,0.010960692,0.009995443,0.009819444,0.00860488 ,0.011003079,0.329991729]#[1/21] * 21
+                moveWeights = [0.252059263 ,0.412954499,0.063124614,0.091279546,0.107225891,0.017778723,0.055577464,0.124954272,0.141280095,0.131862092,0.050910787,0.083675091,0.16745422 ,0.299863443,0.087444364,0.912555636,0.642013021,0.357986979,0.463211574,0.536788426]#[1/7] * 14 + [1/2] * 6
+                self.player1.weights = [shootWeights,moveWeights]
+                self.player1.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
+                self.player1.benchmarkDifference = 0
+                self.player1.shootRule = None
+                self.player1.moverule = None
+                chooseWeight(self.player1)
+            else:
+                self.player1.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
+                self.player1.benchmarkDifference = 0
+                self.player1.weights = [[],[]]
+                self.player1.readWeights()
+                chooseWeight(self.player1)
         else:
             self.player1 = Enemy(KNIGHT_IMAGE,1)
 

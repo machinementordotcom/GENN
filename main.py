@@ -61,7 +61,7 @@ def main(args):
             spacer()
             print("Total iterations %d out of %d" % (game + 1, iterations) )
             p = multiprocessing.Pool(multiprocessing.cpu_count())
-            result = p.map(runOneGame,[ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,iterations,game]] * conCurrentGame])
+            result = p.map(runOneGame,[ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game]] * conCurrentGame])
             player1Wins += result.count("player 1")
             player2Wins += result.count("player 2")
             draws += result.count("draw")

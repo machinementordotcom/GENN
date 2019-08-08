@@ -42,8 +42,8 @@ class Game:
         self.draws = 0
 
     def setup(self):
-        spacer()
-        print("Total iterations %d out of %d" % (abs(self.iterations - self.totalIterations) +1, self.totalIterations) )
+        # spacer()
+        # print("Total iterations %d out of %d" % (abs(self.iterations - self.totalIterations) +1, self.totalIterations) )
         self.player_list = []
         self.arrow_list = []
         self.fireball_list = []
@@ -251,20 +251,18 @@ class Game:
         self.player2_score += self.player2.score
         self.iterations -= 1
 
-        if self.iterations == 0:
-            print("player 1 (" + self.player1_type + ") :",str(self.player1_score))
-            file = open("player1score.txt","w")
-            file.write(str(self.player1_score))
-            file.close()
-            print("player 2 (" + self.player2_type + ") :",str(self.player2_score))
-            file = open("player2score.txt","w")
-            file.write(str(self.player2_score)) 
-            file.close()
-            print("Draws :",self.draws)
-            print("Total Time: ",time.time() - self.start)
-            print('\a')
-            sys.exit()
-        self.setup()
+        # if self.iterations == 0:
+        #     print("player 1 (" + self.player1_type + ") :",str(self.player1_score))
+        #     file = open("player1score.txt","w")
+        #     file.write(str(self.player1_score))
+        #     file.close()
+        #     print("player 2 (" + self.player2_type + ") :",str(self.player2_score))
+        #     file = open("player2score.txt","w")
+        #     file.write(str(self.player2_score)) 
+        #     file.close()
+        #     print("Draws :",self.draws)
+        #     print("Total Time: ",time.time() - self.start)
+        #     print('\a')
 
     def init_player(self):
         
@@ -422,13 +420,19 @@ class Game:
             self.draws += 1
             # print(self.player1.health,self.player2.health)
             self.end_game()
+            if self.iterations == 0: return "draw"
+            else: self.setup()
         elif self.player2.health <= 0:
             # print(self.player1.health,self.player2.health)
             self.player1.score += 1 
             self.end_game()
-            
+            if self.iterations == 0: return "player 2"
+            else: self.setup()
         elif self.player1.health <= 0:
             # print(self.player1.health,self.player2.health)
             self.player2.score += 1 
             self.end_game()
+            if self.iterations == 0: return "player 1"
+            else: self.setup()
+        return True
         

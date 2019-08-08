@@ -3,6 +3,7 @@ import random
 import csv
 from util.constants import * 
 from DynamicController.DynamicControllerSimFunctions import *
+import numpy as np
 
 class DynamicController(arcade.Sprite):
     def check_for_collision(self,player,projectiles):
@@ -21,18 +22,22 @@ class DynamicController(arcade.Sprite):
         self.health += PLAYER_HEALTH*.5
         self.shield +=1
     def writeWeights(self):
-        with open("DynamicController/weightsDynamicController" + self.id + ".csv", 'w') as myfile:
+        with open("DynamicController/weightsDynamicController" + self.id + "-" + str(self.conCurrentGameId) + ".csv", 'w') as myfile:
             wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
             for i in range(2):
                 wr.writerow(self.weights[i])
     def readWeights(self,path = None):
+        tempWeights = [[],[]] 
         if path == None:
-            with open('DynamicController/weightsDynamicController' + self.id + '.csv') as csvfile:
-                reader = csv.reader(csvfile)
-                weightType = 0
-                for row in reader:
-                    self.weights[weightType] = [float(i) for i in row]
-                    weightType +=1
+            for i in range(self.conGames):
+                with open('DynamicController/weightsDynamicController' + self.id + "-" + str(self.conCurrentGameId) + '.csv') as csvfile:
+                    reader = csv.reader(csvfile)
+                    weightType = 0
+                    for row in reader:
+                        tempWeights[weightType].append([float(i) for i in row])
+                        weightType +=1
+            self.weights[0] = np.average(np.array(tempWeights[0]),axis = 0).tolist()
+            self.weights[1] = np.average(np.array(tempWeights[1]),axis = 0).tolist()
         else:
             with open(path) as csvfile:
                 reader = csv.reader(csvfile)

@@ -15,9 +15,10 @@ from FSMPlayers.HumanPlayer import *
 from util.inputFunctions import *
 from DynamicController.DynamicControllerSim import *
 from util.constants import *
+import multiprocessing
 
 class Game:
-    def __init__(self,width , height, title, iterations, player_1_type, player_2_type):
+    def __init__(self,width , height, title, iterations, player_1_type, player_2_type,conGames,currentGame):
         """
         Initializer
         """
@@ -40,6 +41,8 @@ class Game:
         self.player1_score = 0
         self.player2_score = 0
         self.draws = 0
+        self.conGames = conGames
+        self.currentGame = currentGame
 
     def setup(self):
         # spacer()
@@ -48,6 +51,7 @@ class Game:
         self.arrow_list = []
         self.fireball_list = []
         self.knife_list = []
+        # self.conCurrentGameId = multiprocessing.current_process()._identity[0]%self.conGames
 
         # Set up the player
         if self.player1_type.lower() == 'range':
@@ -58,9 +62,11 @@ class Game:
             self.player1 = ShortRangePlayer(KNIGHT_IMAGE,1)
         elif self.player1_type.lower() == 'master':
             self.player1 = DynamicController(KNIGHT_IMAGE,1)
+            self.player1.conCurrentGameId = multiprocessing.current_process()._identity[0]%self.conGames
+            self.player1.conGames = self.conGames
             self.player1.id = "player1"
             self.player1.adjusting = None
-            if self.iterations == self.totalIterations:
+            if self.currentGame == 0:
                 self.player1.adjustingWeight = 0
                 self.player1.weights = [[],[]]
                 self.player1.readWeights("DynamicController/masterWeights.csv")
@@ -78,9 +84,11 @@ class Game:
                 chooseWeight(self.player1)
         elif self.player1_type.lower() == 'average':
             self.player1 = DynamicController(KNIGHT_IMAGE,1)
+            self.player1.conCurrentGameId = multiprocessing.current_process()._identity[0]%self.conGames
+            self.player1.conGames = self.conGames
             self.player1.id = "player1"
             self.player1.adjusting = 'both'
-            if self.iterations == self.totalIterations:
+            if self.currentGame == 0:
                 self.player1.weights = [[],[]]
                 self.player1.readWeights("DynamicController/masterWeights.csv")
                 self.player1.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
@@ -96,9 +104,11 @@ class Game:
                 chooseWeight(self.player1)
         elif self.player1_type.lower() == 'random':
             self.player1 = DynamicController(KNIGHT_IMAGE,1)
+            self.player1.conCurrentGameId = multiprocessing.current_process()._identity[0]%self.conGames
+            self.player1.conGames = self.conGames
             self.player1.id = "player1"
             self.player1.adjusting = 'both'
-            if self.iterations == self.totalIterations:
+            if self.currentGame == 0:
                 shootWeights = [1/21] * 21
                 moveWeights = [1/7] * 14 + [1/2] * 6
                 self.player1.weights = [shootWeights,moveWeights]
@@ -115,13 +125,15 @@ class Game:
                 chooseWeight(self.player1)
         elif self.player1_type.lower() == 'train':
             self.player1 = DynamicController(KNIGHT_IMAGE,1)
+            self.player1.conCurrentGameId = multiprocessing.current_process()._identity[0]%self.conGames
+            self.player1.conGames = self.conGames
             self.player1.id = "player1"
             self.player1.adjusting = 'shoot'
             if self.player1.adjusting == 'shoot':
                 self.player1.adjustingWeight = abs(self.iterations) % 21 
             elif self.player1.adjusting == 'move':
                 self.player1.adjustingWeight = abs(self.iterations) % 20
-            if self.iterations == self.totalIterations:
+            if self.currentGame == 0:
                 shootWeights = [0.349706412,0.003654498,0.007241115,0.007261579,0.056467904,0.014784824,0.07526815 ,0.008607914,0.009829359,0.025498057,0.007078288,0.006121223,0.023625114,0.013999045,0.01048127 ,0.010960692,0.009995443,0.009819444,0.00860488 ,0.011003079,0.329991729]#[1/21] * 21
                 moveWeights = [0.252059263 ,0.412954499,0.063124614,0.091279546,0.107225891,0.017778723,0.055577464,0.124954272,0.141280095,0.131862092,0.050910787,0.083675091,0.16745422 ,0.299863443,0.087444364,0.912555636,0.642013021,0.357986979,0.463211574,0.536788426]#[1/7] * 14 + [1/2] * 6
                 self.player1.weights = [shootWeights,moveWeights]
@@ -154,6 +166,7 @@ class Game:
         self.player1.knife_num = 0
         self.player1.shield = 0
         self.player1.box = 150
+        
 
         # Set up bad guy
         if self.player2_type.lower() == 'range':
@@ -164,9 +177,11 @@ class Game:
             self.player2 = ShortRangePlayer(KNIGHT_IMAGE,1)
         elif self.player2_type.lower() == 'master':
             self.player2 = DynamicController(KNIGHT_IMAGE,1)
+            self.player2.conGames = self.conGames
+            self.player2.conCurrentGameId = multiprocessing.current_process()._identity[0]%self.conGames
             self.player2.id = "player2"
             self.player2.adjusting = None
-            if self.iterations == self.totalIterations:
+            if self.currentGame == 0:
                 self.player2.adjustingWeight = 0
                 self.player2.weights = [[],[]]
                 self.player2.readWeights("DynamicController/masterWeights.csv")
@@ -184,9 +199,11 @@ class Game:
                 chooseWeight(self.player2)
         elif self.player2_type.lower() == 'average':
             self.player2 = DynamicController(KNIGHT_IMAGE,1)
+            self.player2.conGames = self.conGames
+            self.player2.conCurrentGameId = multiprocessing.current_process()._identity[0]%self.conGames
             self.player2.id = "player2"
             self.player2.adjusting = 'both'
-            if self.iterations == self.totalIterations:
+            if self.currentGame == 0:
                 self.player2.weights = [[],[]]
                 self.player2.readWeights("DynamicController/masterWeights.csv")
                 self.player2.totalHealthBenchmark = PLAYER_HEALTH * 2 - 100
@@ -202,9 +219,11 @@ class Game:
                 chooseWeight(self.player2)
         elif self.player2_type.lower() == 'random':
             self.player2 = DynamicController(KNIGHT_IMAGE,1)
+            self.player2.conGames = self.conGames
+            self.player2.conCurrentGameId = multiprocessing.current_process()._identity[0]%self.conGames
             self.player2.id = "player2"
             self.player2.adjusting = 'both'
-            if self.iterations == self.totalIterations:
+            if self.currentGame == 0:
                 self.player2.adjustingWeight = 0
                 shootWeights = [1/21] * 21
                 moveWeights = [1/7] * 14 + [1/2] * 6

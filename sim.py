@@ -14,6 +14,7 @@ from FSMPlayers.AllEnemy import *
 from FSMPlayers.HumanPlayer import *
 from util.inputFunctions import *
 from DynamicController.DynamicControllerSim import *
+from GENN import * 
 from util.constants import *
 import multiprocessing
 
@@ -148,6 +149,9 @@ class Game:
                 self.player1.weights = [[],[]]
                 self.player1.readWeights()
                 chooseWeight(self.player1)
+        elif self.player1_type.lower() == 'genn':
+            self.player1 = GENN(KNIGHT_IMAGE,1)
+
         else:
             self.player1 = Enemy(KNIGHT_IMAGE,1)
 
@@ -445,13 +449,13 @@ class Game:
             # print(self.player1.health,self.player2.health)
             self.player1.score += 1 
             self.end_game()
-            if self.iterations == 0: return "player 2"
+            if self.iterations == 0: return "player 1"
             else: self.setup()
         elif self.player1.health <= 0:
             # print(self.player1.health,self.player2.health)
             self.player2.score += 1 
             self.end_game()
-            if self.iterations == 0: return "player 1"
+            if self.iterations == 0: return "player 2"
             else: self.setup()
         return True
         

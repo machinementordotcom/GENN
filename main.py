@@ -1,8 +1,6 @@
 import arcade
 import sys
 from MyGame import *
-#from Game import *
-#from SimulatedGame import * 
 from sim import *
 from util.constants import * 
 from util.inputFunctions import * 
@@ -25,7 +23,7 @@ def main(args):
     spacer()
     conCurrentGame = get_int_choice('How many games would you like played at the same time:',1,multiprocessing.cpu_count())
     iterations = get_int_choice('Enter the amount of iterations to be played: ',1,5000)
-    simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc')
+    simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc','genn')
     if simulation_player_1.lower() == "freeplay":
         player_1_type = "human"
         graphics = 'yes'
@@ -33,7 +31,9 @@ def main(args):
         player_1_type = get_str_choice("What type of player is player 1 ?",'short','mid','range','pq')
     elif simulation_player_1.lower() == "dc":
         player_1_type = get_str_choice("What type of dynamic controller is player 1 ?",'master','average','random','train')
-    simulation_player_2 = get_str_choice("What type of simulation do you want for player 2?",'fsm','dc','freeplay')
+    elif simulation_player_1.lower() == "genn":
+        player_1_type = "genn"
+    simulation_player_2 = get_str_choice("What type of simulation do you want for player 2?",'fsm','dc','freeplay','genn')
     if simulation_player_2 == "freeplay":
         player_2_type = "human"
         graphics = 'yes'

@@ -17,9 +17,10 @@ from DynamicController.DynamicControllerSim import *
 from GENN import * 
 from util.constants import *
 import multiprocessing
+import numpy as np 
 
 class Game:
-    def __init__(self,width , height, title, iterations, player_1_type, player_2_type,conGames,currentGame):
+    def __init__(self,width , height, title, iterations, player_1_type, player_2_type,conGames,currentGame,player_1_nets,player_2_nets,process_id):
         """
         Initializer
         """
@@ -44,6 +45,7 @@ class Game:
         self.draws = 0
         self.conGames = conGames
         self.currentGame = currentGame
+        self.process_id = process_id
 
     def setup(self):
         # spacer()
@@ -150,8 +152,33 @@ class Game:
                 self.player1.readWeights()
                 chooseWeight(self.player1)
         elif self.player1_type.lower() == 'genn':
+            print(self.process_id - 1 )
             self.player1 = GENN(KNIGHT_IMAGE,1)
-
+            self.player1.N = 16
+            self.player1.inputsNum = 17
+            self.player1.nets = []
+            # # Create every network
+            # for i in range(self.player1.N):
+            #     layers = []
+            #     totalLayers = random.randint(1, self.player1.N)
+            #     # Create every layer
+            #     for j in range(totalLayers):
+            #         totalNodes = random.randint(1,self.player1.N)
+            #         nodeWeights = []
+            #         tempWeights = []
+            #         # create every node 
+            #         for k in range(totalNodes):
+                        
+            #             if j == 0:
+            #                 tempWeights.append( np.random.rand(1,self.player1.inputsNum).tolist()[0] )
+            #             else: 
+            #                 tempWeights.append( np.random.rand(1,len(layers[j-1].weights)).tolist()[0] )
+            #             nodeWeights.append(tempWeights)
+            #         # print("total amount of nodes",len(nodeWeights))  
+            #         layers.append(Layer(nodeWeights))
+            #     # print("Total amount of layers",len(layers))
+            #     self.player1.nets.append(Network(layers))
+            # # print("Total amount of nets",len(self.player1.nets))
         else:
             self.player1 = Enemy(KNIGHT_IMAGE,1)
 
@@ -337,10 +364,10 @@ class Game:
             return True
         return False
     def update(self):
+        # print(self.player1.center_x,self.player1.center_y,self.player2.center_x,self.player2.center_y)
         # sets a timer that game and perspective players use
         # not sure if necessary
         self.curtime += 1 
-        # print(self.player1.center_x,self.player1.center_y,self.player2.center_x,self.player2.center_y)
         # print(self.player1.health,self.player2.health)
         self.player1.update()
         self.player2.update()
@@ -443,19 +470,19 @@ class Game:
             self.draws += 1
             # print(self.player1.health,self.player2.health)
             self.end_game()
-            if self.iterations == 0: return "draw"
+            if self.iterations == 0: return "0"
             else: self.setup()
         elif self.player2.health <= 0:
             # print(self.player1.health,self.player2.health)
             self.player1.score += 1 
             self.end_game()
-            if self.iterations == 0: return "player 1"
+            if self.iterations == 0: return self.player1.health - self.player2.health
             else: self.setup()
         elif self.player1.health <= 0:
             # print(self.player1.health,self.player2.health)
             self.player2.score += 1 
             self.end_game()
-            if self.iterations == 0: return "player 2"
+            if self.iterations == 0: return self.player1.health - self.player2.health
             else: self.setup()
         return True
         

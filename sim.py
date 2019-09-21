@@ -46,6 +46,9 @@ class Game:
         self.conGames = conGames
         self.currentGame = currentGame
         self.process_id = process_id
+        self.player_1_nets = player_1_nets
+        self.player_2_nets = player_2_nets
+
 
     def setup(self):
         # spacer()
@@ -152,11 +155,13 @@ class Game:
                 self.player1.readWeights()
                 chooseWeight(self.player1)
         elif self.player1_type.lower() == 'genn':
-            print(self.process_id - 1 )
             self.player1 = GENN(KNIGHT_IMAGE,1)
-            self.player1.N = 16
-            self.player1.inputsNum = 17
-            self.player1.nets = []
+            self.player1.net = self.player_1_nets[self.process_id]
+            self.player1.model =  self.player1.net.createNetwork()
+            # self.player1.model = self.player1.net.createNetwork()
+            # self.player1.N = 16
+            # self.player1.inputsNum = 17
+            # self.player1.nets = []
             # # Create every network
             # for i in range(self.player1.N):
             #     layers = []

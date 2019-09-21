@@ -14,7 +14,7 @@ from ctypes import c_int
 def runOneGame(a):
 
         # Need to find an answer to the counter problem 
-    x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],-1)
+    x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10])
     x.setup()
     val = True
     while val == True:
@@ -85,7 +85,7 @@ def main(args):
 
             p = multiprocessing.Pool(multiprocessing.cpu_count())
                 # map will always return the results in order, if order is not important in the future use pool.imap_unordered()
-            result = p.map(runOneGame,[ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets]] * conCurrentGame])
+            result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets]] *conCurrentGame  ],1) ])
             if game == 0: evolutionHealth = [float(i) for i in result]
             else: evolutionHealth = list(map(add, [float(i) for i in result], evolutionHealth)) 
             player1Wins += sum(int(i) > 0 for i in [int(i) for i in result]) 

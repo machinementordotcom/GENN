@@ -90,30 +90,32 @@ class Layer:
 class Network:
     def __init__(self, layers):
         self.layers = layers
+    def createNetwork(self):
         tensors = []
         layer = tf.keras.layers.Dense(1, input_shape=(17,1))
         inputs = keras.Input(shape=(17,))
-        for i in range(len(layers)): 
-            if i == 0:
-                h = tf.keras.layers.Dense(len(layers[i].weights[0]), activation='relu')(inputs)
-                # h.set_weights()
-            elif i < len(layers) - 1:
-                h = tf.keras.layers.Dense(len(layers[i].weights[0]), activation='relu')
+        for i in range(len(self.layers)):
+            if len(self.layers) == 1:
+                move_x = tf.keras.layers.Dense(1,activation='tanh')(inputs)
+                move_y = tf.keras.layers.Dense(1,activation='tanh')(inputs)
+                shoot1 = tf.keras.layers.Dense(1,activation='sigmoid')(inputs)
+                shoot2 = tf.keras.layers.Dense(1,activation='sigmoid')(inputs)
+                shoot3 = tf.keras.layers.Dense(1,activation='sigmoid')(inputs)
+            elif i == 0:
+                h = tf.keras.layers.Dense(len(self.layers[i].weights[0]), activation='relu')(inputs)
+                tensors.append(h)
+            elif i <= len(self.layers) - 2:
+                h = tf.keras.layers.Dense(len(self.layers[i].weights[0]), activation='relu')(tensors[i-1])
+                tensors.append(h)
             else:
-                move_x = tf.keras.layers.Dense(1,activation='relu')
-                move_x = tf.keras.layers.Dense(1,activation='relu')
-                shoot1 = tf.keras.layers.Dense(1,activation='softmax')
-                shoot2 = tf.keras.layers.Dense(1,activation='softmax')
-                shoot3 = tf.keras.layers.Dense(1,activation='softmax')
-                # if i == 0: 
-                #     temp = h(inputs)
-                # else: 
-                #     temp = h(layers[i-1])
-                # print(np.asarray(weights).shape)
-                # print(len(weights),len(weights[0]))
-                # print(np.asarray(np.zeros( np.asarray(weights).shape[1]) ))
-                # h.set_weights([np.asarray(weights),np.asarray([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])])#np.asarray(np.zeros( np.asarray(weights).shape[1],) )])
-    # def buildNetwork
+                move_x = tf.keras.layers.Dense(1,activation='tanh')(tensors[i-1])
+                move_y = tf.keras.layers.Dense(1,activation='tanh')(tensors[i-1])
+                shoot1 = tf.keras.layers.Dense(1,activation='sigmoid')(tensors[i-1])
+                shoot2 = tf.keras.layers.Dense(1,activation='sigmoid')(tensors[i-1])
+                shoot3 = tf.keras.layers.Dense(1,activation='sigmoid')(tensors[i-1])
+
+        return keras.Model(inputs=inputs, outputs=[move_x,move_y,shoot1,shoot2,shoot3])
+                
 
 
 

@@ -1,6 +1,8 @@
-import arcade
 import sys
+import os
+sys.stdout = open(os.devnull, 'w')
 from MyGame import *
+import arcade
 from sim import *
 from util.constants import * 
 from util.inputFunctions import * 
@@ -9,11 +11,10 @@ import time
 import multiprocessing
 from operator import add 
 from ctypes import c_int
-
+from operator import itemgetter 
+sys.stdout = sys.__stdout__
 
 def runOneGame(a):
-
-        # Need to find an answer to the counter problem 
     x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10])
     x.setup()
     val = True
@@ -26,7 +27,6 @@ def main(args):
 
     graphics = 'no'
     evolutions = False
-    # games = int(input('Enter the amount of games to be played: '))
     spacer()
     conCurrentGame = get_int_choice('How many games would you like played at the same time (Recommended amount based on computer cores '+str(multiprocessing.cpu_count())+"):",1,1000)
     iterations = get_int_choice('Enter the amount of generations to be played: ',1,5000)
@@ -78,15 +78,24 @@ def main(args):
             spacer()
             print("Total iterations %d out of %d" % (game + 1, iterations) )
             if evolutions == True:
-                        # Update the evolutions every 9 games 
-                if game % 9 == 0:
-                    #Evolve Networks
-                    pass
+                        # Update the evolutions every 9 games
+                            # This is where breeding and mutating would happen
+                                # Current results are keep top 20% and then breed those to create the rest of the population
+                                # Then from that mutate 10% of the networks to  
+                if player_1_type == 'genn':
+                    if game % 3 == 0 and game != 0:
+                        print(evolutionHealth)
+                        bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
+                        evolutionHealth = []
+                        newNets = list(itemgetter(*bestIndexs)(player_1_nets))
+                        temp = createChildNets(newNets,conCurrentGame - len(newNets))
+                        player_1_nets = newNets + temp
+                        # mutate here
 
             p = multiprocessing.Pool(multiprocessing.cpu_count())
                 # map will always return the results in order, if order is not important in the future use pool.imap_unordered()
             result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets]] *conCurrentGame  ],1) ])
-            if game == 0: evolutionHealth = [float(i) for i in result]
+            if game == 0 or game % 3 == 0: evolutionHealth = [float(i) for i in result]
             else: evolutionHealth = list(map(add, [float(i) for i in result], evolutionHealth)) 
             player1Wins += sum(int(i) > 0 for i in [int(i) for i in result]) 
             player2Wins += sum(int(i) < 0 for i in [int(i) for i in result])

@@ -93,7 +93,6 @@ class RangePlayer(arcade.Sprite):
         self.angle = math.degrees(math.atan2(y_diff,x_diff))-90
         self.change_x = -math.cos(self.angle)*MOVEMENT_SPEED
         self.change_y = -math.sin(self.angle)*MOVEMENT_SPEED
-        self.d = math.sqrt(x_diff**2 +y_diff**2)
         if self.curtime >=30:
             self.shootarrow()
             self.curtime = 0

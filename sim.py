@@ -158,32 +158,6 @@ class Game:
             self.player1 = GENN(KNIGHT_IMAGE,1)
             self.player1.net = self.player_1_nets[self.process_id]
             self.player1.model =  self.player1.net.createNetwork()
-            # self.player1.model = self.player1.net.createNetwork()
-            # self.player1.N = 16
-            # self.player1.inputsNum = 17
-            # self.player1.nets = []
-            # # Create every network
-            # for i in range(self.player1.N):
-            #     layers = []
-            #     totalLayers = random.randint(1, self.player1.N)
-            #     # Create every layer
-            #     for j in range(totalLayers):
-            #         totalNodes = random.randint(1,self.player1.N)
-            #         nodeWeights = []
-            #         tempWeights = []
-            #         # create every node 
-            #         for k in range(totalNodes):
-                        
-            #             if j == 0:
-            #                 tempWeights.append( np.random.rand(1,self.player1.inputsNum).tolist()[0] )
-            #             else: 
-            #                 tempWeights.append( np.random.rand(1,len(layers[j-1].weights)).tolist()[0] )
-            #             nodeWeights.append(tempWeights)
-            #         # print("total amount of nodes",len(nodeWeights))  
-            #         layers.append(Layer(nodeWeights))
-            #     # print("Total amount of layers",len(layers))
-            #     self.player1.nets.append(Network(layers))
-            # # print("Total amount of nets",len(self.player1.nets))
         else:
             self.player1 = Enemy(KNIGHT_IMAGE,1)
 
@@ -376,7 +350,7 @@ class Game:
         # print(self.player1.health,self.player2.health)
         self.player1.update()
         self.player2.update()
-
+        # print(self.player1.center_x,self.player1.center_y)
         # player 1 collision
         if self.player1.center_y >= self.height:
             self.player1.center_y = self.height
@@ -417,7 +391,7 @@ class Game:
             if self.collisionCheck(self.player2,self.fireball):
                 self.player1.fireball_list.remove(self.fireball)
                 self.player2.health -= FIREBALL_DAMAGE
-            elif self.fireball.center_x < 0 or self.fireball.center_x > SCREEN_WIDTH or self.fireball.center_y < 0 or self.fireball.center_y > SCREEN_HEIGHT:
+            elif self.fireball.center_x < -5 or self.fireball.center_x > SCREEN_WIDTH +5 or self.fireball.center_y < -5 or self.fireball.center_y > SCREEN_HEIGHT + 5:
                 self.player1.fireball_list.remove(self.fireball)
             self.fireball.center_x += self.fireball.vel*math.cos(self.player1.angle)
             self.fireball.center_y += self.fireball.vel*math.sin(self.player1.angle)
@@ -427,7 +401,7 @@ class Game:
             if self.collisionCheck(self.player1,self.fireball):
                 self.player2.fireball_list.remove(self.fireball)
                 self.player1.health -= FIREBALL_DAMAGE
-            elif self.fireball.center_x < 0 or self.fireball.center_x > SCREEN_WIDTH or self.fireball.center_y < 0 or self.fireball.center_y > SCREEN_HEIGHT:
+            elif self.fireball.center_x < -5 or self.fireball.center_x > SCREEN_WIDTH +5 or self.fireball.center_y < -5 or self.fireball.center_y > SCREEN_HEIGHT + 5:
                 self.player2.fireball_list.remove(self.fireball)
             self.fireball.center_x += self.fireball.vel*math.cos(self.player2.angle)
             self.fireball.center_y += self.fireball.vel*math.sin(self.player2.angle)
@@ -439,7 +413,7 @@ class Game:
             if self.collisionCheck(self.player2,self.arw):
                 self.player1.arrow_list.remove(self.arw)
                 self.player2.health -= ARROW_DAMAGE
-            elif self.arw.center_x < 0 or self.arw.center_x > SCREEN_WIDTH or self.arw.center_y < 0 or self.arw.center_y > SCREEN_HEIGHT:
+            elif self.arw.center_x < -5 or self.arw.center_x > SCREEN_WIDTH+5 or self.arw.center_y < -5 or self.arw.center_y > SCREEN_HEIGHT +5:
                 self.player1.arrow_list.remove(self.arw)
 
             self.arw.center_x += self.arw.vel*math.cos(self.player1.angle)
@@ -450,7 +424,7 @@ class Game:
             if self.collisionCheck(self.player1,self.arw):
                 self.player2.arrow_list.remove(self.arw)
                 self.player1.health -= ARROW_DAMAGE
-            elif self.arw.center_x < 0 or self.arw.center_x > SCREEN_WIDTH or self.arw.center_y < 0 or self.arw.center_y > SCREEN_HEIGHT:
+            elif self.arw.center_x < -5 or self.arw.center_x > SCREEN_WIDTH +5 or self.arw.center_y < -5 or self.arw.center_y > SCREEN_HEIGHT + 5:
                 self.player2.arrow_list.remove(self.arw)
 
             self.arw.center_x += self.arw.vel*math.cos(self.player2.angle)

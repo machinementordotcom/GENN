@@ -59,7 +59,7 @@ class MidRangePlayer(arcade.Sprite):
             elif abs(y_diff) + abs(x_diff) != 0: 
                 self.change_x = (x_diff)/(abs(y_diff) + abs(x_diff))
                 self.change_y = (y_diff)/(abs(y_diff) + abs(x_diff))
-                if self.d > 240:
+                if self.d > 200:
                     self.center_x += self.change_x * (MOVEMENT_SPEED * MID_SPEED_HANDICAP)
                     self.center_y += self.change_y * (MOVEMENT_SPEED * MID_SPEED_HANDICAP)
                 else:
@@ -82,7 +82,7 @@ class MidRangePlayer(arcade.Sprite):
             if abs(y_diff) + abs(x_diff) != 0: 
                 self.change_x = (x_diff)/(abs(y_diff) + abs(x_diff))
                 self.change_y = (y_diff)/(abs(y_diff) + abs(x_diff))
-                if self.d > 230:
+                if self.d > 200:
                     self.center_x += self.change_x * (MOVEMENT_SPEED * MID_SPEED_HANDICAP)
                     self.center_y += self.change_y * (MOVEMENT_SPEED * MID_SPEED_HANDICAP)
                 else:

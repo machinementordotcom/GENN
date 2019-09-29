@@ -3,6 +3,7 @@ import csv
 import arcade
 import numpy as np
 from util.constants import *
+import math
 class GENN(arcade.Sprite):
     def shootarrow(self):
       arrow = Arrow("images/arrow.png",.1)
@@ -93,6 +94,7 @@ class GENN(arcade.Sprite):
                self.weights[weightType] = [float(i) for i in row]
                weightType +=1
     def update(self):
+      self.curtime += 1
       if len(self.opponent_hitbox_list) >= 3:
         opp_proj_1_x = self.opponent_hitbox_list[0].center_x
         opp_proj_1_y = self.opponent_hitbox_list[0].center_y
@@ -122,16 +124,20 @@ class GENN(arcade.Sprite):
         opp_proj_3_x = 0
         opp_proj_3_y = 0
       inputs = [[self.center_x,self.center_y,self.opponent.center_x,self.opponent.center_x,self.health,self.opponent.health,self.total_time,self.shield,self.opponent.shield,self.curtime,len(self.opponent_hitbox_list), opp_proj_1_x, opp_proj_1_y, opp_proj_2_x, opp_proj_2_y, opp_proj_3_x, opp_proj_3_y]]
-      # temp =  self.net.createNetwork()
       # for layer in temp.layers:
       #   print(layer.output_shape)
       # print(np.asarray([inputs]),np.asarray([inputs]).shape)
       # print(np.random.randint(250,size =(1,17)),np.random.randint(250,size =(1,17)).shape)
       choices = self.model.predict(np.asarray(inputs))
       # print(self.health)
-
-      self.center_x += choices[0][0][0]
-      self.center_y += choices[1][0][0]
+      # print(self.center_x,self.center_y,self.health,self.opponent.health,self.opponent.center_x,self.opponent.center_y,opp_proj_1_x,opp_proj_1_y)
+      # print(choices)
+      if choices[0][0][0] > MOVEMENT_SPEED: self.center_x += MOVEMENT_SPEED
+      elif abs(choices[0][0][0]) > MOVEMENT_SPEED: self.center_x -= MOVEMENT_SPEED
+      else: self.center_x += choices[0][0][0]
+      if choices[1][0][0] > MOVEMENT_SPEED: self.center_y += MOVEMENT_SPEED
+      elif abs(choices[1][0][0]) > MOVEMENT_SPEED: self.center_y -= MOVEMENT_SPEED
+      else: self.center_y += choices[1][0][0]
 
       if self.center_y >= SCREEN_HEIGHT:
           self.center_y = SCREEN_HEIGHT
@@ -144,18 +150,16 @@ class GENN(arcade.Sprite):
 
       if self.curtime >=30:
         if choices[2][0][0] > choices[3][0][0] and choices[2][0][0] > choices[4][0][0]:
-          self.shootarrow()
+          self.shortattack()
         elif choices[3][0][0] > choices[4][0][0]:
           self.throwfire()
         else:
-          self.shortattack()
+          self.shootarrow()
+
+        x_diff = self.opponent.center_x - self.center_x
+        y_diff = self.opponent.center_y - self.center_y
+        self.d = math.sqrt(x_diff**2 +y_diff**2)
+        self.angle = math.degrees(math.atan2(y_diff,x_diff))-90
+        self.change_x = -math.cos(self.angle)*MOVEMENT_SPEED
+        self.change_y = -math.sin(self.angle)*MOVEMENT_SPEED
         self.curtime = 0
-
-
-      nn_choices = {
-      'nb_neurons': [64, 128, 256, 512, 768, 1024],
-      'nb_layers': [1, 2, 3, 4],
-      'activation': ['relu', 'elu', 'tanh', 'sigmoid'],
-      'optimizer': ['sgd', 'rmsprop', 'adam',  'adagrad',
-                    'adadelta', 'adamax', 'nadam']
-                    }

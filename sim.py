@@ -262,7 +262,7 @@ class Game:
 
         self.player2.center_x = random.randint(0,SCREEN_WIDTH)
         self.player2.center_y = random.randint(0,SCREEN_HEIGHT)
-        self.player2.type = random.choice(["range","mid","short"])
+        # self.player2.type = random.choice(["range","mid","short"])
         self.player2.health = PLAYER_HEALTH
         self.player2.score = 0
         self.player2.curtime = 0
@@ -287,18 +287,6 @@ class Game:
         self.player2_score += self.player2.score
         self.iterations -= 1
 
-        # if self.iterations == 0:
-        #     print("player 1 (" + self.player1_type + ") :",str(self.player1_score))
-        #     file = open("player1score.txt","w")
-        #     file.write(str(self.player1_score))
-        #     file.close()
-        #     print("player 2 (" + self.player2_type + ") :",str(self.player2_score))
-        #     file = open("player2score.txt","w")
-        #     file.write(str(self.player2_score)) 
-        #     file.close()
-        #     print("Draws :",self.draws)
-        #     print("Total Time: ",time.time() - self.start)
-        #     print('\a')
 
     def init_player(self):
         
@@ -472,10 +460,10 @@ class Game:
             else: self.setup()
         if self.player1.health == self.player1_previous_health and self.player2_previous_health == self.player2.health: self.healthChanges += 1
         else: self.healthChanges = 0
-        if self.healthChanges > 500: 
+        if self.healthChanges > 1500: 
             self.jitter()
             self.healthChanges = 0
-            print("jitter")
+            # print("jitter")
         self.player1_previous_health = self.player1.health
         self.player2_previous_health = self.player2.health
         return True

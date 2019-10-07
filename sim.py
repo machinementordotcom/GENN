@@ -48,8 +48,15 @@ class Game:
         self.process_id = process_id
         self.player_1_nets = player_1_nets
         self.player_2_nets = player_2_nets
+        self.healthChanges = 0
+        self.player1_previous_health = PLAYER_HEALTH
+        self.player2_previous_health = PLAYER_HEALTH
 
-
+    def jitter(self):
+        self.player1.center_x = random.randint(0,SCREEN_WIDTH)
+        self.player1.center_y = random.randint(0,SCREEN_HEIGHT)
+        self.player2.center_x = random.randint(0,SCREEN_WIDTH)
+        self.player2.center_y = random.randint(0,SCREEN_HEIGHT)
     def setup(self):
         # spacer()
         # print("Total iterations %d out of %d" % (abs(self.iterations - self.totalIterations) +1, self.totalIterations) )
@@ -463,5 +470,13 @@ class Game:
             self.end_game()
             if self.iterations == 0: return self.player1.health - self.player2.health
             else: self.setup()
+        if self.player1.health == self.player1_previous_health and self.player2_previous_health == self.player2.health: self.healthChanges += 1
+        else: self.healthChanges = 0
+        if self.healthChanges > 500: 
+            self.jitter()
+            self.healthChanges = 0
+            print("jitter")
+        self.player1_previous_health = self.player1.health
+        self.player2_previous_health = self.player2.health
         return True
         

@@ -1,10 +1,11 @@
 import random 
 import numpy as np
 from util.constants import * 
+import csv
 
 def createNets(conCurrentGame):
-    maxlayers = 10
-    maxNodes = 10
+    maxlayers = 100
+    maxNodes = 100
     inputsNum = 17
     nets = []
     # Create every network
@@ -35,7 +36,7 @@ def createChildNets(parents,number):
     return createNets(number)
     newNets = []
     inputsNum = 17
-    maxNodes = 10
+    maxNodes = 100
     for i in range(number):
         parent1 = parents[random.randint(0, len(parents)-1)]
         parent2 = parents[random.randint(0, len(parents)-1)]
@@ -57,6 +58,38 @@ def createChildNets(parents,number):
         newNets.append(Network(layers))
     return newNets
 
+def writeNetworks(nets):
+
+    for i in range(len(nets)):
+        with open("Genn/weights" + str(i),'w') as myfile:
+            wr = csv.writer(myfile, quoting = csv.QUOTE_ALL) 
+            for j in range(len(nets[i].layers)):
+                # for k in range(len(nets[i].layers[j].weights)):
+                wr.writerow(nets[i].layers[j].weights)
+                #     wr.write(",")
+                # wr.writerow("\n")
+# def readNetworks(nets,path = None):
+#     if path == None:
+#         for i in range(len())
+#     def readWeights(self,path = None):
+#         tempWeights = [[],[]] 
+#         if path == None:
+#             for i in range(self.conGames):
+#                 with open('DynamicController/weightsDynamicController' + self.id + "-" + str(self.conCurrentGameId) + '.csv') as csvfile:
+#                     reader = csv.reader(csvfile)
+#                     weightType = 0
+#                     for row in reader:
+#                         tempWeights[weightType].append([float(i) for i in row])
+#                         weightType +=1
+#             self.weights[0] = np.average(np.array(tempWeights[0]),axis = 0).tolist()
+#             self.weights[1] = np.average(np.array(tempWeights[1]),axis = 0).tolist()
+#         else:
+#             with open(path) as csvfile:
+#                 reader = csv.reader(csvfile)
+#                 weightType = 0
+#                 for row in reader:
+#                     self.weights[weightType] = [float(i) for i in row]
+#                     weightType +=1
 
 
 # def createChildNets(parents,number):

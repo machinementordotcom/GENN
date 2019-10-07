@@ -4,7 +4,9 @@ import arcade
 import numpy as np
 from util.constants import *
 import math
+import random
 class GENN(arcade.Sprite):
+
     def shootarrow(self):
       arrow = Arrow("images/arrow.png",.1)
       arrow.center_x = self.center_x
@@ -94,6 +96,7 @@ class GENN(arcade.Sprite):
                self.weights[weightType] = [float(i) for i in row]
                weightType +=1
     def update(self):
+      # print(self.health,self.opponent.health)
       self.curtime += 1
       if len(self.opponent_hitbox_list) >= 3:
         opp_proj_1_x = self.opponent_hitbox_list[0].center_x
@@ -124,14 +127,8 @@ class GENN(arcade.Sprite):
         opp_proj_3_x = 0
         opp_proj_3_y = 0
       inputs = [[self.center_x,self.center_y,self.opponent.center_x,self.opponent.center_x,self.health,self.opponent.health,self.total_time,self.shield,self.opponent.shield,self.curtime,len(self.opponent_hitbox_list), opp_proj_1_x, opp_proj_1_y, opp_proj_2_x, opp_proj_2_y, opp_proj_3_x, opp_proj_3_y]]
-      # for layer in temp.layers:
-      #   print(layer.output_shape)
-      # print(np.asarray([inputs]),np.asarray([inputs]).shape)
-      # print(np.random.randint(250,size =(1,17)),np.random.randint(250,size =(1,17)).shape)
       choices = self.model.predict(np.asarray(inputs))
-      # print(self.health)
-      # print(self.center_x,self.center_y,self.health,self.opponent.health,self.opponent.center_x,self.opponent.center_y,opp_proj_1_x,opp_proj_1_y)
-      # print(choices)
+      # print(self.center_x,self.center_y,choices[2][0][0],choices[3][0][0],choices[4][0][0])
       if choices[0][0][0] > MOVEMENT_SPEED: self.center_x += MOVEMENT_SPEED
       elif abs(choices[0][0][0]) > MOVEMENT_SPEED: self.center_x -= MOVEMENT_SPEED
       else: self.center_x += choices[0][0][0]
@@ -139,21 +136,29 @@ class GENN(arcade.Sprite):
       elif abs(choices[1][0][0]) > MOVEMENT_SPEED: self.center_y -= MOVEMENT_SPEED
       else: self.center_y += choices[1][0][0]
 
-      if self.center_y >= SCREEN_HEIGHT:
-          self.center_y = SCREEN_HEIGHT
-      if self.center_y <= 0:
-          self.center_y = 0
-      if self.center_x >= SCREEN_WIDTH:
-          self.center_x = SCREEN_WIDTH
-      if self.center_x <= 0:
-          self.center_x = 0
+      if self.center_y >= SCREEN_HEIGHT -20:
+          self.center_y = SCREEN_HEIGHT -20
+      if self.center_y <= 0 + 20:
+          self.center_y = 0 + 20
+      if self.center_x >= SCREEN_WIDTH -20:
+          self.center_x = SCREEN_WIDTH -20
+      if self.center_x <= 0 + 20:
+          self.center_x = 0 + 20
 
       if self.curtime >=30:
-        if choices[2][0][0] > choices[3][0][0] and choices[2][0][0] > choices[4][0][0]:
+        if choices[2][0][0] == choices[3][0][0] == choices[4][0][0]:
+          attack = random.choices(['short','mid','range'])[0]
+          if attack == 'short': self.shortattack()
+          elif attack == 'mid': self.throwfire()
+          else: self.shootarrow()
+        elif choices[2][0][0] > choices[3][0][0] and choices[2][0][0] > choices[4][0][0]:
+          print("knife")
           self.shortattack()
         elif choices[3][0][0] > choices[4][0][0]:
+          print("fire")
           self.throwfire()
         else:
+          print("arrow")
           self.shootarrow()
 
         x_diff = self.opponent.center_x - self.center_x
@@ -163,3 +168,18 @@ class GENN(arcade.Sprite):
         self.change_x = -math.cos(self.angle)*MOVEMENT_SPEED
         self.change_y = -math.sin(self.angle)*MOVEMENT_SPEED
         self.curtime = 0
+      for arrow in self.arrow_list:
+        if arrow.center_x>SCREEN_WIDTH + 10 or arrow.center_y>SCREEN_HEIGHT + 10 or arrow.center_x< -10 or arrow.center_y< -10 :
+            arrow.hit.kill()
+            arrow.kill()
+        for fireball in self.fireball_list:
+            diff_x = fireball.start_x-fireball.center_x
+            diff_y = fireball.start_y-fireball.center_y
+            fireball_dist = math.sqrt(diff_x**2 + diff_y**2)
+            if fireball_dist>200:
+                self.fireball_list.remove(fireball)
+
+
+      if self.health <= PLAYER_HEALTH*.5 and self.shield < 1:
+        self.equipshield()
+

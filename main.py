@@ -28,6 +28,15 @@ def main(args):
     graphics = 'no'
     evolutions = False
     spacer()
+    
+    # conCurrentGame = 4
+    # iterations = 4 
+    # simulation_player_1 = 'genn'
+    # simulation_player_2 = 'fsm'
+    # player_2_type = 'mid'
+    # graphics = 'no'
+    # player_1_type = 'genn'
+
     conCurrentGame = get_int_choice('How many games would you like played at the same time (Recommended amount based on computer cores '+str(multiprocessing.cpu_count())+"):",1,1000)
     iterations = get_int_choice('Enter the amount of generations to be played: ',1,5000)
     simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc','genn')
@@ -83,13 +92,22 @@ def main(args):
                                 # Current results are keep top 20% and then breed those to create the rest of the population
                                 # Then from that mutate 10% of the networks to  
                 if player_1_type == 'genn':
-                    if game % 3 == 0 and game != 0:
+                    if game % 9 == 0 and game != 0:
                         print(evolutionHealth)
                         bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
                         evolutionHealth = []
                         newNets = list(itemgetter(*bestIndexs)(player_1_nets))
                         temp = createChildNets(newNets,conCurrentGame - len(newNets))
                         player_1_nets = newNets + temp
+                        # mutate here
+                if player_2_type == 'genn':
+                    if game % 9 == 0 and game != 0:
+                        print(evolutionHealth)
+                        bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
+                        evolutionHealth = []
+                        newNets = list(itemgetter(*bestIndexs)(player_2_nets))
+                        temp = createChildNets(newNets,conCurrentGame - len(newNets))
+                        player_2_nets = newNets + temp
                         # mutate here
 
             p = multiprocessing.Pool(multiprocessing.cpu_count())
@@ -103,6 +121,10 @@ def main(args):
             leftOverHealth += sum([float(i) for i in result])
             p.close()
             p.join()
+        if player_1_type == 'genn':
+            writeNetworks(player_1_nets)
+        if player_2_type == 'genn':
+            writeNetworks(player_2_nets)
         print("player 1 (" + player_1_type + "):",player1Wins)
         print("player 2 (" + player_2_type + "):",player2Wins)
         print("Draws: ",draws)

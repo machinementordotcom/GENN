@@ -28,9 +28,9 @@ def main(args):
     graphics = 'no'
     evolutions = False
     spacer()
-    
-    # conCurrentGame = 4
-    # iterations = 4 
+
+    # conCurrentGame = 100
+    # iterations = 999 
     # simulation_player_1 = 'genn'
     # simulation_player_2 = 'fsm'
     # player_2_type = 'mid'
@@ -80,6 +80,9 @@ def main(args):
         start = time.time()
         player1Wins = 0
         player2Wins = 0
+        shortWins = 0
+        midWins = 0
+        rangeWins = 0
         draws = 0
         leftOverHealth = 0
         evolutionHealth = []
@@ -99,24 +102,29 @@ def main(args):
                         newNets = list(itemgetter(*bestIndexs)(player_1_nets))
                         temp = createChildNets(newNets,conCurrentGame - len(newNets))
                         player_1_nets = newNets + temp
-                        # mutate here
+                        player_1_nets = mutateNets(player_1_nets)
                 if player_2_type == 'genn':
                     if game % 9 == 0 and game != 0:
-                        print(evolutionHealth)
                         bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
                         evolutionHealth = []
                         newNets = list(itemgetter(*bestIndexs)(player_2_nets))
                         temp = createChildNets(newNets,conCurrentGame - len(newNets))
                         player_2_nets = newNets + temp
-                        # mutate here
+                        player_2_nets = mutateNets(player_2_nets)
 
             p = multiprocessing.Pool(multiprocessing.cpu_count())
                 # map will always return the results in order, if order is not important in the future use pool.imap_unordered()
+            if game % 9 < 3: player_2_type == 'short'
+            elif game % 9 < 6: player_2_type == 'mid'
+            else: player_2_type == 'range'
             result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets]] *conCurrentGame  ],1) ])
             if game == 0 or game % 3 == 0: evolutionHealth = [float(i) for i in result]
             else: evolutionHealth = list(map(add, [float(i) for i in result], evolutionHealth)) 
             player1Wins += sum(int(i) > 0 for i in [int(i) for i in result]) 
             player2Wins += sum(int(i) < 0 for i in [int(i) for i in result])
+            if game % 9 < 3: shortWins += sum(int(i) < 0 for i in [int(i) for i in result])
+            elif game % 9 < 6: midWins += sum(int(i) < 0 for i in [int(i) for i in result])
+            else: rangeWins += sum(int(i) < 0 for i in [int(i) for i in result])
             draws += sum(int(i) == 0 for i in [int(i) for i in result])  
             leftOverHealth += sum([float(i) for i in result])
             p.close()
@@ -127,6 +135,9 @@ def main(args):
             writeNetworks(player_2_nets)
         print("player 1 (" + player_1_type + "):",player1Wins)
         print("player 2 (" + player_2_type + "):",player2Wins)
+        print("\t Short Wins: ",shortWins)
+        print("\t mid Wins: ",midWins)
+        print("\t range Wins: ",rangeWins)
         print("Draws: ",draws)
         print("Average Health Difference: ",round(abs(leftOverHealth) / (conCurrentGame * iterations),4))
         print("Total Time: ",round(time.time() - start,4))

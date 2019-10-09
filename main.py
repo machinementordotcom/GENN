@@ -90,10 +90,6 @@ def main(args):
             spacer()
             print("Total iterations %d out of %d" % (game + 1, iterations) )
             if evolutions == True:
-                        # Update the evolutions every 9 games
-                            # This is where breeding and mutating would happen
-                                # Current results are keep top 20% and then breed those to create the rest of the population
-                                # Then from that mutate 10% of the networks to  
                 if player_1_type == 'genn':
                     if game % 9 == 0 and game != 0:
                         print(evolutionHealth)

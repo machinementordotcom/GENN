@@ -66,7 +66,7 @@ def createChildNets(parents,number):
         parent1 = parents[random.randint(0, len(parents)-1)]
         parent2 = parents[random.randint(0, len(parents)-1)]
         if np.random.random_sample() > .5:totalLayers = len(parent1.layers)
-        else:totalLayers = len(parent1.layers)
+        else:totalLayers = len(parent2.layers)
         totalNodes = np.random.randint(1,maxNodes,size=(1,totalLayers)).tolist()[0]
         layers = []
         for j in range(totalLayers -1):

@@ -69,7 +69,6 @@ class GENN(arcade.Sprite):
       knife.box = BOX 
       self.knife_num += 1 # prevents multiple knifes from being created
       self.knife_list.append(knife)
-      # self.hitbox_list.append(hit)
 
     def writeWeights(self):
       with open("GENN/weightsDynamicController" + self.id + "-" + str(self.conCurrentGameId) + ".csv", 'w') as myfile:
@@ -96,7 +95,6 @@ class GENN(arcade.Sprite):
                self.weights[weightType] = [float(i) for i in row]
                weightType +=1
     def update(self):
-      # print(self.health,self.opponent.health)
       self.curtime += 1
       if len(self.opponent_hitbox_list) >= 3:
         opp_proj_1_x = self.opponent_hitbox_list[0].center_x
@@ -128,8 +126,6 @@ class GENN(arcade.Sprite):
         opp_proj_3_y = 0
       inputs = [[self.center_x,self.center_y,self.opponent.center_x,self.opponent.center_x,self.health,self.opponent.health,self.total_time,self.shield,self.opponent.shield,self.curtime,len(self.opponent_hitbox_list), opp_proj_1_x, opp_proj_1_y, opp_proj_2_x, opp_proj_2_y, opp_proj_3_x, opp_proj_3_y]]
       choices = self.model.predict(np.asarray(inputs))
-      # print(choices)
-      # print(self.center_x,self.center_y,choices[2][0][0],choices[3][0][0],choices[4][0][0])
       self.center_x += MOVEMENT_SPEED * choices[0][0][0]
       self.center_y += MOVEMENT_SPEED * choices[1][0][0]
 
@@ -149,13 +145,10 @@ class GENN(arcade.Sprite):
           elif attack == 'mid': self.throwfire()
           else: self.shootarrow()
         elif choices[2][0][0] > choices[3][0][0] and choices[2][0][0] > choices[4][0][0]:
-          # print("knife")
           self.shortattack()
         elif choices[3][0][0] > choices[4][0][0]:
-          # print("fire")
           self.throwfire()
         else:
-          # print("arrow")
           self.shootarrow()
 
         x_diff = self.opponent.center_x - self.center_x

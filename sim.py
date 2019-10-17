@@ -58,8 +58,6 @@ class Game:
         self.player2.center_x = random.randint(0,SCREEN_WIDTH)
         self.player2.center_y = random.randint(0,SCREEN_HEIGHT)
     def setup(self):
-        # spacer()
-        # print("Total iterations %d out of %d" % (abs(self.iterations - self.totalIterations) +1, self.totalIterations) )
         self.player_list = []
         self.arrow_list = []
         self.fireball_list = []
@@ -165,6 +163,7 @@ class Game:
             self.player1 = GENN(KNIGHT_IMAGE,1)
             self.player1.net = self.player_1_nets[self.process_id]
             self.player1.model =  self.player1.net.createNetwork()
+
         else:
             self.player1 = Enemy(KNIGHT_IMAGE,1)
 
@@ -257,12 +256,15 @@ class Game:
                 self.player2.weights = [[],[]]
                 self.player2.readWeights()
                 chooseWeight(self.player2)
+        elif self.player2_type.lower() == 'genn':
+            self.player2 = GENN(KNIGHT_IMAGE,1)
+            self.player2.net = self.player_2_nets[self.process_id]
+            self.player2.model =  self.player2.net.createNetwork()
         else:
             self.player2 = Enemy(KNIGHT_IMAGE,1)
 
         self.player2.center_x = random.randint(0,SCREEN_WIDTH)
         self.player2.center_y = random.randint(0,SCREEN_HEIGHT)
-        # self.player2.type = random.choice(["range","mid","short"])
         self.player2.health = PLAYER_HEALTH
         self.player2.score = 0
         self.player2.curtime = 0
@@ -338,14 +340,11 @@ class Game:
             return True
         return False
     def update(self):
-        # print(self.player1.center_x,self.player1.center_y,self.player2.center_x,self.player2.center_y)
         # sets a timer that game and perspective players use
         # not sure if necessary
         self.curtime += 1 
-        # print(self.player1.health,self.player2.health)
         self.player1.update()
         self.player2.update()
-        # print(self.player1.center_x,self.player1.center_y)
         # player 1 collision
         if self.player1.center_y >= self.height:
             self.player1.center_y = self.height
@@ -382,7 +381,6 @@ class Game:
 
         #fireball movement
         for self.fireball in self.player1.fireball_list:
-            # print(self.fireball.center_x,self.fireball.center_y,self.player2.center_x,self.player2.center_y)
             if self.collisionCheck(self.player2,self.fireball):
                 self.player1.fireball_list.remove(self.fireball)
                 self.player2.health -= FIREBALL_DAMAGE
@@ -442,28 +440,32 @@ class Game:
         # If health is zero kill them
         if self.player1.health <= 0 and self.player2.health <= 0:
             self.draws += 1
-            # print(self.player1.health,self.player2.health)
             self.end_game()
             if self.iterations == 0: return "0"
             else: self.setup()
         elif self.player2.health <= 0:
-            # print(self.player1.health,self.player2.health)
             self.player1.score += 1 
             self.end_game()
-            if self.iterations == 0: return self.player1.health - self.player2.health
-            else: self.setup()
+            if self.player1.shield == 0:
+                if self.iterations == 0: return self.player1.health - self.player2.health + 500
+                else: self.setup()
+            else:
+                if self.iterations == 0: return self.player1.health - self.player2.health
+                else: self.setup()
         elif self.player1.health <= 0:
-            # print(self.player1.health,self.player2.health)
             self.player2.score += 1 
             self.end_game()
-            if self.iterations == 0: return self.player1.health - self.player2.health
-            else: self.setup()
+            if self.player2.shield == 0:
+                if self.iterations == 0: return self.player1.health - self.player2.health - 500
+                else: self.setup()
+            else:
+                if self.iterations == 0: return self.player1.health - self.player2.health
+                else: self.setup()
         if self.player1.health == self.player1_previous_health and self.player2_previous_health == self.player2.health: self.healthChanges += 1
         else: self.healthChanges = 0
         if self.healthChanges > 1500: 
             self.jitter()
             self.healthChanges = 0
-            # print("jitter")
         self.player1_previous_health = self.player1.health
         self.player2_previous_health = self.player2.health
         return True

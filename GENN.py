@@ -138,25 +138,50 @@ class GENN(arcade.Sprite):
       if self.center_x <= 0 + 20:
           self.center_x = 0 + 20
 
+      x_diff = self.opponent.center_x - self.center_x
+      y_diff = self.opponent.center_y - self.center_y
+      self.d = math.sqrt(x_diff**2 +y_diff**2)
+      self.angle = math.degrees(math.atan2(y_diff,x_diff))-90
+      self.change_x = -math.cos(self.angle)*MOVEMENT_SPEED
+      self.change_y = -math.sin(self.angle)*MOVEMENT_SPEED
+      if self.center_x > self.opponent.center_x and choices[0][0][0] < 0 and self.center_y > self.opponent.center_y and choices[1][0][0] < 0 or  self.center_x < self.opponent.center_x and choices[0][0][0] >0 and self.center_y > self.opponent.center_y and choices[1][0][0] < 0 or  self.center_x < self.opponent.center_x and choices[0][0][0] >0 and self.center_y < self.opponent.center_y and choices[1][0][0] > 0 or  self.center_x > self.opponent.center_x and choices[0][0][0] < 0 and self.center_y < self.opponent.center_y and choices[1][0][0] > 0:
+        self.trends['towardsOpponent'] += 1
+        if self.lastMovement == "Away":
+          self.trends['movementChanges'] +=1 
+          self.currentTrend = 0
+        else:
+          self.currentTrend +=1 
+          if self.currentTrend > self.trends['biggestTrend']:
+            self.trends['biggestTrend'] = self.currentTrend
+        self.lastMovement = "Towards"
+      else:
+        self.trends['awayOpponent'] += 1
+        if self.lastMovement == "Towards":
+          self.trends['movementChanges'] +=1 
+          self.currentTrend = 0
+        else:
+          self.currentTrend +=1 
+          if self.currentTrend > self.trends['biggestTrend']:
+            self.trends['biggestTrend'] = self.currentTrend
+        self.lastMovement = "away"
       if self.curtime >=30:
         if choices[2][0][0] == choices[3][0][0] == choices[4][0][0]:
           attack = random.choices(['short','mid','range'])[0]
-          if attack == 'short': self.shortattack()
-          elif attack == 'mid': self.throwfire()
-          else: self.shootarrow()
+          if attack == 'short': 
+            self.shortattack()
+            self.trends['knife'] = self.trends['knife'] + 1
+          elif attack == 'mid': 
+            self.throwfire()
+            self.trends['fire'] = self.trends['fire'] + 1
+          else: 
+            self.shootarrow()
+            self.trends['arrow'] = self.trends['arrow'] + 1
         elif choices[2][0][0] > choices[3][0][0] and choices[2][0][0] > choices[4][0][0]:
           self.shortattack()
         elif choices[3][0][0] > choices[4][0][0]:
           self.throwfire()
         else:
           self.shootarrow()
-
-        x_diff = self.opponent.center_x - self.center_x
-        y_diff = self.opponent.center_y - self.center_y
-        self.d = math.sqrt(x_diff**2 +y_diff**2)
-        self.angle = math.degrees(math.atan2(y_diff,x_diff))-90
-        self.change_x = -math.cos(self.angle)*MOVEMENT_SPEED
-        self.change_y = -math.sin(self.angle)*MOVEMENT_SPEED
         self.curtime = 0
       for arrow in self.arrow_list:
         if arrow.center_x>SCREEN_WIDTH + 10 or arrow.center_y>SCREEN_HEIGHT + 10 or arrow.center_x< -10 or arrow.center_y< -10 :

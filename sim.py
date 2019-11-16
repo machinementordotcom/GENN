@@ -18,9 +18,10 @@ from GENN import *
 from util.constants import *
 import multiprocessing
 import numpy as np 
+import json
 
 class Game:
-    def __init__(self,width , height, title, iterations, player_1_type, player_2_type,conGames,currentGame,player_1_nets,player_2_nets,process_id):
+    def __init__(self,width , height, title, iterations, player_1_type, player_2_type,conGames,currentGame,player_1_nets,player_2_nets,trendTracking,process_id):
         """
         Initializer
         """
@@ -34,7 +35,9 @@ class Game:
         os.chdir(file_path)
         self.grid = np.zeros(shape = (SCREEN_HEIGHT, SCREEN_WIDTH))
         self.curtime = 0
-        
+        self.written = 0
+
+        self.trendTracking = trendTracking
         self.start = time.time()
         self.totalIterations = iterations
         self.iterations = iterations
@@ -57,6 +60,24 @@ class Game:
         self.player1.center_y = random.randint(0,SCREEN_HEIGHT)
         self.player2.center_x = random.randint(0,SCREEN_WIDTH)
         self.player2.center_y = random.randint(0,SCREEN_HEIGHT)
+    def writeTrends(self):
+        if self.written == 0:
+            with open("player1Trends.txt",'w+') as myfile:
+                myfile.write(json.dumps(self.player1.trends))
+                myfile.close()
+            with open("player2Trends.txt",'w+') as myfile:
+                myfile.write(json.dumps(self.player2.trends))
+                myfile.close()
+        else:
+            with open("player1Trends.txt",'a') as myfile:
+                myfile.write(json.dumps(self.player1.trends))
+                myfile.close()
+            with open("player2Trends.txt",'a') as myfile:
+                myfile.write(json.dumps(self.player2.trends))
+                myfile.close()    
+        self.written += 1    
+        self.player1.trends = {'arrow':0,'fire':0,'knife':0,'towardsOpponent' :0, 'awayOpponent':0,"movementChanges":0,"biggestTrend":0}
+        self.player2.trends = {'arrow':0,'fire':0,'knife':0,'towardsOpponent' :0, 'awayOpponent':0,"movementChanges":0,"biggestTrend":0}
     def setup(self):
         self.player_list = []
         self.arrow_list = []
@@ -182,7 +203,9 @@ class Game:
         self.player1.knife_num = 0
         self.player1.shield = 0
         self.player1.box = 150
-        
+        self.player1.trends = {'arrow':0,'fire':0,'knife':0,'towardsOpponent' :0, 'awayOpponent':0,"movementChanges":0,"biggestTrend":0}
+        self.player1.lastMovement = ""        
+        self.player1.currentTrend = 0
 
         # Set up bad guy
         if self.player2_type.lower() == 'range':
@@ -282,7 +305,9 @@ class Game:
         self.player2.opponent = self.player1
         self.player1.opponent = self.player2
         self.player2.box = 150
-
+        self.player2.trends = {'arrow':0,'fire':0,'knife':0,'towardsOpponent' :0, 'awayOpponent':0,"movementChanges":0,"biggestTrend":0}
+        self.player2.lastMovement = ""
+        self.player2.currentTrend = 0
 
     def end_game(self):
         self.player1_score += self.player1.score
@@ -343,6 +368,8 @@ class Game:
         # sets a timer that game and perspective players use
         # not sure if necessary
         self.curtime += 1 
+        if self.trendTracking == 'yes': 
+            if self.curtime % 100 == 0: self.writeTrends()
         self.player1.update()
         self.player2.update()
         # player 1 collision
@@ -456,10 +483,14 @@ class Game:
             self.player2.score += 1 
             self.end_game()
             if self.player2.shield == 0:
-                if self.iterations == 0: return self.player1.health - self.player2.health - 500
+                if self.iterations == 0: 
+                    # self.writeTrends()
+                    return self.player1.health - self.player2.health - 500
                 else: self.setup()
             else:
-                if self.iterations == 0: return self.player1.health - self.player2.health
+                if self.iterations == 0: 
+                    # self.writeTrends()
+                    return self.player1.health - self.player2.health
                 else: self.setup()
         if self.player1.health == self.player1_previous_health and self.player2_previous_health == self.player2.health: self.healthChanges += 1
         else: self.healthChanges = 0

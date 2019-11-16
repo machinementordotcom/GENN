@@ -15,7 +15,7 @@ from operator import itemgetter
 sys.stdout = sys.__stdout__
 
 def runOneGame(a):
-    x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10])
+    x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11])
     x.setup()
     val = True
     while val == True:
@@ -27,6 +27,7 @@ def main(args):
 
     graphics = 'no'
     train = 'no'
+    trendTracking = 'no'
     evolutions = False
     spacer()
 
@@ -38,9 +39,11 @@ def main(args):
         player_2_type = 'mid'
         graphics = 'no'
         player_1_type = 'genn'
+        trendTracking = 'no'
     else:
         conCurrentGame = get_int_choice('How many games would you like played at the same time (Recommended amount based on computer cores '+str(multiprocessing.cpu_count())+"):",1,1000)
         iterations = get_int_choice('Enter the amount of generations to be played: ',1,5000)
+        trendTracking = get_str_choice("Would you like to track trends",'yes','no')
         simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc','genn')
         if simulation_player_1.lower() == "freeplay":
             player_1_type = "human"
@@ -120,7 +123,7 @@ def main(args):
                 if game % 9 < 3: player_2_type == 'short'
                 elif game % 9 < 6: player_2_type == 'mid'
                 else: player_2_type == 'range'
-            result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets]] *conCurrentGame  ],1) ])
+            result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets, trendTracking]] *conCurrentGame  ],1) ])
             if game == 0 or game % 3 == 0: evolutionHealth = [float(i) for i in result]
             else: evolutionHealth = list(map(add, [float(i) for i in result], evolutionHealth)) 
             player1Wins += sum(int(i) > 0 for i in [int(i) for i in result]) 

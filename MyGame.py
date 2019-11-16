@@ -12,6 +12,7 @@ from FSMPlayers.AllEnemy import *
 from FSMPlayers.HumanPlayer import *
 from util.inputFunctions import *
 from DynamicController.DynamicController import *
+from GENN import * 
 
 
 class MyGame(arcade.Window):
@@ -141,6 +142,10 @@ class MyGame(arcade.Window):
                 self.player1.weights = [[],[]]
                 self.player1.readWeights()
                 chooseWeight(self.player1)
+        elif self.player1_type.lower() == 'genn':
+            self.player1 = GENN(KNIGHT_IMAGE,1)
+            self.player1.net = self.player_1_nets[self.process_id]
+            self.player1.model =  self.player1.net.createNetwork()
         else:
             self.player1 = Enemy(MAGE_IMAGE,SPRITE_SCALING)
 

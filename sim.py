@@ -61,7 +61,7 @@ class Game:
         self.player2.center_x = random.randint(0,SCREEN_WIDTH)
         self.player2.center_y = random.randint(0,SCREEN_HEIGHT)
     def writeTrends(self):
-        if self.written == 0:
+        if self.written == 0 and self.iterations == self.totalIterations:
             with open("player1Trends.txt",'w+') as myfile:
                 myfile.write(json.dumps(self.player1.trends))
                 myfile.close()
@@ -368,10 +368,11 @@ class Game:
         # sets a timer that game and perspective players use
         # not sure if necessary
         self.curtime += 1 
-        if self.trendTracking == 'yes': 
-            if self.curtime % 100 == 0: self.writeTrends()
         self.player1.update()
         self.player2.update()
+        if self.trendTracking == 'yes': 
+            if self.curtime % 3000 == 0: self.writeTrends()
+
         # player 1 collision
         if self.player1.center_y >= self.height:
             self.player1.center_y = self.height
@@ -484,12 +485,12 @@ class Game:
             self.end_game()
             if self.player2.shield == 0:
                 if self.iterations == 0: 
-                    # self.writeTrends()
+                    self.writeTrends()
                     return self.player1.health - self.player2.health - 500
                 else: self.setup()
             else:
                 if self.iterations == 0: 
-                    # self.writeTrends()
+                    self.writeTrends()
                     return self.player1.health - self.player2.health
                 else: self.setup()
         if self.player1.health == self.player1_previous_health and self.player2_previous_health == self.player2.health: self.healthChanges += 1

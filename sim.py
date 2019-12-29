@@ -19,6 +19,7 @@ from util.constants import *
 import multiprocessing
 import numpy as np 
 import json
+import matplotlib.pyplot as plt
 
 class Game:
     def __init__(self,width , height, title, iterations, player_1_type, player_2_type,conGames,currentGame,player_1_nets,player_2_nets,trendTracking,process_id):
@@ -371,7 +372,7 @@ class Game:
         self.player1.update()
         self.player2.update()
         if self.trendTracking == 'yes': 
-            if self.curtime % 3000 == 0: self.writeTrends()
+            if self.curtime % 900 == 0: self.writeTrends()
 
         # player 1 collision
         if self.player1.center_y >= self.height:

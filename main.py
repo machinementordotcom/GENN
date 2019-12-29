@@ -12,6 +12,11 @@ import multiprocessing
 from operator import add 
 from ctypes import c_int
 from operator import itemgetter 
+import pandas as pd
+import json
+import re 
+import matplotlib.ticker as ticker
+
 sys.stdout = sys.__stdout__
 
 def runOneGame(a):
@@ -21,11 +26,36 @@ def runOneGame(a):
     while val == True:
         val = x.update()
     return val
+def createGraphs(playerNum):
+    with open('player' + str(playerNum) + 'Trends.txt') as f:
+        z = str(f.readline()).replace("}","").split("{")
+    p = []
+    for elm in z[1:]:
+        use = elm.split(",")
+        temp = [ re.sub("\D", "", x) for x  in use ] 
+        p.append(temp)
+    x = pd.DataFrame(p,columns = ['arrow','fire','knife','towardsOpponent','awayOpponent','movementChanges','biggestTrend'])
+    fig, ax = plt.subplots()
+
+    plt.plot(range(len(x)),x['arrow'].astype(float))    
+    plt.plot(range(len(x)),x['fire'].astype(float))    
+    plt.plot(range(len(x)),x['knife'].astype(float)) 
+    ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))   
+
+
+    plt.ylabel("Shot Frequency")
+    plt.xlabel("Time segment")
+    plt.title("Shooting trends per segment for player " + str(playerNum))
+    # plt.yticks(range(len(x)))
+    plt.legend(['Arrow', 'Fire', 'Knife'], loc='upper left')
+
+    plt.savefig("player" + str(playerNum) + "ShootingTrends")
 
 def main(args):
     """ Main method """
 
     graphics = 'no'
+    graphOutput = 'no'
     train = 'no'
     trendTracking = 'no'
     evolutions = False
@@ -40,10 +70,12 @@ def main(args):
         graphics = 'no'
         player_1_type = 'genn'
         trendTracking = 'no'
+        graphOutput = 'no'
     else:
         conCurrentGame = get_int_choice('How many games would you like played at the same time (Recommended amount based on computer cores '+str(multiprocessing.cpu_count())+"):",1,1000)
         iterations = get_int_choice('Enter the amount of generations to be played: ',1,5000)
         trendTracking = get_str_choice("Would you like to track trends",'yes','no')
+        graphOutput = get_str_choice("Would you like to create graphical outputs?",'yes','no')
         simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc','genn')
         if simulation_player_1.lower() == "freeplay":
             player_1_type = "human"
@@ -149,6 +181,11 @@ def main(args):
         print("Draws: ",draws)
         print("Average Health Difference: ",round(abs(leftOverHealth) / (conCurrentGame * iterations),4))
         print("Total Time: ",round(time.time() - start,4))
+    if graphOutput =='yes':
+        if player_1_type not in ['short','mid','range']:
+            createGraphs(1)
+        if player_2_type not in ['short','mid','range']:
+            createGraphs(2)
         
 if __name__ == "__main__":
     main(sys.argv)

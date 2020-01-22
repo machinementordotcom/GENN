@@ -3,7 +3,10 @@
 *.txt
 *.pyc
 *.out
-*/__pycache__/
+FSMPlayers/__pycache__/*
+Util/__pycache__/*
+DynamicController/__pycache__/*
+__pycache__/
 GENN/*.csv
 GENN/weights*
 DynamicController/*.csv

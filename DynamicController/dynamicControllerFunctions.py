@@ -2,6 +2,7 @@ from util.constants import *
 import random
 import re 
 import math
+random.seed(RANDOM_SEED)
 def excludeSums(nums,id):
     if (id > len(nums)): raise Exception("problem with summing function")
     return sum(nums[0:id]+nums[id+1:])

@@ -4,7 +4,7 @@ import csv
 from util.constants import * 
 from DynamicController.DynamicControllerSimFunctions import *
 import numpy as np
-
+random.seed(RANDOM_SEED)
 class DynamicController(arcade.Sprite):
     def check_for_collision(self,player,projectiles):
         for projectile in projectiles:

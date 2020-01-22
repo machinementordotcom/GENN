@@ -21,6 +21,8 @@ import numpy as np
 import json
 import matplotlib.pyplot as plt
 
+random.seed(RANDOM_SEED)
+
 class Game:
     def __init__(self,width , height, title, iterations, player_1_type, player_2_type,conGames,currentGame,player_1_nets,player_2_nets,trendTracking,process_id):
         """

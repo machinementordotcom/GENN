@@ -3,6 +3,7 @@ import numpy as np
 from util.constants import * 
 import csv
 import ast
+random.seed(RANDOM_SEED)
 
 def createNets(conCurrentGame):
     maxlayers = 100

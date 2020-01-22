@@ -5,6 +5,7 @@ import csv
 from util.constants import * 
 from DynamicController.dynamicControllerFunctions import *
 
+random.seed(RANDOM_SEED)
 class DynamicController(arcade.Sprite):
     def equipshield(self):
         self.set_texture(1)

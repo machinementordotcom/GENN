@@ -5,6 +5,7 @@ import numpy as np
 from util.constants import *
 import math
 import random
+random.seed(RANDOM_SEED)
 class GENN(arcade.Sprite):
 
     def shootarrow(self):

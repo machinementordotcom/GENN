@@ -8,6 +8,7 @@ from tensorflow import keras
 import multiprocessing
 sys.stdout = sys.__stdout__
 
+RANDOM_SEED = 1
 
 SPRITE_SCALING = 0.5
 SCREEN_WIDTH = 1000

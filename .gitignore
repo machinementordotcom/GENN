@@ -3,10 +3,13 @@
 *.txt
 *.pyc
 *.out
-FSMPlayers/__pycache__/*
-Util/__pycache__/*
-DynamicController/__pycache__/*
 __pycache__/
+
+DynamicController/__pycache__/DynamicController.cpython-36.pyc
+FSMPlayers/__pycache__/HumanPlayer.cpython-36.pyc
+FSMPlayers/__pycache__/MidRangePlayer.cpython-36.pyc
+FSMPlayers/__pycache__/ShortRangePlayer.cpython-36.pyc
+util/__pycache__/constants.cpython-36.pyc
 GENN/*.csv
 GENN/weights*
 DynamicController/*.csv

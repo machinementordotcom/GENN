@@ -3,7 +3,7 @@
 *.txt
 *.pyc
 *.out
-
+__pycache__/
 GENN/*.csv
 GENN/weights*
 DynamicController/*.csv

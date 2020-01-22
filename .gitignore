@@ -3,3 +3,8 @@
 *.txt
 *.pyc
 *.out
+
+GENN/*.csv
+GENN/weights*
+DynamicController/*.csv
+.Rhistory

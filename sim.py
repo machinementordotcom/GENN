@@ -14,7 +14,7 @@ from FSMPlayers.AllEnemy import *
 from FSMPlayers.HumanPlayer import *
 from util.inputFunctions import *
 from DynamicController.DynamicControllerSim import *
-from GENN import * 
+from GENN.GENN import * 
 from util.constants import *
 import multiprocessing
 import numpy as np 

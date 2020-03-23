@@ -4,7 +4,7 @@ from util.constants import *
 import csv
 import ast
 
-def createNets(conCurrentGame):
+def createNets(conCurrentGame, adaptive = False):
     maxlayers = 100
     maxNodes = 100
     inputsNum = 17
@@ -26,10 +26,13 @@ def createNets(conCurrentGame):
         layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
         layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
         layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
-        nets.append(Network(layers))
+        if adaptive = True: #JTW modified to optionally allow creating adaptive network which adjusts its own weights
+            nets.append(AdaptiveNetwork(layers))
+        else:
+            nets.append(Network(layers))
     return nets
 
-def createNet(specificLayers = None,specificNodes = None):
+def createNet(specificLayers = None,specificNodes = None, adaptive = False):
     maxlayers = 100
     maxNodes = 100
     inputsNum = 17
@@ -51,7 +54,10 @@ def createNet(specificLayers = None,specificNodes = None):
     layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
     layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
     layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
-    return Network(layers)
+    if adaptive = True:  #JTW modified to optionally allow creating adaptive network which adjusts its own weights
+            return AdaptiveNetwork
+        else:
+            return Network(layers)
 
 def createChildNets(parents,number):
     return createNets(number)

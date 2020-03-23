@@ -187,6 +187,10 @@ class Game:
             self.player1 = GENN(KNIGHT_IMAGE,1)
             self.player1.net = self.player_1_nets[self.process_id]
             self.player1.model =  self.player1.net.createNetwork()
+        elif self.player1_type.lower() == 'agenn':  # JTW add option for adaptive network
+            self.player1 = GENN(KNIGHT_IMAGE,1)
+            self.player1.net = self.player_1_nets[self.process_id]
+            self.player1.model =  self.player1.net.createNetwork(adaptive = True)
 
         else:
             self.player1 = Enemy(KNIGHT_IMAGE,1)
@@ -286,6 +290,10 @@ class Game:
             self.player2 = GENN(KNIGHT_IMAGE,1)
             self.player2.net = self.player_2_nets[self.process_id]
             self.player2.model =  self.player2.net.createNetwork()
+        elif self.player2_type.lower() == 'agenn':  # JTW add option for adaptive network
+            self.player2 = GENN(KNIGHT_IMAGE,1)
+            self.player2.net = self.player_2_nets[self.process_id]
+            self.player2.model =  self.player2.net.createNetwork(adaptive = True)
         else:
             self.player2 = Enemy(KNIGHT_IMAGE,1)
 

@@ -126,6 +126,19 @@ class GENN(arcade.Sprite):
         opp_proj_3_y = 0
       inputs = [[self.center_x,self.center_y,self.opponent.center_x,self.opponent.center_x,self.health,self.opponent.health,self.total_time,self.shield,self.opponent.shield,self.curtime,len(self.opponent_hitbox_list), opp_proj_1_x, opp_proj_1_y, opp_proj_2_x, opp_proj_2_y, opp_proj_3_x, opp_proj_3_y]]
       choices = self.model.predict(np.asarray(inputs))
+      
+      #JTW check whether network is adaptive.
+      #Adaptive networks return 6 additional targets
+      if choices.shape[0]>5:
+          target = [choices[5][0][0].
+                    choices[5][0][1].
+                    choices[5][0][2].
+                    choices[5][0][3].
+                    choices[5][0][4]]
+          weight = choices[5][0][5]
+          self.model.fit(inputs, targets=target, sample_weight = weight,verbose = 0)
+          
+          
       self.center_x += MOVEMENT_SPEED * choices[0][0][0]
       self.center_y += MOVEMENT_SPEED * choices[1][0][0]
 

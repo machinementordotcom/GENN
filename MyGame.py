@@ -146,6 +146,10 @@ class MyGame(arcade.Window):
             self.player1 = GENN(KNIGHT_IMAGE,1)
             self.player1.net = self.player_1_nets[self.process_id]
             self.player1.model =  self.player1.net.createNetwork()
+        elif self.player1_type.lower() == 'agenn':  # JTW add option for adaptive GENN
+            self.player1 = GENN(KNIGHT_IMAGE,1)
+            self.player1.net = self.player_1_nets[self.process_id]
+            self.player1.model =  self.player1.net.createNetwork(adaptive = True)
         else:
             self.player1 = Enemy(MAGE_IMAGE,SPRITE_SCALING)
 

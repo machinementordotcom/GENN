@@ -6,7 +6,8 @@ import arcade
 from sim import *
 from util.constants import * 
 from util.inputFunctions import * 
-from GENNFunctions import * 
+from GENN.GENNFunctions import * 
+from GENN.GENN import GENN
 import time
 import multiprocessing
 from operator import add 
@@ -26,6 +27,7 @@ def runOneGame(a):
     while val == True:
         val = x.update()
     return val
+
 def createGraphs(playerNum):
     with open('player' + str(playerNum) + 'Trends.txt') as f:
         z = str(f.readline()).replace("}","").split("{")
@@ -56,7 +58,7 @@ def main(args):
 
     graphics = 'no'
     graphOutput = 'no'
-    train = 'no'
+    train = 'yes'
     trendTracking = 'no'
     evolutions = False
     spacer()
@@ -64,11 +66,11 @@ def main(args):
     if train == 'yes':
         conCurrentGame = 100
         iterations = 999 
-        simulation_player_1 = 'genn'
-        simulation_player_2 = 'fsm'
-        player_2_type = 'mid'
+        simulation_player_1 = 'agenn'
+        simulation_player_2 = 'genn'
+        player_2_type = 'genn'
         graphics = 'no'
-        player_1_type = 'genn'
+        player_1_type = 'agenn'
         trendTracking = 'no'
         graphOutput = 'no'
     else:
@@ -76,7 +78,7 @@ def main(args):
         iterations = get_int_choice('Enter the amount of generations to be played: ',1,5000)
         trendTracking = get_str_choice("Would you like to track trends",'yes','no')
         graphOutput = get_str_choice("Would you like to create graphical outputs?",'yes','no')
-        simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc','genn')
+        simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc','genn','agenn')
         if simulation_player_1.lower() == "freeplay":
             player_1_type = "human"
             graphics = 'yes'
@@ -86,7 +88,9 @@ def main(args):
             player_1_type = get_str_choice("What type of dynamic controller is player 1 ?",'master','average','random','train')
         elif simulation_player_1.lower() == "genn":
             player_1_type = "genn"
-        simulation_player_2 = get_str_choice("What type of simulation do you want for player 2?",'fsm','dc','freeplay','genn')
+        elif simulation_player_1.lower() == "agenn":
+            player_1_type = "agenn"
+        simulation_player_2 = get_str_choice("What type of simulation do you want for player 2?",'fsm','dc','freeplay','genn','agenn')
         if simulation_player_2 == "freeplay":
             player_2_type = "human"
             graphics = 'yes'
@@ -96,21 +100,35 @@ def main(args):
             player_2_type = get_str_choice("What type of dynamic controller is player 2 ?",'master','average','random')
         elif simulation_player_2.lower() == "genn":
             player_2_type = "genn"
+        elif simulation_player_2.lower() == "agenn":
+            player_2_type = "agenn"
         if graphics == 'no':
             graphics = get_str_choice('Run Graphically?: ','yes','no')
-
+    
     if player_1_type == 'genn' and train == 'yes':
         evolutions = True
         player_1_nets = createNets(conCurrentGame)
+    elif player_1_type == 'agenn' and train == 'yes':
+        evolutions = True
+        player_1_nets = createNets(conCurrentGame, adaptive = True)
     elif player_1_type == 'genn' and train == 'no':
         player_1_nets = readNets(conCurrentGame)
+    elif player_1_type == 'agenn' and train == 'no':
+        player_1_nets = readNets(conCurrentGame,adaptive = True)
     else: player_1_nets = None
+    
     if player_2_type == 'genn' and train == 'yes':
         evolutions = True
         player_2_nets = createNets(conCurrentGame)
+    elif player_2_type == 'agenn' and train == 'yes':
+        evolutions = True
+        player_2_nets = createNets(conCurrentGame, adaptive = True)
     elif player_2_type == 'genn' and train == 'no':
         player_2_nets = readNets(conCurrentGame)
+    elif player_2_type == 'agenn' and train == 'no':
+        player_2_nets = readNets(conCurrentGame,adaptive = True)
     else: player_2_nets = None
+    
     if graphics == 'yes':
         window = MyGame(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,iterations,player_1_type,player_2_type)
         window.setup()

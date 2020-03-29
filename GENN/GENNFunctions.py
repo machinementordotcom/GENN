@@ -26,7 +26,7 @@ def createNets(conCurrentGame, adaptive = False):
         layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
         layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
         layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
-        if adaptive = True: #JTW modified to optionally allow creating adaptive network which adjusts its own weights
+        if adaptive == True: #JTW modified to optionally allow creating adaptive network which adjusts its own weights
             nets.append(AdaptiveNetwork(layers))
         else:
             nets.append(Network(layers))
@@ -54,10 +54,10 @@ def createNet(specificLayers = None,specificNodes = None, adaptive = False):
     layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
     layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
     layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
-    if adaptive = True:  #JTW modified to optionally allow creating adaptive network which adjusts its own weights
-            return AdaptiveNetwork
-        else:
-            return Network(layers)
+    if adaptive == True:  #JTW modified to optionally allow creating adaptive network which adjusts its own weights
+        return AdaptiveNetwork
+    else:
+        return Network(layers)
 
 def createChildNets(parents,number):
     return createNets(number)
@@ -116,8 +116,13 @@ def writeNetworks(nets):
             for j in range(len(nets[i].layers)):
                 wr.writerow(nets[i].layers[j].weights)
 
-def readNets(nets):
-    with open("Genn/masterWeights/weights.csv") as csvfile:
+def readNets(nets, adaptive = False):
+    if adaptive:
+        filename = "Genn/masterWeightsAdaptive/weights.csv"
+    else:
+        filename = "Genn/masterWeights/weights.csv"
+        
+    with open(filename) as csvfile:
         reader = csv.reader(csvfile)
         layers = []
         for row in reader:

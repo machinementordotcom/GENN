@@ -5,6 +5,8 @@ import numpy as np
 from util.constants import *
 import math
 import random
+import pickle
+
 class GENN(arcade.Sprite):
 
     def shootarrow(self):
@@ -129,14 +131,17 @@ class GENN(arcade.Sprite):
       
       #JTW check whether network is adaptive.
       #Adaptive networks return 6 additional targets
-      if choices.shape[0]>5:
-          target = [choices[5][0][0].
-                    choices[5][0][1].
-                    choices[5][0][2].
-                    choices[5][0][3].
+      
+      if len(choices)>5:
+          with open('debug_dump.p','wb') as f:
+              pickle.dump([choices,inputs],f)
+          target = [choices[5][0][0],
+                    choices[5][0][1],
+                    choices[5][0][2],
+                    choices[5][0][3],
                     choices[5][0][4]]
           weight = choices[5][0][5]
-          self.model.fit(inputs, targets=target, sample_weight = weight,verbose = 0)
+          self.model.fit(inputs, target, sample_weight = weight,verbose = 0)
           
           
       self.center_x += MOVEMENT_SPEED * choices[0][0][0]

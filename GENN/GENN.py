@@ -137,11 +137,13 @@ class GENN(arcade.Sprite):
               pickle.dump([choices,inputs],f)
           target = [choices[5][0][0],
                     choices[5][0][1],
-                    choices[5][0][2],
-                    choices[5][0][3],
-                    choices[5][0][4]]
-          weight = choices[5][0][5]
-          self.model.fit(inputs, target, sample_weight = weight,verbose = 0)
+                    choices[5][0][2]/2+0.5,
+                    choices[5][0][3]/2+0.5,
+                    choices[5][0][4]/2+0.5,
+                    choices[5][0]]
+          weight = (choices[5][0][5]+1)/2
+          assert 0 == 1
+          self.model.fit(inputs, target, batch_size = 1, sample_weight = weight,verbose = 0)
           
           
       self.center_x += MOVEMENT_SPEED * choices[0][0][0]

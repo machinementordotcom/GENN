@@ -45,7 +45,7 @@ KNIFE_DAMAGE = PLAYER_HEALTH / KNIFE_HITS_UNTIL_DEATH
 SHORT_SPEED_HANDICAP = .145#.955
 MID_SPEED_HANDICAP = .09#1
 
-GENE_LENGTH = 20  
+GENE_LENGTH = 19  
 # JTW length of genes used for adaptive network weights
 # Weights used will be a composite function of genes from a stretch of weights
 # this long
@@ -180,9 +180,11 @@ class AdaptiveNetwork:
                 shoot1 = tf.keras.layers.Dense(1,activation='sigmoid')
                 shoot2 = tf.keras.layers.Dense(1,activation='sigmoid')
                 shoot3 = tf.keras.layers.Dense(1,activation='sigmoid')
-                normed_inputs = tf.keras.layers.LayerNormalization()(inputs)
-                adaptive_inputs = tf.expand_dims(normed_inputs,0)
-                adaptive_layer = tf.keras.layers.LSTM(6, stateful=True,time_major = True)
+                #The adaptive layer is a recurrent LSTM layer which recieves normalized 
+                #inputs from the last dense hidden layer.  The weights for the hidden layer
+                #are based on the hidden weights for the first 3 layers        
+                adaptive_layer = tf.keras.layers.GRU(6, time_major = True, stateful = True)
+                adaptive_inputs = tf.expand_dims(inputs,0)   
                 adaptive_outputs = adaptive_layer(adaptive_inputs)
                 tensors.append(move_x)
                 tensors.append(move_y)
@@ -208,9 +210,11 @@ class AdaptiveNetwork:
                 shoot1 = tf.keras.layers.Dense(1,activation='sigmoid')
                 shoot2 = tf.keras.layers.Dense(1,activation='sigmoid')
                 shoot3 = tf.keras.layers.Dense(1,activation='sigmoid')
-                normed_inputs = tf.keras.layers.LayerNormalization()(results[i-1])
-                adaptive_inputs = tf.expand_dims(normed_inputs,0)
-                adaptive_layer = tf.keras.layers.LSTM(6, stateful=True,time_major = True)
+                 #The adaptive layer is a recurrent LSTM layer which recieves normalized 
+                #inputs from the last dense hidden layer.  The weights for the hidden layer
+                #are based on the hidden weights for the first 3 layers        
+                adaptive_layer = tf.keras.layers.GRU(6, time_major = True, stateful = True)
+                adaptive_inputs = tf.expand_dims(results[i-1],0)   
                 adaptive_outputs = adaptive_layer(adaptive_inputs)
                 results.append(move_x(results[i-1]))
                 results.append(move_y(results[i-1]))
@@ -222,6 +226,7 @@ class AdaptiveNetwork:
                 tensors.append(shoot1)
                 tensors.append(shoot2)
                 tensors.append(shoot3)
+                
         counter = 0
         for i in range(len(tensors)):
             if i < len(self.layers) - 5:
@@ -230,26 +235,25 @@ class AdaptiveNetwork:
                 tensors[i].set_weights([np.asarray(self.layers[i - counter].weights),np.zeros(len(self.layers[i - counter].weights[0]))])
                 counter += 1 
                 
-        #set model weights for the child_weight matrix outputs
+       
+        
+        #current weights are read to get the proper shape
         input_weights,hidden_weights, bias = adaptive_layer.get_weights()
-        
-        #Repeat the weights and reshape them into the correct shape for the adaptive 
-        #layer shape
-        
+
         weight_list = []
         counter = 0
         for weights in [input_weights, hidden_weights, bias]:          
             #Input weights are based on the first layer weights
             #Hidden unit weights are based on the second layer weights
             #Bias is based on the 3rd layer weights
-            first_layer_weights = np.asarray(self.layers[counter].weights) 
+            first_layer_weights = np.asarray(self.layers[counter].weights)[0] 
             counter+=1
             weights_1d = np.ravel(first_layer_weights)
-            times_to_repeat = np.ceil(weights.size / weights_1d).astype(int)  
+            times_to_repeat = np.ceil(weights.size / weights_1d.size).astype(int)  
             
             #Each weight used for the adaptive layer is based on alternating addition and 
             #subtraction of the weights used for the first three layers
-            weights_1d = np.repeat(weights_1d, times_to_repeat)[:weights.size]
+            weights_1d = np.tile(weights_1d, times_to_repeat)[:weights.size]
             new_weights = np.copy(weights_1d)
             for i in range(1,GENE_LENGTH):
                 if i%2 ==0:
@@ -257,9 +261,14 @@ class AdaptiveNetwork:
                 else:
                     new_weights -= np.roll(weights_1d,i)
             assert not np.isnan(np.sum(new_weights))        
+            new_weights -= np.mean(new_weights)
+            new_weights /= np.std(new_weights)
             weight_list.append(np.reshape(new_weights,weights.shape))
-            
-        adaptive_layer.set_weights(np.asarray(weight_list))   
+        import pickle 
+        with open('weights_dump.p','wb') as f:
+              pickle.dump([weight_list,new_weights, weights_1d,first_layer_weights],f)
+        adaptive_layer.set_weights(np.asarray(weight_list))
+        
         model = tf.keras.Model(inputs=inputs, outputs=[results[len(results)-5],
                                                       results[len(results)-4],
                                                       results[len(results)-3],
@@ -267,12 +276,7 @@ class AdaptiveNetwork:
                                                       results[len(results)-1],
                                                       adaptive_outputs])
         #Compile model so that it can be trained
-        model.compile(loss = ['mean_squared_error',
-                                'mean_squared_error',
-                                'mean_squared_error',
-                                'mean_squared_error',
-                                'mean_squared_error',
-                                None])
+        model.compile('sgd',loss = 'logcosh')
         return model
                 
 

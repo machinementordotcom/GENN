@@ -64,8 +64,8 @@ def main(args):
     spacer()
 
     if train == 'yes':
-        conCurrentGame = 100
-        iterations = 999 
+        conCurrentGame = 4
+        iterations = 3 
         simulation_player_1 = 'agenn'
         simulation_player_2 = 'genn'
         player_2_type = 'genn'
@@ -150,23 +150,37 @@ def main(args):
             spacer()
             print("Total iterations %d out of %d" % (game + 1, iterations) )
             if evolutions == True and train == 'yes':
-                if player_1_type == 'genn':
-                    if game % 9 == 0 and game != 0:
+                if game % 9 == 0 and game != 0:
+                    if player_1_type == 'genn':
                         print(evolutionHealth)
                         bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
                         evolutionHealth = []
                         newNets = list(itemgetter(*bestIndexs)(player_1_nets))
                         temp = createChildNets(newNets,conCurrentGame - len(newNets))
                         player_1_nets = newNets + temp
-                        player_1_nets = mutateNets(player_1_nets)
-                if player_2_type == 'genn':
-                    if game % 9 == 0 and game != 0:
+                        player_1_nets = mutateNets(player_1_nets, adaptive = False)
+                    if player_1_type == 'agenn':
+                        print(evolutionHealth)
+                        bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
+                        evolutionHealth = []
+                        newNets = list(itemgetter(*bestIndexs)(player_1_nets))
+                        temp = createChildNets(newNets,conCurrentGame - len(newNets), adaptive = True)
+                        player_1_nets = newNets + temp
+                        player_1_nets = mutateNets(player_1_nets, adaptive = True)
+                    if player_2_type == 'genn':
                         bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
                         evolutionHealth = []
                         newNets = list(itemgetter(*bestIndexs)(player_2_nets))
                         temp = createChildNets(newNets,conCurrentGame - len(newNets))
                         player_2_nets = newNets + temp
-                        player_2_nets = mutateNets(player_2_nets)
+                        player_2_nets = mutateNets(player_2_nets, adaptive =False)
+                    if player_2_type == 'agenn':
+                        bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
+                        evolutionHealth = []
+                        newNets = list(itemgetter(*bestIndexs)(player_2_nets))
+                        temp = createChildNets(newNets,conCurrentGame - len(newNets), adaptive = True)
+                        player_2_nets = newNets + temp
+                        player_2_nets = mutateNets(player_2_nets, adaptive =True)
             p = multiprocessing.Pool(multiprocessing.cpu_count())
                 # map will always return the results in order, if order is not important in the future use pool.imap_unordered()
             if train == 'yes':

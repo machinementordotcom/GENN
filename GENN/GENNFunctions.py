@@ -55,11 +55,11 @@ def createNet(specificLayers = None,specificNodes = None, adaptive = False):
     layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
     layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
     if adaptive == True:  #JTW modified to optionally allow creating adaptive network which adjusts its own weights
-        return AdaptiveNetwork
+        return AdaptiveNetwork(layers)
     else:
         return Network(layers)
 
-def createChildNets(parents,number):
+def createChildNets(parents,number, adaptive = False):
     return createNets(number)
     newNets = []
     inputsNum = 17
@@ -82,7 +82,10 @@ def createChildNets(parents,number):
         layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
         layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
         layers.append(Layer(np.random.rand(1,totalNodes[len(totalNodes)-1],1).tolist()[0]))
-        newNets.append(Network(layers))
+        if adaptive:
+            newNets.append(AdaptiveNetwork(layers))
+        else:
+            newNets.append(Network(layers))
     return newNets
 
 def countBits(n):
@@ -96,7 +99,7 @@ def countBits(n):
 def toggleKthBit(n, k): 
     return (n ^ (1 << (k-1))) 
 
-def mutateNets(nets):
+def mutateNets(nets, adaptive =False):
     newNetsIndex = np.random.randint(0,len(nets),int(len(nets)*.1))
     for i in newNetsIndex:
         current = nets[i]
@@ -105,13 +108,16 @@ def mutateNets(nets):
         for i in range(num):
             if random.uniform(0, 1) < (1/num):
                 currentLayers = toggleKthBit(currentLayers,i)
-        nets[i] = createNet(specificLayers = currentLayers)
+        nets[i] = createNet(specificLayers = currentLayers, adaptive=adaptive)
     return nets
 
-def writeNetworks(nets):
-
+def writeNetworks(nets,adaptive = False):
+    if adaptive:
+        filename = "Genn/weights"
+    else:
+        filename = "Genn/adaptiveWeights"
     for i in range(len(nets)):
-        with open("Genn/weights" + str(i) + ".csv",'w') as myfile:
+        with open(filename + str(i) + ".csv",'w') as myfile:
             wr = csv.writer(myfile, quoting = csv.QUOTE_ALL) 
             for j in range(len(nets[i].layers)):
                 wr.writerow(nets[i].layers[j].weights)

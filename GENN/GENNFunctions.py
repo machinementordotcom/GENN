@@ -136,6 +136,9 @@ def readNets(nets, adaptive = False):
             for j in row:
                 temp.append(ast.literal_eval(j))
             layers.append(Layer(temp))
-        return [Network(layers)] * nets  
+        if adaptive:
+            return[AdaptiveNetwork(layers)] * nets 
+        else:
+            return [Network(layers)] * nets  
 
 

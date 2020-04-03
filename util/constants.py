@@ -16,6 +16,8 @@ SPRITE_SCALING = 0.5
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 700
 SCREEN_TITLE = "Adaptive AI"
+DEBUG = False
+NORMALIZE_WEIGHTS = False
 
 ARROW_IMAGE_HEIGHT = 7.9
 MOVEMENT_SPEED = 3#7.5 
@@ -172,9 +174,10 @@ class AdaptiveNetwork:
     def createNetwork(self, adaptive = True):
         tensors = []
         results = []
-        inputs = keras.Input(shape=(17,),batch_size =1)
+        inputs = keras.Input(shape=(17,),batch_size =1,name = 'inputs')
+        hidden_activations = []
         for i in range(len(self.layers) - 4):
-            if len(self.layers)- 5 == 0:
+            if len(self.layers)== 5:
                 move_x = tf.keras.layers.Dense(1,activation='tanh')
                 move_y = tf.keras.layers.Dense(1,activation='tanh')
                 shoot1 = tf.keras.layers.Dense(1,activation='sigmoid')
@@ -183,7 +186,7 @@ class AdaptiveNetwork:
                 #The adaptive layer is a recurrent LSTM layer which recieves normalized 
                 #inputs from the last dense hidden layer.  The weights for the hidden layer
                 #are based on the hidden weights for the first 3 layers        
-                adaptive_layer = tf.keras.layers.GRU(6, time_major = True, stateful = True)
+                adaptive_layer = tf.keras.layers.GRU(6, time_major = True, stateful = True,activity_regularizer=tf.keras.regularizers.l2(0.01))
                 adaptive_inputs = tf.expand_dims(inputs,0)   
                 adaptive_outputs = adaptive_layer(adaptive_inputs)
                 tensors.append(move_x)
@@ -200,27 +203,35 @@ class AdaptiveNetwork:
                 h = tf.keras.layers.Dense(len(self.layers[i].weights[0]), activation='relu')
                 results.append(h(inputs))
                 tensors.append(h)
+                if DEBUG: hidden_activations.append(h.output)
             elif i <= len(self.layers)- 4 - 2:
                 h = tf.keras.layers.Dense(len(self.layers[i].weights[0]), activation='relu')
-                results.append(h(results[i-1]))
+                normed_inputs = tf.keras.layers.LayerNormalization()(results[i-1])
+                results.append(h(normed_inputs))
                 tensors.append(h)
+                if DEBUG: hidden_activations.append(h.output)
             else:
-                move_x = tf.keras.layers.Dense(1,activation='tanh')
-                move_y = tf.keras.layers.Dense(1,activation='tanh')
-                shoot1 = tf.keras.layers.Dense(1,activation='sigmoid')
-                shoot2 = tf.keras.layers.Dense(1,activation='sigmoid')
-                shoot3 = tf.keras.layers.Dense(1,activation='sigmoid')
+                move_x = tf.keras.layers.Dense(1,activation='tanh', name = 'move_x')
+                move_y = tf.keras.layers.Dense(1,activation='tanh',name = 'move_y' )
+                shoot1 = tf.keras.layers.Dense(1,activation='sigmoid',name = 'shoot1')
+                shoot2 = tf.keras.layers.Dense(1,activation='sigmoid',name = 'shoot2')
+                shoot3 = tf.keras.layers.Dense(1,activation='sigmoid',name = 'shoot3')
                  #The adaptive layer is a recurrent LSTM layer which recieves normalized 
                 #inputs from the last dense hidden layer.  The weights for the hidden layer
-                #are based on the hidden weights for the first 3 layers        
-                adaptive_layer = tf.keras.layers.GRU(6, time_major = True, stateful = True)
-                adaptive_inputs = tf.expand_dims(results[i-1],0)   
+                #are based on the hidden weights for the first 3 layers     
+                normed_inputs = tf.keras.layers.LayerNormalization()(results[i-1])
+                adaptive_layer = tf.keras.layers.GRU(6, 
+                                                     time_major = True, 
+                                                     stateful = True,
+                                                     activity_regularizer=tf.keras.regularizers.l2(0.01),
+                                                     name = 'adaptive_targets')
+                adaptive_inputs = tf.expand_dims(normed_inputs,0)   
                 adaptive_outputs = adaptive_layer(adaptive_inputs)
-                results.append(move_x(results[i-1]))
-                results.append(move_y(results[i-1]))
-                results.append(shoot1(results[i-1]))
-                results.append(shoot2(results[i-1]))
-                results.append(shoot3(results[i-1]))
+                results.append(move_x(normed_inputs))
+                results.append(move_y(normed_inputs))
+                results.append(shoot1(normed_inputs))
+                results.append(shoot2(normed_inputs))
+                results.append(shoot3(normed_inputs))
                 tensors.append(move_x)
                 tensors.append(move_y)
                 tensors.append(shoot1)
@@ -230,7 +241,20 @@ class AdaptiveNetwork:
         counter = 0
         for i in range(len(tensors)):
             if i < len(self.layers) - 5:
-                tensors[i].set_weights([np.asarray(self.layers[i].weights),np.zeros(len(self.layers[i].weights[0]))])
+                weights = np.asarray(self.layers[i].weights)
+                
+                if NORMALIZE_WEIGHTS:
+                    fan_out = weights.shape[1]
+                    last_width = weights.shape[0]
+                    if i == 0: 
+                        fan_in = 17
+                    else: 
+                        fan_in = last_width
+                    target_std = np.sqrt(2/(fan_in + fan_out)) #rescale to gloirot
+                    weights = weights/np.std(weights)*target_std
+                
+                tensors[i].set_weights([weights,np.zeros(len(self.layers[i].weights[0]))])
+                
             else:
                 tensors[i].set_weights([np.asarray(self.layers[i - counter].weights),np.zeros(len(self.layers[i - counter].weights[0]))])
                 counter += 1 
@@ -265,18 +289,27 @@ class AdaptiveNetwork:
             new_weights /= np.std(new_weights)
             weight_list.append(np.reshape(new_weights,weights.shape))
         import pickle 
-        with open('weights_dump.p','wb') as f:
-              pickle.dump([weight_list,new_weights, weights_1d,first_layer_weights],f)
+        
+        if DEBUG:
+            with open('weights_dump.p','wb') as f:
+                  pickle.dump([weight_list,new_weights, weights_1d,first_layer_weights],f)
         adaptive_layer.set_weights(np.asarray(weight_list))
         
-        model = tf.keras.Model(inputs=inputs, outputs=[results[len(results)-5],
-                                                      results[len(results)-4],
-                                                      results[len(results)-3],
-                                                      results[len(results)-2],
-                                                      results[len(results)-1],
-                                                      adaptive_outputs])
+        output=[results[len(results)-5],
+                        results[len(results)-4],
+                        results[len(results)-3],
+                        results[len(results)-2],
+                        results[len(results)-1],
+                        adaptive_outputs]
+        if DEBUG:
+            output.append(hidden_activations)
+            pass
+            
+        model = tf.keras.Model(inputs=inputs, outputs=output)
+        sgd = tf.keras.optimizers.SGD(
+                learning_rate=0.02, clipnorm = 1 )
         #Compile model so that it can be trained
-        model.compile('sgd',loss = 'logcosh')
+        model.compile(sgd,loss = 'logcosh')
         return model
                 
 

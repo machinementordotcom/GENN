@@ -271,6 +271,8 @@ class AdaptiveNetwork:
             #Hidden unit weights are based on the second layer weights
             #Bias is based on the 3rd layer weights
             first_layer_weights = np.asarray(self.layers[counter].weights)[0] 
+            if counter == 0:
+                learn_rate = first_layer_weights[0]/10 
             counter+=1
             weights_1d = np.ravel(first_layer_weights)
             times_to_repeat = np.ceil(weights.size / weights_1d.size).astype(int)  
@@ -305,9 +307,11 @@ class AdaptiveNetwork:
             output.append(hidden_activations)
             pass
             
+        
         model = tf.keras.Model(inputs=inputs, outputs=output)
         sgd = tf.keras.optimizers.SGD(
-                learning_rate=0.02, clipnorm = 1 )
+                learning_rate=learn_rate, clipnorm = 1 )
+        
         #Compile model so that it can be trained
         model.compile(sgd,loss = 'logcosh')
         return model

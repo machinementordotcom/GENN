@@ -64,14 +64,14 @@ def main(args):
     spacer()
 
     if train == 'yes':
-        conCurrentGame = 4
-        iterations = 3 
+        conCurrentGame = 3
+        iterations = 2
         simulation_player_1 = 'agenn'
         simulation_player_2 = 'genn'
         player_2_type = 'genn'
         graphics = 'no'
         player_1_type = 'agenn'
-        trendTracking = 'no'
+        trendTracking = 'yes'
         graphOutput = 'no'
     else:
         conCurrentGame = get_int_choice('How many games would you like played at the same time (Recommended amount based on computer cores '+str(multiprocessing.cpu_count())+"):",1,1000)

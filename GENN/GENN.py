@@ -138,7 +138,7 @@ class GENN(arcade.Sprite):
                  self.total_time,
                  self.shield,
                  self.opponent.shield,self.curtime,len(self.opponent_hitbox_list), opp_proj_1_x, opp_proj_1_y, opp_proj_2_x, opp_proj_2_y, opp_proj_3_x, opp_proj_3_y]]
-      choices = self.model.predict(np.asarray(inputs))
+      choices = self.model.predict(np.asarray(inputs), verbose = 0)
       
       #JTW check whether network is adaptive.
       #Adaptive networks return 6 additional targets
@@ -161,8 +161,11 @@ class GENN(arcade.Sprite):
           if DEBUG:
               with open('debug_dump.p','wb') as f:
                   pickle.dump([choices,inputs,target,weight],f)
-                  
-          self.model.fit(x={'inputs':np.asarray(inputs)}, y=target, batch_size = 1, sample_weight = weight,verbose = 0)
+          try:        
+              self.model.fit(x={'inputs':np.asarray(inputs)}, y=target, batch_size = 1, 
+                            sample_weight = weight,verbose = 0)
+          except:
+              print('AGENN model failed to run model-fit')
           
           
       self.center_x += MOVEMENT_SPEED * choices[0][0][0]

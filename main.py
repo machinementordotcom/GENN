@@ -76,7 +76,6 @@ def main(args):
         graphOutput = 'no'
         report_interval = 1
         debug = True
-        log_file = open("/debug_log%s"%time.time(  ),'w')
         
         
         print('Inititating training with %s concurrent games between %s and %s player types'%(conCurrentGame,simulation_player_1,simulation_player_2))

@@ -17,7 +17,7 @@ import pandas as pd
 import json
 import re 
 import matplotlib.ticker as ticker
-from tf.logging import set_verbosity
+from tensorflow.logging import set_verbosity
 
 
 set_verbosity('ERROR')

@@ -67,11 +67,8 @@ def main(args):
     spacer()
 
     if train == 'yes':
-        #
-        #
-        #
-        #
-        conCurrentGame = 36
+
+        conCurrentGame = 34
         iterations = 1000
         simulation_player_1 = 'agenn'
         simulation_player_2 = 'genn'

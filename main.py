@@ -17,10 +17,7 @@ import pandas as pd
 import json
 import re 
 import matplotlib.ticker as ticker
-from tensorflow.logging import set_verbosity
 
-
-set_verbosity('ERROR')
 sys.stdout = sys.__stdout__
 
 def runOneGame(a):

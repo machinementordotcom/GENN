@@ -58,7 +58,7 @@ def main(args):
 
     graphics = 'no'
     graphOutput = 'no'
-    train = 'yes'
+    train = 'no'
     trendTracking = 'no'
     evolutions = False
     spacer()
@@ -136,7 +136,8 @@ def main(args):
     else: player_2_nets = None
     
     if graphics == 'yes':
-        window = MyGame(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,iterations,player_1_type,player_2_type)
+        window = MyGame(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,iterations,player_1_type,player_2_type,
+                        player_1_nets, player_2_nets)
         window.setup()
         try:
             arcade.run()

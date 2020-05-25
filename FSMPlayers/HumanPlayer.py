@@ -1,6 +1,6 @@
 import arcade
 import math
-import random
+
 from util.constants import * 
 
 class HumanPlayer(arcade.Sprite):
@@ -17,6 +17,7 @@ class HumanPlayer(arcade.Sprite):
         fireball.change_y = ARROW_SPEED*math.cos(math.radians(self.angle))
         
         self.fireball_list.append(fireball)
+
     def shootarrow(self):
         arrow = Arrow("images/arrow.png",.1)
         arrow.center_x = self.center_x
@@ -25,10 +26,12 @@ class HumanPlayer(arcade.Sprite):
         arrow.change_x = -ARROW_SPEED*math.sin(math.radians(self.angle))
         arrow.change_y = ARROW_SPEED*math.cos(math.radians(self.angle))
         self.arrow_list.append(arrow)
+
     def equipshield(self):
         self.set_texture(1)
         self.health += 50
         self.shield +=1
+
     def shortattack(self):
         knife = Knife("images/knife.png",.1)
         knife.center_x = self.center_x

@@ -18,6 +18,7 @@ class RangePlayer(arcade.Sprite):
     def equipshield(self):
         self.health += PLAYER_HEALTH*.5
         self.shield +=1
+
     def shootarrow(self):
         arrow = Arrow("images/arrow.png",.1)
         arrow.center_x = self.center_x

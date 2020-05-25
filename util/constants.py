@@ -6,7 +6,6 @@ import tensorflow as tf
 import numpy as np
 from tensorflow import keras
 import multiprocessing
-from zlib import crc32
 
 sys.stdout = sys.__stdout__
 
@@ -106,7 +105,7 @@ class Network:
     def __init__(self, layers):
         self.layers = layers
     def createNetwork(self, adaptive = False):
-        if adaptive == True:
+        if adaptive:
             net = AdaptiveNetwork(self.layers)
             return net.createNetwork()
         else:
@@ -319,6 +318,3 @@ class AdaptiveNetwork:
         #Compile model so that it can be trained
         model.compile(sgd,loss = 'logcosh')
         return model
-                
-
-

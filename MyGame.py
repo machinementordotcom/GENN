@@ -4,7 +4,6 @@ import math
 import random
 import sys
 import time
-from arcade.arcade_types import Color
 from FSMPlayers.RangePlayer import *
 from FSMPlayers.MidRangePlayer import *
 from FSMPlayers.ShortRangePlayer import *
@@ -13,7 +12,6 @@ from FSMPlayers.HumanPlayer import *
 from util.inputFunctions import *
 from DynamicController.DynamicController import *
 from GENN.GENN import GENN
-#from GENN.GENNFunctions import G
 
 
 class MyGame(arcade.Window):

@@ -4,7 +4,6 @@ import math
 import random
 import sys
 import time
-from arcade.arcade_types import Color
 from FSMPlayers.RangePlayer import *
 from FSMPlayers.MidRangePlayer import *
 from FSMPlayers.ShortRangePlayer import *

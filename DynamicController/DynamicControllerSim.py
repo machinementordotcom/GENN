@@ -5,6 +5,8 @@ from util.constants import *
 from DynamicController.DynamicControllerSimFunctions import *
 import numpy as np
 random.seed(RANDOM_SEED)
+
+
 class DynamicController(arcade.Sprite):
     def check_for_collision(self,player,projectiles):
         for projectile in projectiles:
@@ -18,14 +20,17 @@ class DynamicController(arcade.Sprite):
                 if start_x - projectile.box <= player.center_x + player.box or start_x + projectile.box >= player.center_x - player.box and start_y + projectile.box <= player.center_y - player.box or start_y + projectile.box >= player.center_y - player.box:
                     return True
         return False
+
     def equipshield(self):
         self.health += PLAYER_HEALTH*.5
         self.shield +=1
+
     def writeWeights(self):
         with open("DynamicController/weightsDynamicController" + self.id + "-" + str(self.conCurrentGameId) + ".csv", 'w') as myfile:
             wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
             for i in range(2):
                 wr.writerow(self.weights[i])
+
     def readWeights(self,path = None):
         tempWeights = [[],[]] 
         if path == None:

@@ -6,15 +6,12 @@ import arcade
 from sim import *
 from util.constants import * 
 from util.inputFunctions import * 
-from GENN.GENNFunctions import * 
-from GENN.GENN import GENN
+from GENN.GENNFunctions import *
 import time
 import multiprocessing
-from operator import add 
-from ctypes import c_int
+from operator import add
 from operator import itemgetter 
 import pandas as pd
-import json
 import re 
 import matplotlib.ticker as ticker
 

@@ -6,7 +6,6 @@ import math
 import random
 import sys
 import time
-from arcade.arcade_types import Color
 from FSMPlayers.RangePlayerSim import *
 from FSMPlayers.MidRangeSim import *
 from FSMPlayers.ShortRangeSim import *
@@ -19,7 +18,6 @@ from util.constants import *
 import multiprocessing
 import numpy as np 
 import json
-import matplotlib.pyplot as plt
 
 random.seed(RANDOM_SEED)
 
@@ -63,6 +61,7 @@ class Game:
         self.player1.center_y = random.randint(0,SCREEN_HEIGHT)
         self.player2.center_x = random.randint(0,SCREEN_WIDTH)
         self.player2.center_y = random.randint(0,SCREEN_HEIGHT)
+
     def writeTrends(self):
         if self.written == 0 and self.iterations == self.totalIterations:
             with open("player1Trends.txt",'w+') as myfile:
@@ -81,6 +80,7 @@ class Game:
         self.written += 1    
         self.player1.trends = {'arrow':0,'fire':0,'knife':0,'towardsOpponent' :0, 'awayOpponent':0,"movementChanges":0,"biggestTrend":0}
         self.player2.trends = {'arrow':0,'fire':0,'knife':0,'towardsOpponent' :0, 'awayOpponent':0,"movementChanges":0,"biggestTrend":0}
+
     def setup(self):
         self.player_list = []
         self.arrow_list = []
@@ -364,8 +364,8 @@ class Game:
 
     def collisionCheck(self,player,projectile):
         if (
-                (     player.center_x - player.box <= projectile.center_x + projectile.box and player.center_x + player.box >= projectile.center_x + projectile.box  
-                or   player.center_x - player.box <= projectile.center_x - projectile.box and player.center_x + player.box >= projectile.center_x - projectile.box 
+                (     player.center_x - player.box <= projectile.center_x + projectile.box and player.center_x + player.box >= projectile.center_x + projectile.box
+                or   player.center_x - player.box <= projectile.center_x - projectile.box and player.center_x + player.box >= projectile.center_x - projectile.box
                 or   player.center_x - player.box <= projectile.center_x and player.center_x + player.box >= projectile.center_x  )
                 and 
                 (    player.center_y - player.box <= projectile.center_y + projectile.box and player.center_y + player.box >= projectile.center_y + projectile.box

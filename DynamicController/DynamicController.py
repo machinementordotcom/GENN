@@ -11,11 +11,13 @@ class DynamicController(arcade.Sprite):
         self.set_texture(1)
         self.health += PLAYER_HEALTH*.5
         self.shield +=1
+
     def writeWeights(self):
         with open("DynamicController/weightsDynamicController" + self.id + ".csv", 'w') as myfile:
             wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
             for i in range(2):
                 wr.writerow(self.weights[i])
+
     def readWeights(self,path = None):
         if path == None:
             with open('DynamicController/weightsDynamicController' + self.id + '.csv') as csvfile:

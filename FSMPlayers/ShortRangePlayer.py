@@ -8,6 +8,7 @@ class ShortRangePlayer(arcade.Sprite):
         self.set_texture(1)
         self.health += PLAYER_HEALTH*.5
         self.shield +=1
+        
     def shortattack(self):
         knife = Knife("images/knife.png",.1)
         knife.center_x = self.center_x

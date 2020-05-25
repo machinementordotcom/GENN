@@ -18,6 +18,7 @@ class ShortRangePlayer(arcade.Sprite):
     def equipshield(self):
         self.health += PLAYER_HEALTH*.5
         self.shield +=1
+
     def shortattack(self):
         knife = Knife("images/knife.png",.1)
         knife.center_x = self.center_x
@@ -27,6 +28,7 @@ class ShortRangePlayer(arcade.Sprite):
         self.knife_num += 1 # prevents multiple knifes from being created
         self.knife_list.append(knife)
         # self.hitbox_list.append(hit)
+
     def update(self):
         self.curtime += 1
         x_diff = self.opponent.center_x - self.center_x

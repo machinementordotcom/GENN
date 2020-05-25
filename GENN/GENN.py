@@ -1,12 +1,10 @@
-import sys
-import csv 
+import csv
 import arcade
 import numpy as np
 from util.constants import *
 import math
 import random
 import pickle
-import datetime
 
 DEBUG = False
 
@@ -80,6 +78,7 @@ class GENN(arcade.Sprite):
          wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
          for i in range(2):
             wr.writerow(self.weights[i])
+
     def readWeights(self,path = None):
      tempWeights = [[],[]] 
      if path == None:
@@ -99,6 +98,7 @@ class GENN(arcade.Sprite):
             for row in reader:
                self.weights[weightType] = [float(i) for i in row]
                weightType +=1
+
     def update(self):
       self.curtime += 1
       if len(self.opponent_hitbox_list) >= 3:

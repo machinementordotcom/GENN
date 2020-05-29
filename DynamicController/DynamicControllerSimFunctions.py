@@ -1,7 +1,11 @@
-from util.constants import *
+
 import random
 import re 
 import math
+from util import constants
+from util.constants import RANDOM_SEED, \
+    BOX, ARROW_SPEED, MOVEMENT_SPEED
+
 random.seed(RANDOM_SEED)
 
 
@@ -10,7 +14,7 @@ def excludeSums(nums,id):
     return sum(nums[0:id]+nums[id+1:])
 
 def shortattack(self,angle_adjustment):
-        knife = Knife("images/knife.png",.1)
+        knife = constants.Knife("images/knife.png",.1)
         knife.center_x = self.center_x
         knife.center_y = self.center_y
         knife.angle = self.angle-180 + angle_adjustment
@@ -19,7 +23,7 @@ def shortattack(self,angle_adjustment):
         self.knife_list.append(knife)
 
 def throwfireball(self,angle_adjustment):
-    fireball = Fireball("images/fire.png", .1)
+    fireball = constants.Fireball("images/fire.png", .1)
     fireball.center_x = self.center_x
     fireball.center_y = self.center_y
     fireball.start_x = self.center_x 
@@ -30,7 +34,7 @@ def throwfireball(self,angle_adjustment):
     fireball.vel = ARROW_SPEED
     fireball.box = BOX
     self.fireball_list.append(fireball)
-    hit = HitBox("images/fire.png")
+    hit = constants.HitBox("images/fire.png")
     hit.angle = self.angle
     hit.center_x = self.center_x + -math.sin(math.radians(hit.angle)) * hit.height/2
     hit.center_y = self.center_y + math.cos(math.radians(hit.angle)) * hit.height/2
@@ -40,7 +44,7 @@ def throwfireball(self,angle_adjustment):
     self.hitbox_list.append(hit)
 
 def shootarrow(self,angle_adjustment):
-    arrow = Arrow("images/arrow.png",.1)
+    arrow = constants.Arrow("images/arrow.png",.1)
     arrow.center_x = self.center_x
     arrow.center_y = self.center_y
     arrow.start_x = self.center_x 
@@ -51,7 +55,7 @@ def shootarrow(self,angle_adjustment):
     arrow.vel = ARROW_SPEED
     arrow.box = BOX
     self.arrow_list.append(arrow)
-    hit = HitBox("images/fire.png")
+    hit = constants.HitBox("images/fire.png")
     hit.angle = self.angle
     hit.center_x = self.center_x + -math.sin(math.radians(hit.angle)) * hit.height/2
     hit.center_y = self.center_y + math.cos(math.radians(hit.angle)) * hit.height/2

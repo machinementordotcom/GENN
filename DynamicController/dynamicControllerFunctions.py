@@ -1,7 +1,13 @@
-from util.constants import *
 import random
 import re 
 import math
+
+import arcade
+
+from util.constants import RANDOM_SEED, ARROW_SPEED, SCREEN_WIDTH, SCREEN_HEIGHT, ARROW_IMAGE_HEIGHT, MOVEMENT_SPEED
+from util import constants
+
+
 random.seed(RANDOM_SEED)
 
 
@@ -10,7 +16,7 @@ def excludeSums(nums,id):
     return sum(nums[0:id]+nums[id+1:])
 
 def shortattack(self,angle_adjustment):
-        knife = Knife("images/knife.png",.1)
+        knife = constants.Knife("images/knife.png",.1)
         knife.center_x = self.center_x
         knife.center_y = self.center_y
         knife.angle = self.angle-180 + angle_adjustment
@@ -18,7 +24,7 @@ def shortattack(self,angle_adjustment):
         self.knife_list.append(knife)
 
 def throwfireball(self,angle_adjustment):
-    fireball = Fireball("images/fire.png", .1)
+    fireball = constants.Fireball("images/fire.png", .1)
     fireball.center_x = self.center_x
     fireball.center_y = self.center_y
     fireball.start_x = self.center_x 
@@ -27,7 +33,7 @@ def throwfireball(self,angle_adjustment):
     fireball.change_x = -ARROW_SPEED*math.sin(math.radians(self.angle))
     fireball.change_y = ARROW_SPEED*math.cos(math.radians(self.angle))
     self.fireball_list.append(fireball)
-    hit = HitBox("images/fire.png")
+    hit = constants.HitBox("images/fire.png")
     hit._set_alpha(0)
     hit._set_height(math.sqrt(SCREEN_WIDTH**2 + SCREEN_HEIGHT**2))
     hit._set_width(ARROW_IMAGE_HEIGHT)
@@ -38,7 +44,7 @@ def throwfireball(self,angle_adjustment):
     self.hitbox_list.append(hit)
 
 def shootarrow(self,angle_adjustment):
-    arrow = Arrow("images/arrow.png",.1)
+    arrow = constants.Arrow("images/arrow.png",.1)
     arrow.center_x = self.center_x
     arrow.center_y = self.center_y
     arrow.start_x = self.center_x 
@@ -47,7 +53,7 @@ def shootarrow(self,angle_adjustment):
     arrow.change_x = -ARROW_SPEED*math.sin(math.radians(self.angle))
     arrow.change_y = ARROW_SPEED*math.cos(math.radians(self.angle))
     self.arrow_list.append(arrow)
-    hit = HitBox("images/fire.png")
+    hit = constants.HitBox("images/fire.png")
     hit._set_alpha(0)
     hit._set_height(math.sqrt(SCREEN_WIDTH**2 + SCREEN_HEIGHT**2))
     hit._set_width(ARROW_IMAGE_HEIGHT)
@@ -93,6 +99,7 @@ def chooseWeight(self):
         self.move_direction_choice = random.choices(population = ["away","toward"],weights = self.weights[1][14:16], k = 1)[0]
         self.x_dodge_direction_choice = random.choices(population = [-1,1],weights = self.weights[1][16:18], k = 1)[0]
         self.y_dodge_direction_choice = random.choices(population = [-1,1],weights = self.weights[1][18:20], k = 1)[0]
+
     elif self.adjusting == 'shoot':
         self.shootRule = "rule" + str(self.adjustingWeight + 1)
         self.move_away_choice = random.choices(population = [50,100,150,200,250,300,350],weights = self.weights[1][0:7], k = 1)[0]
@@ -100,6 +107,7 @@ def chooseWeight(self):
         self.move_direction_choice = random.choices(population = ["away","toward"],weights = self.weights[1][14:16], k = 1)[0]
         self.x_dodge_direction_choice = random.choices(population = [-1,1],weights = self.weights[1][16:18], k = 1)[0]
         self.y_dodge_direction_choice = random.choices(population = [-1,1],weights = self.weights[1][18:20], k = 1)[0]
+
     elif self.adjusting == 'move':
         self.shootRule = chooseType(self.weights[0])
         if 0 <= self.adjustingWeight <= 6:

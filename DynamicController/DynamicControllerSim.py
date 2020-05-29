@@ -1,9 +1,12 @@
 import math
 import random
+import arcade
 import csv
-from util.constants import * 
 from DynamicController.DynamicControllerSimFunctions import *
 import numpy as np
+from util.constants import RANDOM_SEED, \
+    PLAYER_HEALTH, SCREEN_WIDTH, SCREEN_HEIGHT
+
 random.seed(RANDOM_SEED)
 
 

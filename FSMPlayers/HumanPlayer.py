@@ -1,13 +1,14 @@
 import arcade
 import math
+from util import constants
+from util.constants import ARROW_SPEED, MOVEMENT_SPEED
 
-from util.constants import * 
 
 class HumanPlayer(arcade.Sprite):
     # def moveW(self):
     #         self.center_y += MOVEMENT_SPEED
     def throwfire(self):
-        fireball = Fireball("images/fire.png", .1)
+        fireball = constants.Fireball("images/fire.png", .1)
         fireball.center_x = self.center_x
         fireball.center_y = self.center_y
         fireball.start_x = self.center_x # for tracking 
@@ -19,7 +20,7 @@ class HumanPlayer(arcade.Sprite):
         self.fireball_list.append(fireball)
 
     def shootarrow(self):
-        arrow = Arrow("images/arrow.png",.1)
+        arrow = constants.Arrow("images/arrow.png",.1)
         arrow.center_x = self.center_x
         arrow.center_y = self.center_y
         arrow.angle = self.angle-90
@@ -33,7 +34,7 @@ class HumanPlayer(arcade.Sprite):
         self.shield +=1
 
     def shortattack(self):
-        knife = Knife("images/knife.png",.1)
+        knife = constants.Knife("images/knife.png",.1)
         knife.center_x = self.center_x
         knife.center_y = self.center_y
         knife.angle = self.angle-180

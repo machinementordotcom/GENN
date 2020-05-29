@@ -1,6 +1,11 @@
 import math
+import arcade
+from util import constants
+from util.constants import MOVEMENT_SPEED, PLAYER_HEALTH \
+    , SHORT_SPEED_HANDICAP, SCREEN_WIDTH, SCREEN_HEIGHT, BOX
+
 import random
-from util.constants import * 
+
 
 class ShortRangePlayer(arcade.Sprite):
     def check_for_collision(self,player,projectiles):
@@ -20,7 +25,7 @@ class ShortRangePlayer(arcade.Sprite):
         self.shield +=1
 
     def shortattack(self):
-        knife = Knife("images/knife.png",.1)
+        knife = constants.Knife("images/knife.png",.1)
         knife.center_x = self.center_x
         knife.center_y = self.center_y
         knife.angle = self.angle-180

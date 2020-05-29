@@ -1,7 +1,7 @@
 import csv
 import arcade
 import numpy as np
-from util.constants import *
+from util.neural_net import *
 import math
 import random
 import pickle

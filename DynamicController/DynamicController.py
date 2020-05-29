@@ -2,8 +2,10 @@ import arcade
 import math
 import random
 import csv
-from util.constants import * 
 from DynamicController.dynamicControllerFunctions import *
+
+from util.constants import RANDOM_SEED, \
+    PLAYER_HEALTH
 
 random.seed(RANDOM_SEED)
 class DynamicController(arcade.Sprite):

@@ -4,6 +4,8 @@ import math
 import random
 import sys
 import time
+
+from DynamicController.dynamicControllerFunctions import chooseWeight
 from FSMPlayers.RangePlayer import *
 from FSMPlayers.MidRangePlayer import *
 from FSMPlayers.ShortRangePlayer import *
@@ -14,7 +16,8 @@ from DynamicController.DynamicController import *
 from GENN import GENN
 
 from util.constants import RANDOM_SEED, \
-    PLAYER_HEALTH, SCREEN_WIDTH, SCREEN_HEIGHT, MAGE_IMAGE, SPRITE_SCALING, KNIGHT_IMAGE, ANGLE_SPEED, FIREBALL_DAMAGE, \
+    PLAYER_HEALTH, SCREEN_WIDTH, SCREEN_HEIGHT, MAGE_IMAGE, \
+    SPRITE_SCALING, KNIGHT_IMAGE, ANGLE_SPEED, FIREBALL_DAMAGE, \
     ARROW_DAMAGE, KNIFE_DAMAGE
 
 

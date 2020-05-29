@@ -63,7 +63,7 @@ def main(args):
 
     graphics = 'no'
     graphOutput = 'no'
-    train = 'yes'
+    train = 'no'
     trendTracking = 'no'
     evolutions = False
     spacer()

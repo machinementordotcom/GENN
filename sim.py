@@ -6,6 +6,8 @@ import math
 import random
 import sys
 import time
+
+from DynamicController.DynamicControllerSimFunctions import chooseWeight
 from FSMPlayers.RangePlayerSim import *
 from FSMPlayers.MidRangeSim import *
 from FSMPlayers.ShortRangeSim import *

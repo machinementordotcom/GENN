@@ -4,7 +4,9 @@ import math
 
 import arcade
 
-from util.constants import RANDOM_SEED, ARROW_SPEED, SCREEN_WIDTH, SCREEN_HEIGHT, ARROW_IMAGE_HEIGHT, MOVEMENT_SPEED
+from util.constants import RANDOM_SEED, ARROW_SPEED, \
+    SCREEN_WIDTH, SCREEN_HEIGHT, ARROW_IMAGE_HEIGHT, \
+    MOVEMENT_SPEED
 from util import constants
 
 

@@ -2,10 +2,9 @@ import arcade
 import math
 import random
 import csv
-from DynamicController.dynamicControllerFunctions import *
+import DynamicController.dynamicControllerFunctions as dcf
 
-from util.constants import RANDOM_SEED, \
-    PLAYER_HEALTH
+from util.constants import RANDOM_SEED, PLAYER_HEALTH
 
 random.seed(RANDOM_SEED)
 class DynamicController(arcade.Sprite):
@@ -43,7 +42,7 @@ class DynamicController(arcade.Sprite):
         y_diff = self.opponent.center_y - self.center_y
         self.d = math.sqrt(x_diff**2 +y_diff**2)
         self.angle = math.degrees(math.atan2(y_diff,x_diff))-90
-        playerLogic(self)
+        dcf.playerLogic(self)
         for fireball in self.fireball_list:
             diff_x = fireball.start_x-fireball.center_x
             diff_y = fireball.start_y-fireball.center_y
@@ -55,7 +54,7 @@ class DynamicController(arcade.Sprite):
         health_diff = self.health - self.opponent.health
             # If the dynamic controller fails to cause an overall increase of 100 health in the game choose different weights but don't penalize the current weights
         if self.total_time == 300:
-            update_weights(self,False)
+            dcf.update_weights(self,False)
             self.total_time = 0
             # If combined health lost is greater than the update rate (100). Change the weights
         if self.health + self.opponent.health <= self.totalHealthBenchmark:
@@ -63,4 +62,4 @@ class DynamicController(arcade.Sprite):
             self.benchmarkDifference = health_diff - self.benchmarkDifference
             self.totalHealthBenchmark -= 100
             self.total_time = 0
-            update_weights(self,True)
+            dcf.update_weights(self,True)

@@ -1,7 +1,7 @@
 import csv
 import arcade
 import numpy as np
-from util.neural_net import *
+
 import math
 import random
 import pickle
@@ -43,6 +43,7 @@ class GENN(arcade.Sprite):
     def equipshield(self):
       self.health += PLAYER_HEALTH*.5
       self.shield +=1
+
     def throwfire(self):
       fireball = constants.Fireball("images/fire.png", .1)
       fireball.center_x = self.center_x

@@ -120,7 +120,8 @@ def main(args):
                 if game % 9 < 3: player_2_type == 'short'
                 elif game % 9 < 6: player_2_type == 'mid'
                 else: player_2_type == 'range'
-            result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets]] *conCurrentGame  ],1) ])
+            result = p.imap_unordered(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets]] *conCurrentGame  ],1) ])
+            print(result)
             if game == 0 or game % 3 == 0: evolutionHealth = [float(i) for i in result]
             else: evolutionHealth = list(map(add, [float(i) for i in result], evolutionHealth)) 
             player1Wins += sum(int(i) > 0 for i in [int(i) for i in result]) 

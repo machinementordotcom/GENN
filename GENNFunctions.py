@@ -105,13 +105,13 @@ def mutateNets(nets):
 def writeNetworks(nets):
 
     for i in range(len(nets)):
-        with open("Genn/weights" + str(i) + ".csv",'w') as myfile:
+        with open("GENN/weights" + str(i) + ".csv",'w') as myfile:
             wr = csv.writer(myfile, quoting = csv.QUOTE_ALL) 
             for j in range(len(nets[i].layers)):
                 wr.writerow(nets[i].layers[j].weights)
 
 def readNets(nets):
-    with open("Genn/masterWeights/weights.csv") as csvfile:
+    with open("GENN/masterWeights/weights.csv") as csvfile:
         reader = csv.reader(csvfile)
         layers = []
         for row in reader:

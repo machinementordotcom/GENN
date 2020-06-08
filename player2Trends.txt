@@ -1,0 +1,1 @@
+{"arrow": 0, "fire": 0, "knife": 0, "towardsOpponent": 0, "awayOpponent": 0, "movementChanges": 0, "biggestTrend": 0}{"arrow": 0, "fire": 0, "knife": 0, "towardsOpponent": 0, "awayOpponent": 0, "movementChanges": 0, "biggestTrend": 0}{"arrow": 0, "fire": 0, "knife": 0, "towardsOpponent": 0, "awayOpponent": 0, "movementChanges": 0, "biggestTrend": 0}

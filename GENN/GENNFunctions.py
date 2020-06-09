@@ -114,9 +114,9 @@ def mutateNets(nets, adaptive =False):
 
 def writeNetworks(nets,adaptive = False):
     if adaptive:
-        filename = "Genn/weights"
+        filename = "GENN/weights"  ## NH corrected case (Genn to GENN)
     else:
-        filename = "Genn/adaptiveWeights"
+        filename = "GENN/adaptiveWeights"  ## corrected case
     for i in range(len(nets)):
         with open(filename + str(i) + ".csv",'w') as myfile:
             wr = csv.writer(myfile, quoting = csv.QUOTE_ALL) 
@@ -125,9 +125,9 @@ def writeNetworks(nets,adaptive = False):
 
 def readNets(nets, adaptive = False):
     if adaptive:
-        filename = "Genn/masterWeightsAdaptive/weights.csv"
+        filename = "GENN/masterWeightsAdaptive/weights.csv" ## corrected case
     else:
-        filename = "Genn/masterWeights/weights.csv"
+        filename = "GENN/masterWeights/weights.csv" ## corrected case
         
     with open(filename) as csvfile:
         reader = csv.reader(csvfile)

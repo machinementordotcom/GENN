@@ -1,4 +1,3 @@
-
 import numpy as np
 import arcade
 import os
@@ -35,7 +34,7 @@ from util import constants
 random.seed(RANDOM_SEED)
 
 class Game:
-    def __init__(self,width , height, title, iterations, player_1_type, player_2_type,conGames,currentGame,player_1_nets,player_2_nets,trendTracking,process_id):
+    def __init__(self,width,height,title,iterations,player_1_type,player_2_type,conGames,currentGame,player_1_nets,player_2_nets,trendTracking,process_id):
         """
         Initializer
         """
@@ -50,7 +49,6 @@ class Game:
         self.grid = np.zeros(shape = (SCREEN_HEIGHT, SCREEN_WIDTH))
         self.curtime = 0
         self.written = 0
-
         self.trendTracking = trendTracking
         self.start = time.time()
         self.totalIterations = iterations
@@ -333,7 +331,7 @@ class Game:
         self.player2.lastMovement = ""
         self.player2.currentTrend = 0
 
-    def end_game(self):
+    def end_game(self):  ## NH:  this routine is not ending the game, as its name would imply.
         self.player1_score += self.player1.score
         self.player2_score += self.player2.score
         self.iterations -= 1
@@ -388,6 +386,7 @@ class Game:
             ):
             return True
         return False
+
     def update(self):
         # sets a timer that game and perspective players use
         # not sure if necessary
@@ -395,7 +394,7 @@ class Game:
         self.player1.update()
         self.player2.update()
         if self.trendTracking == 'yes': 
-            if self.curtime % 900 == 0: self.writeTrends()
+            if self.curtime % 100 == 0: self.writeTrends()
 
         # player 1 collision
         if self.player1.center_y >= self.height:
@@ -486,18 +485,20 @@ class Game:
                 self.player1.health -= KNIFE_DAMAGE
             self.player2.knife_list.remove(self.knife)
 
-
-        
-                
+        if self.curtime % 250 == 0:  ## added intermittent updates instead of every move - every 1000 moves
+            print("Player 1 Health: ", str(self.player1.health))
+            print("Player 2 Health: ", str(self.player2.health))
         # If health is zero kill them
         if self.player1.health <= 0 and self.player2.health <= 0:
             self.draws += 1
             self.end_game()
+            continuegame = False
             if self.iterations == 0: return "0"
             else: self.setup()
         elif self.player2.health <= 0:
             self.player1.score += 1 
             self.end_game()
+            continuegame = False
             if self.player1.shield == 0:
                 if self.iterations == 0: return self.player1.health - self.player2.health + 500
                 else: self.setup()
@@ -507,6 +508,7 @@ class Game:
         elif self.player1.health <= 0:
             self.player2.score += 1 
             self.end_game()
+            continuegame = False
             if self.player2.shield == 0:
                 if self.iterations == 0: 
                     self.writeTrends()
@@ -517,6 +519,9 @@ class Game:
                     self.writeTrends()
                     return self.player1.health - self.player2.health
                 else: self.setup()
+        else:  ## added this line to allow for game to continue
+            continuegame = True
+
         if self.player1.health == self.player1_previous_health and self.player2_previous_health == self.player2.health: self.healthChanges += 1
         else: self.healthChanges = 0
         if self.healthChanges > 1500: 
@@ -524,5 +529,7 @@ class Game:
             self.healthChanges = 0
         self.player1_previous_health = self.player1.health
         self.player2_previous_health = self.player2.health
-        return True
+        return continuegame  ## If game is supposed to end, this variable will be set to False and runOneGame will exit
+#        return True  ## This is returning "True" to RunOneGame and allowing the loop to perpetuate, even if end_game() is run
+
         

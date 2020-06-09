@@ -4,11 +4,8 @@ sys.stdout = open(os.devnull, 'w')
 from MyGame import *
 import arcade
 from sim import *
-
 from util import neural_net
-
 from util import inputFunctions
-
 from GENN.GENNFunctions import *
 import time
 import multiprocessing
@@ -26,12 +23,18 @@ from util.constants import SCREEN_WIDTH, \
 sys.stdout = sys.__stdout__
 
 def runOneGame(a):
+    move = 0
     x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11])
     x.setup()
     val = True
+    print("Fight!")
     while val:
         val = x.update()
-    return val
+        move += 1
+        if move % 250  == 0:  ## updates are coordinated with sim.py health updates
+            print("Move", str(move))
+    print("Game over")
+    return val  ## NH I don't think this sub needs to return val, since it is dependent on sim.py returning val
 
 def createGraphs(playerNum):
     with open('player' + str(playerNum) + 'Trends.txt') as f:
@@ -49,7 +52,6 @@ def createGraphs(playerNum):
     plt.plot(range(len(x)),x['knife'].astype(float)) 
     ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))   
 
-
     plt.ylabel("Shot Frequency")
     plt.xlabel("Time segment")
     plt.title("Shooting trends per segment for player " + str(playerNum))
@@ -62,23 +64,23 @@ def main(args):
     """ Main method """
 
     graphics = 'no'
-    graphOutput = 'no'
-    train = 'no'
-    trendTracking = 'no'
+    graphOutput = 'yes'
+    train = 'yes'
+    trendTracking = 'yes'
     evolutions = False
     spacer()
 
     if train == 'yes':
 
-        conCurrentGame = 1
-        iterations = 1
-        simulation_player_1 = 'agenn'
+        conCurrentGame = 2
+        iterations = 10
+        simulation_player_1 = 'genn'
         simulation_player_2 = 'genn'
         player_2_type = 'genn'
         graphics = 'no'
-        player_1_type = 'agenn'
+        player_1_type = 'genn'
         trendTracking = 'yes'
-        graphOutput = 'no'
+        graphOutput = 'yes'
         report_interval = 1
         debug = True
         
@@ -117,7 +119,7 @@ def main(args):
             graphics = inputFunctions.get_str_choice('Run Graphically?: ','yes','no')
     
     if player_1_type == 'genn' and train == 'yes':
-        evolutions = True
+        evolutions = False ## temporarily setting GENN games NOT to evolve
         player_1_nets = createNets(conCurrentGame)
     elif player_1_type == 'agenn' and train == 'yes':
         evolutions = True
@@ -129,7 +131,7 @@ def main(args):
     else: player_1_nets = None
     
     if player_2_type == 'genn' and train == 'yes':
-        evolutions = True
+        evolutions = False  ## temporarily setting GENN games to NOT evolve
         player_2_nets = createNets(conCurrentGame)
     elif player_2_type == 'agenn' and train == 'yes':
         evolutions = True
@@ -156,13 +158,14 @@ def main(args):
         midWins = 0
         rangeWins = 0
         draws = 0
+        moves = 0  ## added to initialize update reporting
         leftOverHealth = 0
         evolutionHealth = []
         for game in range(iterations):
             inputFunctions.spacer()
             print("Total iterations %d out of %d" % (game + 1, iterations) )
             if evolutions == True and train == 'yes':
-                if game % report_interval== 0 and game != 0:
+                if game % report_interval == 0 and game != 0:  ## on report intervals and NOT on the first game, do this
                     if player_1_type == 'genn':
                         print(evolutionHealth)
                         bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
@@ -194,20 +197,20 @@ def main(args):
                         player_2_nets = newNets + temp
                         player_2_nets = mutateNets(player_2_nets, adaptive =True)
             p = multiprocessing.Pool(multiprocessing.cpu_count())
-                # map will always return the results in order, if order is not important in the future use pool.imap_unordered()
-            if train == 'yes':
-                if game % 9 < 3: player_2_type == 'short'
-                elif game % 9 < 6: player_2_type == 'mid'
-                else: player_2_type == 'range'
+##  Temporarily removing the three different types of players 
+##            if train == 'yes':
+##                if game % 9 < 3: player_2_type == 'short'
+##                elif game % 9 < 6: player_2_type == 'mid'
+##                else: player_2_type == 'range'
             clock = time.time()
-            result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets, trendTracking]] *conCurrentGame  ],1) ])
-            
+            r = p.map_async(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets, trendTracking]] *conCurrentGame  ],1) ],1000)
+            result = r.get()
             print('Game simulation finished in %s seconds'%(time.time()-clock))
             if game == 0 or game % 3 == 0: evolutionHealth = [float(i) for i in result]
             else: evolutionHealth = list(map(add, [float(i) for i in result], evolutionHealth)) 
             player1Wins += sum(int(i) > 0 for i in [int(i) for i in result]) 
             player2Wins += sum(int(i) < 0 for i in [int(i) for i in result])
-            print('player 1 wins: %s  /n  player 2 wins: %s/n'%(player1Wins,player2Wins))
+            print("player 1 wins: %s  /n  player 2 wins: %s /n" % (player1Wins,player2Wins))  ## changed from ' to "
             if train == 'yes':
                 if game % 9 < 3: shortWins += sum(int(i) < 0 for i in [int(i) for i in result])
                 elif game % 9 < 6: midWins += sum(int(i) < 0 for i in [int(i) for i in result])

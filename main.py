@@ -24,7 +24,7 @@ sys.stdout = sys.__stdout__
 
 def runOneGame(a):
     move = 0
-    x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11])
+    x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11], a[12], a[13], a[14])
     x.setup()
     val = True
     print("Fight!")
@@ -203,7 +203,7 @@ def main(args):
 ##                elif game % 9 < 6: player_2_type == 'mid'
 ##                else: player_2_type == 'range'
             clock = time.time()
-            r = p.map_async(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets, trendTracking]] *conCurrentGame  ],1) ],1000)
+            r = p.map_async(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets, trendTracking,simulation_player_1,simulation_player_2]] *conCurrentGame  ],1) ],1000)
             result = r.get()
             print('Game simulation finished in %s seconds'%(time.time()-clock))
             if game == 0 or game % 3 == 0: evolutionHealth = [float(i) for i in result]

@@ -24,7 +24,7 @@ sys.stdout = sys.__stdout__
 
 def runOneGame(a):
     move = 0
-    x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11], a[12], a[13], a[14])
+    x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11], a[12], a[13])
     x.setup()
     val = True
     print("Fight!")
@@ -226,7 +226,7 @@ def main(args):
         if player_2_type == 'genn' or player_2_type == 'agenn':
             writeNetworks(player_2_nets)
         
-        print('Network weights written in %s seconds'%(time.timer()-clock))
+        print('Network weights written in %s seconds'%(time.time()-clock))
         print("player 1 (" + player_1_type + "):",player1Wins)
         print("player 2 (" + player_2_type + "):",player2Wins)
         if train == 'yes':

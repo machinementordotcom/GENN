@@ -88,7 +88,7 @@ class Game:
             'concurrent_game_id': [concurrent_game_id],
             'player_type': [player_type],
             'player_simulation': [player_simulation],
-            'iteration': [iteration],
+            'iteration': [int(iteration+1)],
             'healthChanges': [healthChanges],
             'timestamp': [str(datetime.now())],
         }

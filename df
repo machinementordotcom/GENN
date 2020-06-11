@@ -1,0 +1,955 @@
+[33mcommit 66eaeefd0cdc140d52fbdeb063df4f8b85527653[m
+Author: machinementordotcom <dev@machinementor.com>
+Date:   Mon Jun 8 15:36:29 2020 +0000
+
+    Add Trends
+
+[33mcommit 9399f19e7be48db2228e47259bbb2ac2d6344244[m
+Author: Rageeb Noor <Rageeb Noor>
+Date:   Sat May 30 01:46:04 2020 +0600
+
+    Bug solve
+
+[33mcommit bb071c47879e55ec6a04dd65c49f6b3f33d5159c[m
+Author: Rageeb Noor <Rageeb Noor>
+Date:   Sat May 30 01:00:37 2020 +0600
+
+    More Organization
+
+[33mcommit 90ba67b869fefc8c89776ad42cc1c93af4a2ff75[m
+Author: Rageeb Noor <Rageeb Noor>
+Date:   Sat May 30 00:27:32 2020 +0600
+
+    Bug Issue Solved
+
+[33mcommit 995c2f6230c77d38042bd193bcfc08966b9b3286[m
+Author: Rageeb Noor <Rageeb Noor>
+Date:   Fri May 29 23:57:22 2020 +0600
+
+    Code Organize
+
+[33mcommit 3043546c287d1527d3fdeed2c4de3759a75ccb5d[m
+Author: Rageeb Noor <Rageeb Noor>
+Date:   Mon May 25 22:33:18 2020 +0600
+
+    Deleted some unnecessary code and some code modification
+
+[33mcommit d7d10af77261a86285369ec9f326cc9baa3e45d5[m
+Author: Rageeb Noor <Rageeb Noor>
+Date:   Sun May 24 20:23:07 2020 +0600
+
+    Some bug solved
+
+[33mcommit 0662aa908bac530d4c1cfcae21766dbc5e8b39a2[m
+Author: jordantwolf <jordantwolf@gmail.com>
+Date:   Tue Apr 14 13:18:01 2020 -0500
+
+    Update main.py
+
+[33mcommit 93a0d0b0c3f4b9fe79bf34b029c8359aeba756bf[m
+Author: jordantwolf <jordantwolf@gmail.com>
+Date:   Tue Apr 14 13:17:21 2020 -0500
+
+    Update main.py
+
+[33mcommit ba4f56943c67520e68b3fa40a03d729579d113d9[m
+Author: jordantwolf <jordantwolf@gmail.com>
+Date:   Tue Apr 14 13:16:20 2020 -0500
+
+    Update main.py
+
+[33mcommit 755825c16f5dac312680fe717ae081c983ca4a23[m
+Author: jordantwolf <jordantwolf@gmail.com>
+Date:   Tue Apr 14 13:14:46 2020 -0500
+
+    Update main.py
+
+[33mcommit 693583f435f879cc90d6e19667ad6bb6b511194e[m
+Author: jordantwolf <jordantwolf@gmail.com>
+Date:   Tue Apr 14 13:13:45 2020 -0500
+
+    Update main.py
+
+[33mcommit a0526d8c7b6271b3ac161587ae1a17c5a8e621b6[m
+Merge: 3e6883e 93e9b85
+Author: Jordan Wolf <jordantwolf@gmail.com>
+Date:   Tue Apr 14 13:04:03 2020 -0500
+
+    Merge branch 'master' of https://github.com/dbinnion/AdaptableAITesting
+
+[33mcommit 3e6883e19cdfc162688fc3d9c28a3b984db175ad[m
+Author: Jordan Wolf <jordantwolf@gmail.com>
+Date:   Tue Apr 14 13:02:35 2020 -0500
+
+    adding logging during training
+
+[33mcommit 93e9b85ff306c984edd24529898ff68c544edb43[m
+Author: jordantwolf <jordantwolf@gmail.com>
+Date:   Mon Apr 6 10:42:19 2020 -0500
+
+    Decrease concurrent games to 34
+    
+    Free up 2 CPUs to run other processes
+
+[33mcommit 029355cd3b014260f0e78a40881c7071a57f91ac[m
+Author: jordantwolf <jordantwolf@gmail.com>
+Date:   Mon Apr 6 10:33:22 2020 -0500
+
+    Update constants.py
+
+[33mcommit 8efc493d03b33e971daafc37b45f7b9f8830efef[m
+Author: Jordan Wolf <jordantwolf@gmail.com>
+Date:   Sun Apr 5 10:33:25 2020 -0500
+
+    fix main.py bug in master
+
+[33mcommit fab512650e403d50bd91593da68a92b5025fc9a5[m
+Merge: 3275cd8 62d8f02
+Author: jordantwolf <jordantwolf@gmail.com>
+Date:   Sun Apr 5 10:23:31 2020 -0500
+
+    Merge pull request #5 from dbinnion/AdaptiveGENN
+    
+    Merge AdaptiveGENN with master
+
+[33mcommit 62d8f022312d1a0cbcfc4c4a1e49648fcbe7276d[m
+Author: Jordan Wolf <jordantwolf@gmail.com>
+Date:   Sun Apr 5 10:05:54 2020 -0500
+
+    Set up for agenn training
+
+[33mcommit a901836ca83ff120f02c387758e8959c5a181c3e[m
+Author: Jordan Wolf <jordantwolf@gmail.com>
+Date:   Sat Apr 4 14:30:28 2020 -0500
+
+    Make learning rate for AGENN learnable
+    
+    learning rate is based on the first weight of the first layer, scaled to between 0 and 0.1
+
+[33mcommit 152b721b78df3f30583245520cf3b70a285824b2[m
+Author: Jordan Wolf <jordantwolf@gmail.com>
+Date:   Fri Apr 3 18:43:55 2020 -0500
+
+    Fixed network activities approaching infinity
+
+[33mcommit 68345e398111b462c14eb1a24ee293a6ad13ae71[m
+Author: Jordan Wolf <jordantwolf@gmail.com>
+Date:   Thu Apr 2 16:36:23 2020 -0500
+
+    updates to agenn
+
+[33mcommit 3275cd817092c1e0e7fb89cafda4e17e53f0edc0[m
+Author: Jordan Wolf <jordantwolf@gmail.com>
+Date:   Sun Mar 29 10:52:03 2020 -0500
+
+    Debugged and updated agenn network
+    
+    The game succesfully runs and trains with a player_type = 'agenn' to select the adaptive GENN neural network for control.
+
+[33mcommit 94e6792124851a3de0e669539b2b83b3d05f3e83[m
+Author: Jordan Wolf <jordantwolf@gmail.com>
+Date:   Sun Mar 22 19:54:16 2020 -0500
+
+    Created an Adaptive GENN option for the players
+    
+    Created a new type of neural network AI which can choose to adjust its own network.  It is selected by setting player_type to 'agenn'.
+
+[33mcommit b8b0c1b78c028d6c3fc1bbab26ede6520e2513de[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Mon Mar 9 08:22:06 2020 -0500
+
+    Creating documentation file
+
+[33mcommit 618b5bf0a39b90902f3bde82c57e598d0343c75f[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Mon Mar 9 08:15:36 2020 -0500
+
+    Changing imports
+
+[33mcommit 3b7f5ee6489d592de2b1acfc7d03770c07bbea69[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Mon Mar 9 08:14:40 2020 -0500
+
+    Moved
+
+[33mcommit e3d9c470f14f3a0b80e61a0d8b5b617517ca3ad3[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Mon Mar 9 08:14:29 2020 -0500
+
+    Moved
+
+[33mcommit de1b5ded67e85acc5210ee8e982b82f2d370580d[m
+Author: proselotis <gusmoir@me.com>
+Date:   Mon Mar 9 08:13:55 2020 -0500
+
+    moving GENN
+
+[33mcommit 8812eeafeba0181aba746263d8bac0978e244175[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Mon Mar 2 07:18:51 2020 -0600
+
+    Update .gitignore
+
+[33mcommit 57538e765d077872accc502d921af87ffae029f4[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue Jan 21 21:03:00 2020 -0600
+
+    removed unnecsary pyc files
+
+[33mcommit 70bd5f799ac19dacbf5e8a6c51dced2575e9ca9c[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue Jan 21 20:58:09 2020 -0600
+
+    changes to gitignore final (i hope)
+
+[33mcommit ba5287e5df4ed7956243c8c9035f1b67234e5b87[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue Jan 21 20:56:32 2020 -0600
+
+    changes to git ignore
+
+[33mcommit b8d29339c1637a757c963cfd656f228a0f27b561[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue Jan 21 20:54:47 2020 -0600
+
+    gitignore changes
+
+[33mcommit 114fd3290bf435b1868b8e6672bd4cbddeb7b7de[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue Jan 21 20:53:51 2020 -0600
+
+    adding changes to gitignore
+
+[33mcommit b12320772180a9425a8fa1c0fa8a38169b0225d5[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue Jan 21 20:52:50 2020 -0600
+
+    adding changable seed value to game
+
+[33mcommit 3952a1d59e9635323cf3fcc1e2e338130c824733[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue Jan 21 20:51:32 2020 -0600
+
+    changes to gitignore
+
+[33mcommit 58f05e9f928f474cdda583999fa2698ccae231a4[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue Jan 21 20:49:16 2020 -0600
+
+    adding a gitignore
+
+[33mcommit a8eea626acae3906422af9ed1aa2a394996e97a3[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sun Dec 29 01:34:55 2019 -0600
+
+    adding graph functionality for shooting tracking
+
+[33mcommit bbf0db91f1a6a3a56cae6798dc89c2e67a10bdf6[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sat Nov 16 13:57:56 2019 -0600
+
+    adds tracking over multiple games for accounting trends for over 100 shots (aka 3000 updates)
+
+[33mcommit 497e7a3d967d929405b0fd0a27c6a132d91c760c[m
+Merge: 7d409df 6ba0fb0
+Author: proselotis <gusmoir@me.com>
+Date:   Sat Nov 16 13:38:07 2019 -0600
+
+    Merge branch 'master' of https://github.com/dbinnion/AdaptableAITesting
+
+[33mcommit 7d409dfd3ca930be8dc56e666b6e26ba2ccf70b4[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sat Nov 16 13:37:59 2019 -0600
+
+    adding trend tracking basics
+
+[33mcommit 6ba0fb01018f6f24b27c5330c2a744e0de67b013[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Mon Oct 21 22:39:49 2019 -0500
+
+    Adding the GENN Write Up
+
+[33mcommit 95d7641d7d40fdc6a5fa40ee482b010d3be7c009[m
+Author: proselotis <gusmoir@me.com>
+Date:   Thu Oct 17 13:49:13 2019 -0500
+
+    Revert "Revert "adding trained weights for the general GENN""
+    
+    This reverts commit 8a68b5d7dab9349b8442617a63930ab54807f0f3.
+
+[33mcommit 8a68b5d7dab9349b8442617a63930ab54807f0f3[m
+Author: proselotis <gusmoir@me.com>
+Date:   Thu Oct 17 13:42:49 2019 -0500
+
+    Revert "adding trained weights for the general GENN"
+    
+    This reverts commit 6f036952b376e5d120fc1f80b93d2729dd4d5556.
+
+[33mcommit 6f036952b376e5d120fc1f80b93d2729dd4d5556[m
+Author: proselotis <gusmoir@me.com>
+Date:   Thu Oct 17 13:40:43 2019 -0500
+
+    adding trained weights for the general GENN
+
+[33mcommit 089f71db7b9392cd82427830eac37d4181ddefbc[m
+Author: proselotis <gusmoir@me.com>
+Date:   Wed Oct 9 09:49:01 2019 -0500
+
+    Last push while training
+
+[33mcommit 7baacb671d9f70ca926ce501d11fa8db36d11da1[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue Oct 8 13:24:17 2019 -0500
+
+    changes before traning
+
+[33mcommit 210648bbacde5824f108f2a321cdc49f68b29e86[m
+Author: proselotis <gusmoir@me.com>
+Date:   Mon Oct 7 18:09:20 2019 -0500
+
+    fixed changes to the genn
+
+[33mcommit eeec98dd035b2915d4d7e3a1ccdd30d50c16f782[m
+Author: proselotis <gusmoir@me.com>
+Date:   Mon Oct 7 17:31:51 2019 -0500
+
+    temporary changes to the genn
+
+[33mcommit ef005cf70f56f381665ce1541bb132936dd8a91f[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sun Sep 29 11:22:41 2019 -0500
+
+    no mutation, breeding and complete genn
+
+[33mcommit dd55fde34c53371f750d689bc68004895f42f9b5[m
+Author: proselotis <gusmoir@me.com>
+Date:   Fri Sep 20 22:11:38 2019 -0500
+
+    GENN before adding custom weight to layers
+
+[33mcommit 889c205318f189481ed0244078eba01227cd208b[m
+Author: proselotis <gusmoir@me.com>
+Date:   Thu Sep 19 01:38:53 2019 -0500
+
+    Still needs much work. Working on the GENN
+
+[33mcommit 151d146fe40b2bdba5ea982a03b5fd6cc9afa1d2[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sun Aug 11 14:43:22 2019 -0500
+
+    bug fix with win declartions
+
+[33mcommit d8dba196658302eee917ea21f53d294ab21a0a64[m
+Author: proselotis <gusmoir@me.com>
+Date:   Thu Aug 8 16:35:46 2019 -0500
+
+    bug fix
+
+[33mcommit 741a148ca7b4dc8eb1c6a81d12af8aaadaa664c5[m
+Author: proselotis <gusmoir@me.com>
+Date:   Thu Aug 8 16:29:32 2019 -0500
+
+    fixed dynamic controller so that the weights update every concurrent games
+
+[33mcommit becd60f6eaf599ef1d8c1725ffd975d6c5c10b58[m
+Author: proselotis <gusmoir@me.com>
+Date:   Thu Aug 8 14:54:05 2019 -0500
+
+    testing multiprocessing, final changes coming soon
+
+[33mcommit 4433e09f55b6f20e0cab8903d8ee4c420a4442a6[m
+Merge: 7d2a14f d2fc4d8
+Author: proselotis <gusmoir@me.com>
+Date:   Fri Aug 2 19:35:08 2019 -0500
+
+    Merge branch 'master' of https://github.com/dbinnion/AdaptableAITesting
+
+[33mcommit 7d2a14fdd6248508a4ea35c94c50da54a89e2519[m
+Author: proselotis <gusmoir@me.com>
+Date:   Fri Aug 2 19:34:56 2019 -0500
+
+    retrained Dynamic Controller weights
+
+[33mcommit d2fc4d86c4384f8c461a9f73b6959999dabd9f79[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Fri Aug 2 15:23:07 2019 -0500
+
+    type fix
+
+[33mcommit 6c103d934c219b215bedc835af513dc8ef525093[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Fri Aug 2 15:14:20 2019 -0500
+
+    Changing the balancing documentation of the FSM's
+
+[33mcommit 568b0981423cfce5d94998261eb44339e56eddeb[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue Jul 30 20:05:56 2019 -0500
+
+    balanced FSM Sim Players
+
+[33mcommit 2d29df9ec8e53ec40fbde50e94917eaa43e5efe3[m
+Author: proselotis <gusmoir@me.com>
+Date:   Mon Jul 29 16:16:17 2019 -0500
+
+    Fixed collisions between projectiles and players as well as various player movement bugs, but overall game still needs work
+
+[33mcommit 1576aea1af1da0606da44b222b810faeb5616671[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sun Jul 21 14:14:26 2019 -0500
+
+    More changes needed for the adjustments of the sim
+
+[33mcommit da1c2c7df0252f63b9323635f0aec82a9086c3d0[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sun Jul 21 14:13:24 2019 -0500
+
+    Changes for the simulated version of the game
+
+[33mcommit 02bf7bdc2e3297301811accf51881995c33ebc64[m
+Author: Sully98 <42426440+Sully98@users.noreply.github.com>
+Date:   Mon Jul 15 15:41:42 2019 -0400
+
+    Changed the arrow and fireball classes to simulated
+
+[33mcommit d87f1e4e9a867fc40d572737ef0f958b32bd5880[m
+Author: Sully98 <42426440+Sully98@users.noreply.github.com>
+Date:   Mon Jul 15 15:38:54 2019 -0400
+
+    Adds class for simulated fireballs and simulated arrows
+
+[33mcommit fbe8c811c85cac11dc48063b294858365914db41[m
+Author: proselotis <gusmoir@me.com>
+Date:   Mon Jul 15 14:21:18 2019 -0500
+
+    changing the main so that it run's the new version of the simulated game
+
+[33mcommit 727f2732128207ce6e51dd5106379a1def7f2abb[m
+Author: Sully98 <42426440+Sully98@users.noreply.github.com>
+Date:   Sun Jul 14 20:32:51 2019 -0500
+
+    added attributes to arrow and fireball methods
+    
+    by doing this it will allow sim.py to agree
+
+[33mcommit 90c6a9d256838782f96b4a9e674ab740394983d0[m
+Author: Sully98 <42426440+Sully98@users.noreply.github.com>
+Date:   Thu Jul 11 17:35:50 2019 -0400
+
+    Fixed import error and FIREBALL_SPEED error
+
+[33mcommit f1be9c5d931fd30aab64ce52f19e46238349f05f[m
+Merge: c11c066 f38152a
+Author: David Peter Binnion <dbinnion@gmail.com>
+Date:   Thu Jul 11 13:47:17 2019 -0400
+
+    Merge pull request #4 from Sully98/master
+    
+    This is the file that will be able to run the game with no visual and no arcade library
+
+[33mcommit f38152a46abfc74dcbf0e5a4addf88aee95b3370[m
+Author: Sully98 <42426440+Sully98@users.noreply.github.com>
+Date:   Tue Jul 9 08:19:03 2019 -0500
+
+    Outdated to the file sim.py
+
+[33mcommit e8baa6291ae4c5d63300bbe079aa51da07490136[m
+Author: Sully98 <42426440+Sully98@users.noreply.github.com>
+Date:   Tue Jul 9 08:17:08 2019 -0500
+
+    This file will run the game with no visuals
+
+[33mcommit c11c066ae5e2df78114849711ef06421cd05ff5c[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Thu Jun 20 12:50:56 2019 -0500
+
+    Additions to the Dynamic Controllers
+
+[33mcommit f9c5b22c0844f8f69a39f583a7dcd159d8cbce40[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Thu Jun 20 12:45:35 2019 -0500
+
+    Updates to README
+
+[33mcommit f0c54d485bce041c13c9a2f98f32b0eeaab1783d[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue Jun 18 17:57:23 2019 -0500
+
+    changing the read function to read the master weights from a file
+
+[33mcommit f67c8d9c078682d1e3038483fe760891c5ccbd33[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sun Jun 16 22:50:15 2019 -0500
+
+    changing the weights to be saved in the folder
+
+[33mcommit bfd61699cc608a325d8ccadc736900d599e3f830[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sun Jun 16 22:46:25 2019 -0500
+
+    adding weights
+
+[33mcommit 68e47a59778d15b664c69aa992622c499d9d8f04[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sun Jun 16 22:45:54 2019 -0500
+
+    changing imports
+
+[33mcommit fcc058aa78ec6eeab9f1f3ac0235f3666702a106[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Sun Jun 16 22:28:23 2019 -0500
+
+    Changing Imports
+
+[33mcommit 69cf35bcfa23ad56c8426e2ddf74fea9767c3ddb[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Thu Jun 13 00:30:13 2019 -0500
+
+    Delete dynamicControllerFunctions.py
+    
+    Moved to a different location
+
+[33mcommit b5010e1c88a9362afdd7463fa483e2a0ddd473f7[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Thu Jun 13 00:29:58 2019 -0500
+
+    Delete DynamicController.py
+    
+    Moved to a different location
+
+[33mcommit 5e9ff24c33c214e636609cf9f22d1a302fb3a6b4[m
+Merge: 09ef9b3 5e18232
+Author: proselotis <gusmoir@me.com>
+Date:   Thu Jun 13 00:29:06 2019 -0500
+
+    Merge branch 'master' of https://github.com/dbinnion/AdaptableAITesting
+
+[33mcommit 09ef9b3301aa9ff7e866eb5f5885f9c4ae017192[m
+Author: proselotis <gusmoir@me.com>
+Date:   Thu Jun 13 00:28:51 2019 -0500
+
+    placing the dynamic controllers in a folder
+
+[33mcommit 5e18232ea06212a5e5d635b6baea14d9f6c93e82[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Thu Jun 13 00:17:53 2019 -0500
+
+    Update README.md
+    
+    Adding Dynamic Controller condition to the README
+
+[33mcommit b5afe0b685cedf212e5770295de67413d3e3cc45[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Thu Jun 13 00:07:56 2019 -0500
+
+    Update SIMULATIONTYPES.md
+    
+    Adding the dynamic controller various simulation features.
+
+[33mcommit 38e3cda6a274e8df894fe4858d48e4e83bb13b77[m
+Author: proselotis <gusmoir@me.com>
+Date:   Wed Jun 12 23:53:27 2019 -0500
+
+    adding the constants changes
+
+[33mcommit a622bd86d98417334e5ed4bec2ec9d758152c6c9[m
+Author: proselotis <gusmoir@me.com>
+Date:   Wed Jun 12 23:52:38 2019 -0500
+
+    adding the dynamic controller functionality, this will need to be cleaned up but the functionality should be there
+
+[33mcommit a604b121fe7c5a7db6e6f16b9fef636bf72987a8[m
+Author: proselotis <gusmoir@me.com>
+Date:   Fri May 31 23:40:33 2019 -0500
+
+    Adding the dynamic controller before cleaned and individual weights are added
+
+[33mcommit a623638ecd8d4b6923b18e1b27cc96c98366c34f[m
+Merge: 557e0a6 b90d0f6
+Author: proselotis <gusmoir@me.com>
+Date:   Thu May 30 16:15:25 2019 -0500
+
+    Merge branch 'master' of https://github.com/dbinnion/AdaptableAITesting
+
+[33mcommit 557e0a6560e0973a9445e9ac7c4896b8c9a5a464[m
+Author: proselotis <gusmoir@me.com>
+Date:   Thu May 30 16:14:53 2019 -0500
+
+    adding balancing to bigger health
+
+[33mcommit b90d0f6998524ba3ad9d5d16f698bf35aaad6fb7[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Tue May 28 13:27:52 2019 -0500
+
+    Update main.py
+    
+    Commenting out not needed libraries.
+
+[33mcommit 0fc6ad2efc0fa87c29aa6d256d2cbd2dcb18d452[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue May 28 01:16:09 2019 -0500
+
+    adding missed files
+
+[33mcommit 0b93affc7251403bbc5a43c5ea1344bc5d767f2a[m
+Merge: 6b70b7b 7c2dfd6
+Author: proselotis <gusmoir@me.com>
+Date:   Tue May 28 01:14:42 2019 -0500
+
+    Merge branch 'master' of https://github.com/dbinnion/AdaptableAITesting
+
+[33mcommit 6b70b7b766855861a4701e0860b767f559503b5d[m
+Author: proselotis <gusmoir@me.com>
+Date:   Tue May 28 01:14:09 2019 -0500
+
+    adding recent changes, including formatting and fsm updates
+
+[33mcommit 7c2dfd67aa918667b5d53716088d65adab201d34[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Tue May 28 00:29:14 2019 -0500
+
+    Update SIMULATIONTYPES.md
+    
+    Adding balance explination
+
+[33mcommit 8ae603dc5d3b23f6114dbc01d5aece16957b55bc[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Mon May 27 23:34:04 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit 78b0ec19d933aebf42f8c2ca6e4eb7d5b5e6e807[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Mon May 27 23:33:09 2019 -0500
+
+    Add files via upload
+
+[33mcommit 2259d7332c96e97ed49ab6aca6340f7235f015f8[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Mon May 27 23:32:14 2019 -0500
+
+    Delete FSMImage.png
+
+[33mcommit 1903a483c493c2289c35cf6287569425a04098fa[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Mon May 27 23:12:55 2019 -0500
+
+    Update SIMULATIONTYPES.md
+    
+    Typo fixes
+
+[33mcommit 23e6d448eb2c0321c12f1822d7319f5f803522ae[m
+Author: David Peter Binnion <dbinnion@gmail.com>
+Date:   Sun May 26 22:31:38 2019 -0400
+
+    removal of readme keys
+    
+    human playable keys are not included in this project
+
+[33mcommit f9c5be00f27867b4ede5d27fdcfd893aca26e8b1[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Sat May 25 12:49:58 2019 -0500
+
+    Update README.md
+
+[33mcommit 82006ce51268bded3bf00b4e086bbf775e9194a7[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sat May 25 12:09:27 2019 -0500
+
+    changing naming convention
+
+[33mcommit a2cdbd5fb24f53cca002dc744c72df72be91a906[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sat May 25 12:07:48 2019 -0500
+
+    Cleaning comments of the game class
+
+[33mcommit 24361589fa2137658e3bb0457283cbadcaa651d2[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sat May 25 11:53:31 2019 -0500
+
+    Final changes to the game and FSM
+
+[33mcommit 4626fcf6e3803ff7ccae72f0c50cb4f8a1d47ee5[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sat May 25 01:28:34 2019 -0500
+
+    adding more inputs to the main
+
+[33mcommit d81a75f97826abee3cd7f1f29f374698854a5fe4[m
+Merge: 3fa7043 655143f
+Author: proselotis <gusmoir@me.com>
+Date:   Sat May 25 01:06:11 2019 -0500
+
+    Merge branch 'master' of https://github.com/dbinnion/AdaptableAITesting
+
+[33mcommit 3fa7043a8374f650d3ab1db203aa287256f0b43a[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sat May 25 01:05:32 2019 -0500
+
+    Simplifying the code for the FSM players
+
+[33mcommit 655143f67c07ac7b97bb7d17e125b991eca9462e[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:34:29 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit 25320b3b096017a4c59b63bb5dc02d00dd1ddb26[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:32:52 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit ab517fd02afa63253f57147e375db7c7397196af[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:32:32 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit 11a88a92af2ac26c6d556662a1bfd7e95e87d572[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:31:39 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit 69525b21a49ea0b8f221da7e032a0d6e52b094be[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:30:49 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit 35fbcb9ff0b4f0f324586122d6268fbafcd9cd77[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:29:47 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit 029c669e2dbb61dac1217c86b60c967d2f6da1de[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:27:39 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit f46006b4818792b34fa37f27edc5bf64819f2f24[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:27:06 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit 6dbde38d27600cd7492949b8b0e79e7365e17494[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:26:50 2019 -0500
+
+    Add files via upload
+
+[33mcommit 0efa068f2dfe6a730b474a476e736f1259b9f34c[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:26:37 2019 -0500
+
+    Delete FSMimage.jpg
+
+[33mcommit 8f41625953e31891836d222b5abc27dc929e47e6[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:23:28 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit f7c3ec467852fec4b6f8d64deec30a0e0e11d820[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:23:13 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit f482256442d915a6b8c7aac49aaa6c9b08750006[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:21:16 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit 1b5e6583f3396e5b1b8ce53384be29df2b624a57[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:20:08 2019 -0500
+
+    Add files via upload
+
+[33mcommit e8effcf31fc7b5de7ff28cede1f0825972fa3138[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:19:45 2019 -0500
+
+    Delete Adaptive AI.pdf
+
+[33mcommit 05372baa6f46411dd866c66092a104ec32ea619b[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:17:48 2019 -0500
+
+    Update SIMULATIONTYPES.md
+
+[33mcommit 6c7977e97fc24b9996939e269830daa4732457e3[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:17:12 2019 -0500
+
+    Update SIMULATIONTYPES.md
+    
+    Adding, the image of the FSM
+
+[33mcommit f117296fb6f01c196cebcbcdfa6451b659e5d98d[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:16:11 2019 -0500
+
+    Add files via upload
+    
+    Keeping a folder for Graphs and Images
+
+[33mcommit 385a319d14b5280532940285007140936f2dca06[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:14:33 2019 -0500
+
+    Delete Adaptive AI.pdf
+    
+    Cleaning files
+
+[33mcommit 342b3ccfb4677283c152db9e99a7aafa8f8937f9[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:11:33 2019 -0500
+
+    Add files via upload
+    
+    Finite State Machine pdf document
+
+[33mcommit 8e5a422e20bf94b9ce6afae3aa53c3f920aae41f[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:02:16 2019 -0500
+
+    Update README.md
+    
+    Fixing typos
+
+[33mcommit 471a700315c9dd7b0fd98ee6a45385354a15f889[m
+Author: jmuresan <jimuresan@gmail.com>
+Date:   Fri May 24 23:01:09 2019 -0500
+
+    Add files via upload
+    
+    Adding a doc describing the simulation types with an overview, and cleaning up the README. Finite State Machine images to come soon.
+
+[33mcommit 7d28ec8ce399670d5922e54a05f987c765de8f8a[m
+Author: proselotis <gusmoir@me.com>
+Date:   Fri May 24 16:58:10 2019 -0500
+
+    Fixing a player choice error
+
+[33mcommit 9d5358bfdc532b84f6451b5211672f236b3c339a[m
+Author: proselotis <gusmoir@me.com>
+Date:   Fri May 24 16:16:33 2019 -0500
+
+    Added the user input for the programs
+
+[33mcommit 766438af74a5e35d551ffbc4cf5a919767137474[m
+Author: proselotis <gusmoir@me.com>
+Date:   Fri May 24 16:08:18 2019 -0500
+
+    Dynamic controller added into the game
+
+[33mcommit d2034199319ebb368e8dc49ad434c516c13ee3f0[m
+Merge: 3cf690d 783a25b
+Author: proselotis <gusmoir@me.com>
+Date:   Fri May 24 12:06:33 2019 -0500
+
+    Merge branch 'master' of https://github.com/dbinnion/AdaptableAITesting
+
+[33mcommit 3cf690d0b32d56ae84e409a1aa4baa0705d25115[m
+Author: proselotis <gusmoir@me.com>
+Date:   Fri May 24 12:05:29 2019 -0500
+
+    Adding some elements of Dynamic Controller, still adding some various features. A user input for type of player to come too.
+
+[33mcommit 783a25b44099f644ef4e76fb68e2abe0a69c5cb7[m
+Author: Gus Moir <gusmoir@me.com>
+Date:   Thu May 23 22:40:17 2019 -0500
+
+    Add files via upload
+    
+    Adding the knife.png
+
+[33mcommit 48bede9116ff1ba4b6204e48fb9d6367968e5430[m
+Author: Sully98 <42426440+Sully98@users.noreply.github.com>
+Date:   Wed May 22 19:24:33 2019 -0500
+
+    Create main.py
+    
+    This version has a short attack added
+
+[33mcommit df1b44b5983e3bef052fd23482e68132b2e3c659[m
+Author: proselotis <gusmoir@me.com>
+Date:   Mon May 20 11:18:54 2019 -0500
+
+    Adding formatting for the main to take inputs from other programs and pass a current state of the game.
+
+[33mcommit 3585b4df5fa984c5d8970f91b31c2fedf51c4b97[m
+Author: proselotis <gusmoir@me.com>
+Date:   Mon May 20 11:12:28 2019 -0500
+
+    Formatting the main to take commands from a program/model passed in via commandline. Also adding the current state of the game variables
+
+[33mcommit 2108851b81d20065ef50294a1cd75ba782665e1b[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sun May 19 16:07:05 2019 -0500
+
+    Added the functionality of playing the number of games the user inputs
+
+[33mcommit cc8c33f8ec3a1a5f50a2439634a19cccb7f6314b[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sun May 19 15:12:59 2019 -0500
+
+    Adding limited distance to the current enemie's fireball
+
+[33mcommit 8fc249c277ea7071df0fbc5963e90e72900bec85[m
+Author: proselotis <gusmoir@me.com>
+Date:   Sun May 19 14:45:42 2019 -0500
+
+    Cleaning some of the paths for the images in the main so it works correctly
+
+[33mcommit 71cc166ee63bb26382f4c640b061ae524d142c17[m
+Merge: 5acf24b ffa6a84
+Author: David Peter Binnion <dbinnion@gmail.com>
+Date:   Tue May 7 15:08:33 2019 -0400
+
+    Merge pull request #2 from Sully98/master
+    
+    Image files
+
+[33mcommit ffa6a8429064af764ce9c23d84928c21c028130d[m
+Author: Sully98 <42426440+Sully98@users.noreply.github.com>
+Date:   Mon May 6 22:32:48 2019 -0500
+
+    Image files
+    
+    Holds all of the images that will populate in the game
+
+[33mcommit 5acf24b3c8bfd7db77f8968b2c18d44335e12d18[m
+Merge: 6393e11 3d82605
+Author: David Peter Binnion <dbinnion@gmail.com>
+Date:   Tue Apr 30 13:58:18 2019 -0400
+
+    Merge pull request #1 from Sully98/patch-1
+    
+    Create main.py
+
+[33mcommit 3d826054d3a3b45d420b59283e84e33c43a99530[m
+Author: Sully98 <42426440+Sully98@users.noreply.github.com>
+Date:   Tue Apr 30 12:52:42 2019 -0500
+
+    Update main.py
+
+[33mcommit 1815d9b2e8953d8d7335ef7a1ac754b39b14715e[m
+Author: Sully98 <42426440+Sully98@users.noreply.github.com>
+Date:   Mon Apr 29 22:33:21 2019 -0500
+
+    Create main.py
+
+[33mcommit 6393e113e60add7e36b45280c601d3cf3f21b9cb[m
+Author: David Peter Binnion <dbinnion@gmail.com>
+Date:   Mon Apr 29 19:19:23 2019 -0400
+
+    Initial commit

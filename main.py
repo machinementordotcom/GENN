@@ -63,6 +63,17 @@ def createGraphs(playerNum):
 def main(args):
     """ Main method """
 
+    #Remove the Log File first otherwise it for avoiding merge log data for every run
+    if os.path.exists('player_1_log.csv'):
+        os.remove('player_1_log.csv')
+    else:
+        pass
+
+    if os.path.exists('player_2_log.csv'):
+        os.remove('player_2_log.csv')
+    else:
+        pass
+
     graphics = 'no'
     graphOutput = 'yes'
     train = 'yes'

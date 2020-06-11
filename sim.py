@@ -72,7 +72,7 @@ class Game:
         self.player_1_simulation = player_1_simulation
         self.player_2_simulation = player_2_simulation
 
-    def write_csv(self, filename, mode, arrow, fire, knife, towardsOpponent, awayOpponent,
+    def write_csv(self, filename, arrow, fire, knife, towardsOpponent, awayOpponent,
                   movementChanges, biggestTrend,
                   concurrent_game_id, player_type, player_simulation,
                   iteration, healthChanges):
@@ -95,11 +95,11 @@ class Game:
 
         df = pd.DataFrame(data)
 
-        if mode is "w":
-            df.to_csv(str(filename), mode='w', header=True, index=False)
-
-        if mode is "a":
+        if os.path.exists(filename):
             df.to_csv(str(filename), mode='a', header=False, index=False)
+
+        else:
+            df.to_csv(str(filename), mode='w', header=True, index=False)
 
 
     def jitter(self):
@@ -109,47 +109,43 @@ class Game:
         self.player2.center_y = random.randint(0,SCREEN_HEIGHT)
 
     def writeTrends(self):
+        # Write CSV
+        # Player 1
+        self.write_csv(
+            "player_1_log.csv",
+            self.player1.trends['arrow'],
+            self.player1.trends['fire'],
+            self.player1.trends['knife'],
+            self.player1.trends['towardsOpponent'],
+            self.player1.trends['awayOpponent'],
+            self.player1.trends['movementChanges'],
+            self.player1.trends['biggestTrend'],
+            self.process_id,
+            self.player1_type,
+            self.player_1_simulation,
+            self.currentGame,
+            self.healthChanges,
+        )
+
+        # Player 2
+        self.write_csv(
+            "player_2_log.csv",
+            self.player1.trends['arrow'],
+            self.player1.trends['fire'],
+            self.player1.trends['knife'],
+            self.player1.trends['towardsOpponent'],
+            self.player1.trends['awayOpponent'],
+            self.player1.trends['movementChanges'],
+            self.player1.trends['biggestTrend'],
+            self.process_id,
+            self.player2_type,
+            self.player_2_simulation,
+            self.currentGame,
+            self.healthChanges,
+        )
+
+
         if self.written == 0 and self.iterations == self.totalIterations:
-
-            #Write CSV
-            # Player 1
-            self.write_csv(
-                "player_1_log.csv",
-                "w",
-                self.player1.trends['arrow'],
-                self.player1.trends['fire'],
-                self.player1.trends['knife'],
-                self.player1.trends['towardsOpponent'],
-                self.player1.trends['awayOpponent'],
-                self.player1.trends['movementChanges'],
-                self.player1.trends['biggestTrend'],
-                self.process_id,
-                self.player1_type,
-                self.player_1_simulation,
-                self.currentGame,
-                self.healthChanges,
-            )
-
-            # Player 2
-            self.write_csv(
-                "player_2_log.csv",
-                "w",
-                self.player1.trends['arrow'],
-                self.player1.trends['fire'],
-                self.player1.trends['knife'],
-                self.player1.trends['towardsOpponent'],
-                self.player1.trends['awayOpponent'],
-                self.player1.trends['movementChanges'],
-                self.player1.trends['biggestTrend'],
-                self.process_id,
-                self.player2_type,
-                self.player_2_simulation,
-                self.currentGame,
-                self.healthChanges,
-            )
-
-
-
             with open("player1Trends.txt",'w+') as myfile:
                 myfile.write(json.dumps(self.player1.trends))
                 myfile.close()
@@ -157,44 +153,6 @@ class Game:
                 myfile.write(json.dumps(self.player2.trends))
                 myfile.close()
         else:
-
-            # Append CSV
-            # Player 1
-            self.write_csv(
-                "player_1_log.csv",
-                "a",
-                self.player1.trends['arrow'],
-                self.player1.trends['fire'],
-                self.player1.trends['knife'],
-                self.player1.trends['towardsOpponent'],
-                self.player1.trends['awayOpponent'],
-                self.player1.trends['movementChanges'],
-                self.player1.trends['biggestTrend'],
-                self.process_id,
-                self.player1_type,
-                self.player_1_simulation,
-                self.currentGame,
-                self.healthChanges,
-            )
-
-            # Player 2
-            self.write_csv(
-                "player_2_log.csv",
-                "a",
-                self.player1.trends['arrow'],
-                self.player1.trends['fire'],
-                self.player1.trends['knife'],
-                self.player1.trends['towardsOpponent'],
-                self.player1.trends['awayOpponent'],
-                self.player1.trends['movementChanges'],
-                self.player1.trends['biggestTrend'],
-                self.process_id,
-                self.player2_type,
-                self.player_2_simulation,
-                self.currentGame,
-                self.healthChanges,
-            )
-
             with open("player1Trends.txt",'a') as myfile:
                 myfile.write(json.dumps(self.player1.trends))
                 myfile.close()

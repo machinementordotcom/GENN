@@ -1,12 +1,12 @@
 import sys
 import os
-sys.stdout = open(os.devnull, 'w')
+#sys.stdout = open(os.devnull, 'w')
 from MyGame import *
 import arcade
 from sim import *
 from util.constants import * 
 from util.inputFunctions import * 
-from GENNFunctions import * 
+from GENN.GENNFunctions import * 
 import time
 import multiprocessing
 from operator import add 
@@ -17,14 +17,24 @@ import json
 import re 
 import matplotlib.ticker as ticker
 
-sys.stdout = sys.__stdout__
+#sys.stdout = sys.__stdout__
 
 def runOneGame(a):
-    x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11])
+    move = 0
+
+    x = Game(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11],a[12],a[13])
     x.setup()
     val = True
+    print("Game Play Started...")
+
     while val == True:
         val = x.update()
+
+        move += 1
+        if move % 250  == 0:  ## updates are coordinated with sim.py health updates
+            print("Move", str(move))
+
+    print("Game over")
     return val
 def createGraphs(playerNum):
     with open('player' + str(playerNum) + 'Trends.txt') as f:
@@ -54,19 +64,30 @@ def createGraphs(playerNum):
 def main(args):
     """ Main method """
 
+    #Remove the Log File first otherwise it for avoiding merge log data for every run
+    if os.path.exists('player_1_log.csv'):
+        os.remove('player_1_log.csv')
+    else:
+        pass
+
+    if os.path.exists('player_2_log.csv'):
+        os.remove('player_2_log.csv')
+    else:
+        pass
+
     graphics = 'no'
     graphOutput = 'no'
-    train = 'no'
+    train = 'yes'
     trendTracking = 'no'
     evolutions = False
     spacer()
 
     if train == 'yes':
-        conCurrentGame = 100
-        iterations = 999 
+        conCurrentGame = 20
+        iterations = 20 
         simulation_player_1 = 'genn'
-        simulation_player_2 = 'fsm'
-        player_2_type = 'mid'
+        simulation_player_2 = 'genn'
+        player_2_type = 'genn'
         graphics = 'no'
         player_1_type = 'genn'
         trendTracking = 'no'
@@ -155,7 +176,7 @@ def main(args):
                 if game % 9 < 3: player_2_type == 'short'
                 elif game % 9 < 6: player_2_type == 'mid'
                 else: player_2_type == 'range'
-            result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets, trendTracking]] *conCurrentGame  ],1) ])
+            result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets, trendTracking,simulation_player_1,simulation_player_2]] *conCurrentGame  ],1) ])
             if game == 0 or game % 3 == 0: evolutionHealth = [float(i) for i in result]
             else: evolutionHealth = list(map(add, [float(i) for i in result], evolutionHealth)) 
             player1Wins += sum(int(i) > 0 for i in [int(i) for i in result]) 

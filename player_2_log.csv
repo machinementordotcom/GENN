@@ -1,0 +1,6 @@
+Arrow,Fire,knife,towardsOpponent,awayOpponent,movementChanges,biggestTrend,concurrent_game_id,player_type,player_simulation,iteration,healthChanges,timestamp
+31,27,26,0,2520,0,2520,5,genn,genn,1,29,2020-06-16 19:12:42.624688
+35,30,25,0,2700,0,2700,10,genn,genn,1,29,2020-06-16 19:14:10.126265
+24,25,30,0,2370,0,2370,12,genn,genn,1,29,2020-06-16 19:14:18.739129
+30,30,26,159,2421,1,2420,14,genn,genn,1,29,2020-06-16 19:16:22.209433
+29,29,28,126,2454,1,2453,15,genn,genn,1,29,2020-06-16 19:16:51.855885

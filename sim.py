@@ -20,11 +20,14 @@ import multiprocessing
 import numpy as np 
 import json
 import matplotlib.pyplot as plt
+import pandas as pd
+from datetime import datetime
 
 random.seed(RANDOM_SEED)
 
 class Game:
-    def __init__(self,width , height, title, iterations, player_1_type, player_2_type,conGames,currentGame,player_1_nets,player_2_nets,trendTracking,process_id):
+    def __init__(self,width , height, title, iterations, player_1_type, player_2_type,conGames,currentGame,player_1_nets,player_2_nets,trendTracking,
+                 player_1_simulation, player_2_simulation, process_id):
         """
         Initializer
         """
@@ -57,13 +60,80 @@ class Game:
         self.healthChanges = 0
         self.player1_previous_health = PLAYER_HEALTH
         self.player2_previous_health = PLAYER_HEALTH
+        self.player_1_simulation = player_1_simulation
+        self.player_2_simulation = player_2_simulation
 
     def jitter(self):
         self.player1.center_x = random.randint(0,SCREEN_WIDTH)
         self.player1.center_y = random.randint(0,SCREEN_HEIGHT)
         self.player2.center_x = random.randint(0,SCREEN_WIDTH)
         self.player2.center_y = random.randint(0,SCREEN_HEIGHT)
+
+    def write_csv(self, filename, arrow, fire, knife, towardsOpponent, awayOpponent,
+                  movementChanges, biggestTrend,
+                  concurrent_game_id, player_type, player_simulation,
+                  iteration, healthChanges):
+        data = {
+            'Arrow': [arrow],
+            'Fire': [fire],
+            'knife': [knife],
+            'towardsOpponent': [towardsOpponent],
+            'awayOpponent': [awayOpponent],
+            'movementChanges': [movementChanges],
+            'biggestTrend': [biggestTrend],
+            'concurrent_game_id': [concurrent_game_id],
+            'player_type': [player_type],
+            'player_simulation': [player_simulation],
+            'iteration': [int(iteration)+1],
+            'healthChanges': [healthChanges],
+            'timestamp': [str(datetime.now())],
+        }
+
+        df = pd.DataFrame(data)
+
+        if os.path.exists(filename):
+            df.to_csv(str(filename), mode='a', header=False, index=False)
+
+        else:
+            df.to_csv(str(filename), mode='w', header=True, index=False)
+
     def writeTrends(self):
+        # Write CSV
+        # Player 1
+        self.write_csv(
+            "player_1_log.csv",
+            self.player1.trends['arrow'],
+            self.player1.trends['fire'],
+            self.player1.trends['knife'],
+            self.player1.trends['towardsOpponent'],
+            self.player1.trends['awayOpponent'],
+            self.player1.trends['movementChanges'],
+            self.player1.trends['biggestTrend'],
+            self.process_id,
+            self.player1_type,
+            self.player_1_simulation,
+            self.currentGame,
+            self.healthChanges,
+        )
+
+        # Player 2
+        self.write_csv(
+            "player_2_log.csv",
+            self.player1.trends['arrow'],
+            self.player1.trends['fire'],
+            self.player1.trends['knife'],
+            self.player1.trends['towardsOpponent'],
+            self.player1.trends['awayOpponent'],
+            self.player1.trends['movementChanges'],
+            self.player1.trends['biggestTrend'],
+            self.process_id,
+            self.player2_type,
+            self.player_2_simulation,
+            self.currentGame,
+            self.healthChanges,
+        )
+
+
         if self.written == 0 and self.iterations == self.totalIterations:
             with open("player1Trends.txt",'w+') as myfile:
                 myfile.write(json.dumps(self.player1.trends))
@@ -375,6 +445,10 @@ class Game:
         self.player2.update()
         if self.trendTracking == 'yes': 
             if self.curtime % 900 == 0: self.writeTrends()
+
+        if self.curtime % 100 == 0:  ## added intermittent updates instead of every move - every 1000 moves
+            print("Player 1 Health: ", str(self.player1.health))
+            print("Player 2 Health: ", str(self.player2.health))
 
         # player 1 collision
         if self.player1.center_y >= self.height:

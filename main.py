@@ -1,3 +1,4 @@
+
 import sys
 import os
 #sys.stdout = open(os.devnull, 'w')
@@ -28,7 +29,7 @@ def runOneGame(a):
     print("Game Play Started...")
 
     while val == True:
-        val = x.update()
+        val = x.update(move)
 
         move += 1
         if move % 250  == 0:  ## updates are coordinated with sim.py health updates
@@ -83,11 +84,11 @@ def main(args):
     spacer()
 
     if train == 'yes':
-        conCurrentGame = 20
-        iterations = 20 
+        conCurrentGame = 50
+        iterations = 5
         simulation_player_1 = 'genn'
-        simulation_player_2 = 'genn'
-        player_2_type = 'genn'
+        simulation_player_2 = 'fsm'
+        player_2_type = 'short'
         graphics = 'no'
         player_1_type = 'genn'
         trendTracking = 'no'
@@ -177,6 +178,7 @@ def main(args):
                 elif game % 9 < 6: player_2_type == 'mid'
                 else: player_2_type == 'range'
             result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets, trendTracking,simulation_player_1,simulation_player_2]] *conCurrentGame  ],1) ])
+            
             if game == 0 or game % 3 == 0: evolutionHealth = [float(i) for i in result]
             else: evolutionHealth = list(map(add, [float(i) for i in result], evolutionHealth)) 
             player1Wins += sum(int(i) > 0 for i in [int(i) for i in result]) 
@@ -207,7 +209,7 @@ def main(args):
             createGraphs(1)
         if player_2_type not in ['short','mid','range']:
             createGraphs(2)
-        
+      
 if __name__ == "__main__":
     main(sys.argv)
 

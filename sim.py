@@ -437,7 +437,20 @@ class Game:
             ):
             return True
         return False
-    def update(self):
+    
+    
+    def update(self, game_move):
+        
+        # Attack Data Holder
+        player1_fireball = 0
+        player2_fireball = 0 
+        player1_arrow = 0
+        player2_arrow = 0
+        player1_knife = 0
+        player2_knife = 0
+        
+        
+        
         # sets a timer that game and perspective players use
         # not sure if necessary
         self.curtime += 1 
@@ -489,6 +502,9 @@ class Game:
             if self.collisionCheck(self.player2,self.fireball):
                 self.player1.fireball_list.remove(self.fireball)
                 self.player2.health -= FIREBALL_DAMAGE
+                
+                player2_fireball = 1
+                
             elif self.fireball.center_x < -5 or self.fireball.center_x > SCREEN_WIDTH +5 or self.fireball.center_y < -5 or self.fireball.center_y > SCREEN_HEIGHT + 5:
                 self.player1.fireball_list.remove(self.fireball)
             self.fireball.center_x += self.fireball.vel*math.cos(self.player1.angle)
@@ -499,6 +515,9 @@ class Game:
             if self.collisionCheck(self.player1,self.fireball):
                 self.player2.fireball_list.remove(self.fireball)
                 self.player1.health -= FIREBALL_DAMAGE
+                
+                player1_fireball = 1
+                
             elif self.fireball.center_x < -5 or self.fireball.center_x > SCREEN_WIDTH +5 or self.fireball.center_y < -5 or self.fireball.center_y > SCREEN_HEIGHT + 5:
                 self.player2.fireball_list.remove(self.fireball)
             self.fireball.center_x += self.fireball.vel*math.cos(self.player2.angle)
@@ -511,6 +530,9 @@ class Game:
             if self.collisionCheck(self.player2,self.arw):
                 self.player1.arrow_list.remove(self.arw)
                 self.player2.health -= ARROW_DAMAGE
+                
+                player2_arrow = 1
+                
             elif self.arw.center_x < -5 or self.arw.center_x > SCREEN_WIDTH+5 or self.arw.center_y < -5 or self.arw.center_y > SCREEN_HEIGHT +5:
                 self.player1.arrow_list.remove(self.arw)
 
@@ -522,26 +544,75 @@ class Game:
             if self.collisionCheck(self.player1,self.arw):
                 self.player2.arrow_list.remove(self.arw)
                 self.player1.health -= ARROW_DAMAGE
+                
+                player1_arrow = 1
+                
             elif self.arw.center_x < -5 or self.arw.center_x > SCREEN_WIDTH +5 or self.arw.center_y < -5 or self.arw.center_y > SCREEN_HEIGHT + 5:
                 self.player2.arrow_list.remove(self.arw)
 
             self.arw.center_x += self.arw.vel*math.cos(self.player2.angle)
             self.arw.center_y += self.arw.vel*math.sin(self.player2.angle)
         
-
+        
+        #Knife Movement 
         for self.knife in self.player1.knife_list:
             if self.collisionCheck(self.player2,self.knife):
                 self.player2.health -= KNIFE_DAMAGE
+                
+                player2_knife = 1
+                
             self.player1.knife_list.remove(self.knife)
 
         for self.knife in self.player2.knife_list:
             if self.collisionCheck(self.player1,self.knife):
                 self.player1.health -= KNIFE_DAMAGE
+                
+                player1_kinfe = 1
+                
             self.player2.knife_list.remove(self.knife)
 
 
         
-                
+           
+        
+        #Print The Log Result
+        progress_data = dict(
+            iterations = [self.iterations],
+            player_1_type = [self.player1_type],
+            player_2_type = [self.player2_type],
+            conCurrentGames = [self.conGames],
+            player_1_simulation = [self.player_1_simulation],
+            player_2_simulation = [self.player_2_simulation],
+            currentGame = [self.currentGame],
+            process_id = [self.process_id],
+            player1_center_x = [self.player1.center_x],
+            player_1_center_y = [self.player1.center_y],
+            player1_shield = [self.player1.shield],
+            player2_center_x = [self.player2.center_x],
+            player_2_center_y = [self.player2.center_y],
+            player2_shield = [self.player2.shield],
+            player1_score = [self.player1.score],
+            player2_score = [self.player2.score],
+            player1_fireball = [player1_fireball],
+            player2_fireball = [player2_fireball],
+            player1_arrow = [player1_arrow],
+            player2_arrow = [player2_arrow],
+            player1_knife = [player1_knife],
+            player2_knife = [player2_knife],
+            game_move = [game_move],
+            player1_health = [self.player1.health],
+            player2_health = [self.player2.health],
+            timestamp = [str(datetime.now())],
+        )
+        
+        dataFrame = pd.DataFrame(progress_data)
+
+        if os.path.exists("data_log.csv"):
+            dataFrame.to_csv(str("data_log.csv"), mode='a', header=False, index=False)
+
+        else:
+            dataFrame.to_csv(str("data_log.csv"), mode='w', header=True, index=False)
+        
         # If health is zero kill them
         if self.player1.health <= 0 and self.player2.health <= 0:
             self.draws += 1

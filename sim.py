@@ -459,7 +459,7 @@ class Game:
         if self.trendTracking == 'yes': 
             if self.curtime % 900 == 0: self.writeTrends()
 
-        if self.curtime % 1000 == 0:  ## added intermittent updates instead of every move - every 1000 moves
+        if self.curtime % 100 == 0:  ## added intermittent updates instead of every move - every 1000 moves
             print("Player 1 Health: ", str(self.player1.health))
             print("Player 2 Health: ", str(self.player2.health))
 

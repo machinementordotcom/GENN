@@ -84,18 +84,20 @@ def main(args):
     spacer()
 
     if train == 'yes':
-        conCurrentGame = 50
-        iterations = 5
+        conCurrentGame = 3
+        iterations = 9
         simulation_player_1 = 'genn'
-        simulation_player_2 = 'fsm'
-        player_2_type = 'short'
+        simulation_player_2 = 'genn'
+        player_2_type = 'genn'
         graphics = 'no'
         player_1_type = 'genn'
         trendTracking = 'no'
         graphOutput = 'no'
+        gameplay_iteration = 10
     else:
         conCurrentGame = get_int_choice('How many games would you like played at the same time (Recommended amount based on computer cores '+str(multiprocessing.cpu_count())+"):",1,1000)
         iterations = get_int_choice('Enter the amount of generations to be played: ',1,5000)
+        gameplay_iteration = get_int_choice('Enter the amount of game play iteration: ',1,5000)
         trendTracking = get_str_choice("Would you like to track trends",'yes','no')
         graphOutput = get_str_choice("Would you like to create graphical outputs?",'yes','no')
         simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc','genn')
@@ -177,7 +179,7 @@ def main(args):
                 if game % 9 < 3: player_2_type == 'short'
                 elif game % 9 < 6: player_2_type == 'mid'
                 else: player_2_type == 'range'
-            result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,1,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets, trendTracking,simulation_player_1,simulation_player_2]] *conCurrentGame  ],1) ])
+            result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,gameplay_iteration,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets, trendTracking,simulation_player_1,simulation_player_2]] *conCurrentGame  ],1) ])
             
             if game == 0 or game % 3 == 0: evolutionHealth = [float(i) for i in result]
             else: evolutionHealth = list(map(add, [float(i) for i in result], evolutionHealth)) 

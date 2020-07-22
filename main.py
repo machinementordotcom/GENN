@@ -84,20 +84,20 @@ def main(args):
     spacer()
 
     if train == 'yes':
-        conCurrentGame = 3
-        iterations = 9
+        conCurrentGame = 10
+        generations = 9
         simulation_player_1 = 'genn'
-        simulation_player_2 = 'genn'
-        player_2_type = 'genn'
+        simulation_player_2 = 'fsm'
+        player_2_type = 'short'
         graphics = 'no'
         player_1_type = 'genn'
         trendTracking = 'no'
         graphOutput = 'no'
-        gameplay_iteration = 10
+        games = 10
     else:
         conCurrentGame = get_int_choice('How many games would you like played at the same time (Recommended amount based on computer cores '+str(multiprocessing.cpu_count())+"):",1,1000)
-        iterations = get_int_choice('Enter the amount of generations to be played: ',1,5000)
-        gameplay_iteration = get_int_choice('Enter the amount of game play iteration: ',1,5000)
+        generations = get_int_choice('Enter the amount of rounds to be played: ',1,9)
+        games = get_int_choice('Enter the amount of games to play per round: ',1,5000)
         trendTracking = get_str_choice("Would you like to track trends",'yes','no')
         graphOutput = get_str_choice("Would you like to create graphical outputs?",'yes','no')
         simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc','genn')
@@ -136,7 +136,7 @@ def main(args):
         player_2_nets = readNets(conCurrentGame)
     else: player_2_nets = None
     if graphics == 'yes':
-        window = MyGame(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,iterations,player_1_type,player_2_type)
+        window = MyGame(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,generations,player_1_type,player_2_type)
         window.setup()
         try:
             arcade.run()
@@ -152,12 +152,12 @@ def main(args):
         draws = 0
         leftOverHealth = 0
         evolutionHealth = []
-        for game in range(iterations):
+        for rounds in range(generations):
             spacer()
-            print("Total iterations %d out of %d" % (game + 1, iterations) )
+            print("Total rounds %d out of %d" % (rounds + 1, generations))
             if evolutions == True and train == 'yes':
                 if player_1_type == 'genn':
-                    if game % 9 == 0 and game != 0:
+                    if rounds % 9 == 0 and rounds != 0:
                         print(evolutionHealth)
                         bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
                         evolutionHealth = []
@@ -166,7 +166,7 @@ def main(args):
                         player_1_nets = newNets + temp
                         player_1_nets = mutateNets(player_1_nets)
                 if player_2_type == 'genn':
-                    if game % 9 == 0 and game != 0:
+                    if rounds % 9 == 0 and rounds != 0:
                         bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
                         evolutionHealth = []
                         newNets = list(itemgetter(*bestIndexs)(player_2_nets))
@@ -176,18 +176,24 @@ def main(args):
             p = multiprocessing.Pool(multiprocessing.cpu_count())
                 # map will always return the results in order, if order is not important in the future use pool.imap_unordered()
             if train == 'yes':
-                if game % 9 < 3: player_2_type == 'short'
-                elif game % 9 < 6: player_2_type == 'mid'
-                else: player_2_type == 'range'
-            result = p.map(runOneGame,[ x + [i - 1]  for i,x in enumerate([ x for x in [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,gameplay_iteration,player_1_type,player_2_type,conCurrentGame,game,player_1_nets,player_2_nets, trendTracking,simulation_player_1,simulation_player_2]] *conCurrentGame  ],1) ])
+                if rounds % 9 < 3: player_2_type = 'short'
+                elif rounds % 9 < 6: player_2_type = 'mid'
+                else: player_2_type = 'range'
+            result = p.map(runOneGame,[ x + [i - 1]  \
+                                       for i,x in enumerate([x for x in \
+                                                             [[SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE,
+                                                             games,player_1_type,player_2_type,
+                                                             conCurrentGame,rounds,player_1_nets,
+                                                             player_2_nets, trendTracking,
+                                                             simulation_player_1,simulation_player_2]] *conCurrentGame  ],1) ])
             
-            if game == 0 or game % 3 == 0: evolutionHealth = [float(i) for i in result]
+            if rounds == 0 or rounds % 3 == 0: evolutionHealth = [float(i) for i in result]
             else: evolutionHealth = list(map(add, [float(i) for i in result], evolutionHealth)) 
             player1Wins += sum(int(i) > 0 for i in [int(i) for i in result]) 
             player2Wins += sum(int(i) < 0 for i in [int(i) for i in result])
             if train == 'yes':
-                if game % 9 < 3: shortWins += sum(int(i) < 0 for i in [int(i) for i in result])
-                elif game % 9 < 6: midWins += sum(int(i) < 0 for i in [int(i) for i in result])
+                if rounds % 9 < 3: shortWins += sum(int(i) < 0 for i in [int(i) for i in result])
+                elif rounds % 9 < 6: midWins += sum(int(i) < 0 for i in [int(i) for i in result])
                 else: rangeWins += sum(int(i) < 0 for i in [int(i) for i in result])
             draws += sum(int(i) == 0 for i in [int(i) for i in result])  
             leftOverHealth += sum([float(i) for i in result])
@@ -204,7 +210,7 @@ def main(args):
             print("\t mid Wins: ",midWins)
             print("\t range Wins: ",rangeWins)
         print("Draws: ",draws)
-        print("Average Health Difference: ",round(abs(leftOverHealth) / (conCurrentGame * iterations),4))
+        print("Average Health Difference: ",round(abs(leftOverHealth) / (conCurrentGame * generations),4))
         print("Total Time: ",round(time.time() - start,4))
     if graphOutput =='yes':
         if player_1_type not in ['short','mid','range']:

@@ -22,6 +22,7 @@ import json
 import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import datetime
+from GENN.GENNFunctions import *
 
 random.seed(RANDOM_SEED)
 
@@ -62,6 +63,8 @@ class Game:
         self.player2_previous_health = PLAYER_HEALTH
         self.player_1_simulation = player_1_simulation
         self.player_2_simulation = player_2_simulation
+        
+        print("Game Initialized for process ID/network: ",str(self.process_id))
 
     def jitter(self):
         self.player1.center_x = random.randint(0,SCREEN_WIDTH)
@@ -151,6 +154,7 @@ class Game:
         self.written += 1    
         self.player1.trends = {'arrow':0,'fire':0,'knife':0,'towardsOpponent' :0, 'awayOpponent':0,"movementChanges":0,"biggestTrend":0}
         self.player2.trends = {'arrow':0,'fire':0,'knife':0,'towardsOpponent' :0, 'awayOpponent':0,"movementChanges":0,"biggestTrend":0}
+    
     def setup(self):
         self.player_list = []
         self.arrow_list = []
@@ -381,12 +385,18 @@ class Game:
         self.player2.trends = {'arrow':0,'fire':0,'knife':0,'towardsOpponent' :0, 'awayOpponent':0,"movementChanges":0,"biggestTrend":0}
         self.player2.lastMovement = ""
         self.player2.currentTrend = 0
+        
+        
+        print("Game setup complete for Process ID/Network: ",str(self.process_id))
 
     def end_game(self):
         self.player1_score += self.player1.score
         self.player2_score += self.player2.score
         self.games -= 1
-
+        
+        if self.games > 6: self.player2_type = 'short'
+        elif self.games < 6 and self.games >3: self.player2_type = 'mid'
+        else: self.player2_type = 'range'
 
     def init_player(self):
         
@@ -439,7 +449,7 @@ class Game:
         return False
     
     
-    def update(self, game_move):
+    def update(self, game_move, prev_health_differ):
         
         # Attack Data Holder
         player1_fireball = 0
@@ -459,9 +469,11 @@ class Game:
         if self.trendTracking == 'yes': 
             if self.curtime % 900 == 0: self.writeTrends()
 
-        if self.curtime % 1000 == 0:  ## added intermittent updates instead of every move - every 1000 moves
+        if self.curtime % 250 == 0:  ## added intermittent updates instead of every move - every 1000 moves
             print("Player 1 Health: ", str(self.player1.health))
             print("Player 2 Health: ", str(self.player2.health))
+            print("Player Round: ", str(self.rounds))
+            print("Game left: " + str(self.games) + " in Process ID/Network: " + str(self.process_id))
 
         # player 1 collision
         if self.player1.center_y >= self.height:
@@ -571,9 +583,14 @@ class Game:
                 
             self.player2.knife_list.remove(self.knife)
 
-
         
+        current_health_differ = self.player1.health - self.player2.health
+        if game_move%1000 == 0 and prev_health_differ <= current_health_differ:
+            self.player1.net = createChildNets(self.player1.net, 1)
+            self.player1.net = mutateNets(self.player1.net)[0]
+            self.player1.model =  self.player1.net.createNetwork()
            
+        
         
         #Print The Log Result
         progress_data = dict(
@@ -591,8 +608,8 @@ class Game:
             player2_center_x = [self.player2.center_x],
             player_2_center_y = [self.player2.center_y],
             player2_shield = [self.player2.shield],
-            player1_score = [self.player1.score],
-            player2_score = [self.player2.score],
+            player1_score = [self.player1_score],
+            player2_score = [self.player2_score],
             player1_fireball = [player1_fireball],
             player2_fireball = [player2_fireball],
             player1_arrow = [player1_arrow],
@@ -607,13 +624,14 @@ class Game:
         
         dataFrame = pd.DataFrame(progress_data)
         
-        file_name = "data_log_new.csv"
+        file_name = "data_log.csv"
         
         if os.path.exists(file_name):
             dataFrame.to_csv(file_name, mode='a', header=False, index=False)
 
         else:
             dataFrame.to_csv(file_name, mode='w', header=True, index=False)
+        
         
         # If health is zero kill them
         if self.player1.health <= 0 and self.player2.health <= 0:
@@ -650,5 +668,5 @@ class Game:
             self.healthChanges = 0
         self.player1_previous_health = self.player1.health
         self.player2_previous_health = self.player2.health
-        return True
+        return [True, self.player1.health - self.player2.health]
         

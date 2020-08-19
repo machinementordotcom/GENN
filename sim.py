@@ -63,7 +63,8 @@ class Game:
         self.player2_previous_health = PLAYER_HEALTH
         self.player_1_simulation = player_1_simulation
         self.player_2_simulation = player_2_simulation
-        
+        self.player1_version = 1
+
         print("Game Initialized for process ID/network: ",str(self.process_id))
 
     def jitter(self):
@@ -257,7 +258,7 @@ class Game:
                 self.player1.weights = [[],[]]
                 self.player1.readWeights()
                 chooseWeight(self.player1)
-        elif self.player1_type.lower() == 'genn':
+        elif self.player1_type.lower() == 'genn' or self.player1_type.lower() == 'agenn':
             self.player1 = GENN(KNIGHT_IMAGE,1)
             self.player1.net = self.player_1_nets[self.process_id]
             self.player1.model =  self.player1.net.createNetwork()
@@ -356,7 +357,7 @@ class Game:
                 self.player2.weights = [[],[]]
                 self.player2.readWeights()
                 chooseWeight(self.player2)
-        elif self.player2_type.lower() == 'genn':
+        elif self.player2_type.lower() is 'genn' or self.player2_type.lower() is 'agenn':
             self.player2 = GENN(KNIGHT_IMAGE,1)
             self.player2.net = self.player_2_nets[self.process_id]
             self.player2.model =  self.player2.net.createNetwork()
@@ -395,7 +396,7 @@ class Game:
         self.games -= 1
         
         if self.games > 6: self.player2_type = 'short'
-        elif self.games < 6 and self.games >3: self.player2_type = 'mid'
+        elif self.games <= 6 and self.games >3: self.player2_type = 'mid'
         else: self.player2_type = 'range'
 
     def init_player(self):
@@ -579,60 +580,62 @@ class Game:
             if self.collisionCheck(self.player1,self.knife):
                 self.player1.health -= KNIFE_DAMAGE
                 
-                player1_kinfe = 1
+                player1_knife = 1
                 
             self.player2.knife_list.remove(self.knife)
 
-        
+        #aGENN Supervisor
         current_health_differ = self.player1.health - self.player2.health
-        if game_move%1000 == 0 and prev_health_differ <= current_health_differ:
-            self.player1.net = createChildNets(self.player1.net, 1)
-            self.player1.net = mutateNets(self.player1.net)[0]
-            self.player1.model =  self.player1.net.createNetwork()
-           
-        
-        
-        #Print The Log Result
+        if self.player_1_simulation.lower() is 'agenn':
+            if game_move%1000 == 0 and prev_health_differ <= current_health_differ:
+                self.player1.net = createChildNets(self.player1.net, 1)
+                self.player1.net = mutateNets(self.player1.net)[0]
+                self.player1.model =  self.player1.net.createNetwork()
+                self.player1_version += 1
+
+	#Print The Log Result
         progress_data = dict(
-            games = [self.games],
-            player_1_type = [self.player1_type],
-            player_2_type = [self.player2_type],
-            conCurrentGames = [self.conGames],
-            player_1_simulation = [self.player_1_simulation],
-            player_2_simulation = [self.player_2_simulation],
-            rounds = [self.rounds],
-            process_id = [self.process_id],
-            player1_center_x = [self.player1.center_x],
-            player_1_center_y = [self.player1.center_y],
-            player1_shield = [self.player1.shield],
-            player2_center_x = [self.player2.center_x],
-            player_2_center_y = [self.player2.center_y],
-            player2_shield = [self.player2.shield],
-            player1_score = [self.player1_score],
-            player2_score = [self.player2_score],
-            player1_fireball = [player1_fireball],
-            player2_fireball = [player2_fireball],
-            player1_arrow = [player1_arrow],
-            player2_arrow = [player2_arrow],
-            player1_knife = [player1_knife],
-            player2_knife = [player2_knife],
-            game_move = [game_move],
-            player1_health = [self.player1.health],
-            player2_health = [self.player2.health],
-            timestamp = [str(datetime.now())],
+		games = [self.games],
+        	player_1_type = [self.player1_type],
+        	player_2_type = [self.player2_type],
+#        	conCurrentGames = [self.conGames],
+#        	player_1_simulation = [self.player_1_simulation],
+#        	player_2_simulation = [self.player_2_simulation],
+        	rounds = [self.rounds],
+        	process_id = [self.process_id],
+        	agenn_v = [self.player1_version],
+#        	player1_center_x = [self.player1.center_x],
+#        	player_1_center_y = [self.player1.center_y],
+        	player1_shield = [self.player1.shield],
+#        	player2_center_x = [self.player2.center_x],
+#        	player_2_center_y = [self.player2.center_y],
+        	player2_shield = [self.player2.shield],
+        	player1_score = [self.player1_score],
+        	player2_score = [self.player2_score],
+        	player1_fireball = [player1_fireball],
+        	player2_fireball = [player2_fireball],
+        	player1_arrow = [player1_arrow],
+        	player2_arrow = [player2_arrow],
+        	player1_knife = [player1_knife],
+        	player2_knife = [player2_knife],
+        	game_move = [game_move],
+        	player1_health = [self.player1.health],
+        	player2_health = [self.player2.health],
+        	timestamp = [str(datetime.now())],
         )
         
-        dataFrame = pd.DataFrame(progress_data)
+        ## NH made reporting less frequent for performance reasons
         
-        file_name = "data_log.csv"
-        
-        if os.path.exists(file_name):
-            dataFrame.to_csv(file_name, mode='a', header=False, index=False)
+        if self.curtime % 100 == 0:
+            dataFrame = pd.DataFrame(progress_data)
+            file_name = "data_log.csv"
+   
+            if os.path.exists(file_name):
+                dataFrame.to_csv(file_name, mode='a', header=False, index=False)
 
-        else:
-            dataFrame.to_csv(file_name, mode='w', header=True, index=False)
-        
-        
+            else:
+                dataFrame.to_csv(file_name, mode='w', header=True, index=False)                
+       
         # If health is zero kill them
         if self.player1.health <= 0 and self.player2.health <= 0:
             self.draws += 1

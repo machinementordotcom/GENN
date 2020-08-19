@@ -35,9 +35,9 @@ def runOneGame(a):
                 val = x.update(move, val[1])
 
                 move += 1
-                if move % 250  == 0:  ## updates are coordinated with sim.py health updates
+#                if move % 250  == 0:  ## updates are coordinated with sim.py health updates
                     #print("Move", str(move))
-                    None
+#                    None
         else:
             print("Game over")
             return val
@@ -89,10 +89,10 @@ def main(args):
 
     if train == 'yes':
         # Game/Network will be played in the same time per generation
-        conCurrentGame = 5
+        conCurrentGame = 10
         # Total Generation 
-        generations = 11
-        simulation_player_1 = 'genn'
+        generations = 10
+        simulation_player_1 = 'agenn'
         simulation_player_2 = 'fsm'
         player_2_type = 'short'
         graphics = 'no'
@@ -108,7 +108,7 @@ def main(args):
         games_per_network = get_int_choice('Enter the amount of games to play per network: ',1,5000)
         trendTracking = get_str_choice("Would you like to track trends",'yes','no')
         graphOutput = get_str_choice("Would you like to create graphical outputs?",'yes','no')
-        simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc','genn')
+        simulation_player_1 = get_str_choice("What type of simulation do you want for player 1?",'fsm','freeplay','dc','genn','agenn')
         if simulation_player_1.lower() == "freeplay":
             player_1_type = "human"
             graphics = 'yes'
@@ -118,6 +118,8 @@ def main(args):
             player_1_type = get_str_choice("What type of dynamic controller is player 1 ?",'master','average','random','train')
         elif simulation_player_1.lower() == "genn":
             player_1_type = "genn"
+        elif simulation_player_1.lower() == "agenn":
+            player_1_type = "agenn"
         simulation_player_2 = get_str_choice("What type of simulation do you want for player 2?",'fsm','dc','freeplay','genn')
         if simulation_player_2 == "freeplay":
             player_2_type = "human"
@@ -131,16 +133,16 @@ def main(args):
         if graphics == 'no':
             graphics = get_str_choice('Run Graphically?: ','yes','no')
 
-    if player_1_type == 'genn' and train == 'yes':
+    if (player_1_type == 'genn' or player_1_type == 'agenn') and train == 'yes':
         evolutions = True
         player_1_nets = createNets(conCurrentGame)
-    elif player_1_type == 'genn' and train == 'no':
+    elif (player_1_type == 'genn' or player_1_type == 'agenn') and train == 'no':
         player_1_nets = readNets(conCurrentGame)
     else: player_1_nets = None
-    if player_2_type == 'genn' and train == 'yes':
+    if (player_2_type == 'genn' or player_2_type == 'agenn') and train == 'yes':
         evolutions = True
         player_2_nets = createNets(conCurrentGame)
-    elif player_2_type == 'genn' and train == 'no':
+    elif (player_2_type == 'genn' or player_2_type == 'agenn') and train == 'no':
         player_2_nets = readNets(conCurrentGame)
     else: player_2_nets = None
     if graphics == 'yes':
@@ -163,8 +165,10 @@ def main(args):
         for rounds in range(generations):
             spacer()
             print("Total rounds %d out of %d" % (rounds + 1, generations))
+            print("Player1 Nets lenght:", str(len(player_1_nets)))
+            print(player_1_nets)
             if evolutions == True and train == 'yes':
-                if player_1_type == 'genn':
+                if player_1_type is 'genn' or player_1_type is 'agenn':
                     #if rounds % 9 == 0 and rounds != 0:
                     if rounds != 0:
                         print(evolutionHealth)
@@ -174,7 +178,7 @@ def main(args):
                         temp = createChildNets(newNets,conCurrentGame - len(newNets))
                         player_1_nets = newNets + temp
                         player_1_nets = mutateNets(player_1_nets)
-                if player_2_type == 'genn':
+                if player_2_type is 'genn' or player_2_type is 'agenn':
                     #if rounds % 9 == 0 and rounds != 0:
                     if rounds != 0:
                         bestIndexs = sorted(range(len(evolutionHealth)), key=lambda i: evolutionHealth[i])[-int(conCurrentGame*.2//1):]
@@ -183,7 +187,7 @@ def main(args):
                         temp = createChildNets(newNets,conCurrentGame - len(newNets))
                         player_2_nets = newNets + temp
                         player_2_nets = mutateNets(player_2_nets)
-            p = multiprocessing.Pool(multiprocessing.cpu_count())
+            p = multiprocessing.Pool(conCurrentGame)
                 # map will always return the results in order, if order is not important in the future use pool.imap_unordered()
             """
             if train == 'yes':
@@ -213,9 +217,9 @@ def main(args):
             leftOverHealth += sum([float(i) for i in result])
             p.close()
             p.join()
-        if player_1_type == 'genn':
+        if player_1_type is 'genn' or player_1_type is 'agenn':
             writeNetworks(player_1_nets)
-        if player_2_type == 'genn':
+        if player_2_type is 'genn' or player_2_type is 'agenn':
             writeNetworks(player_2_nets)
         print("player 1 (" + player_1_type + "):",player1Wins)
         print("player 2 (" + player_2_type + "):",player2Wins)
